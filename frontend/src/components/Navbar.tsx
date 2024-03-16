@@ -12,7 +12,7 @@ export default function Navbar() {
     <header className="fixed top-0 z-20 flex h-20 w-full items-center bg-white">
       <div className="mx-auto flex h-full w-full max-w-screen-xl items-center justify-between">
         <div className="relative size-16">
-          <Image src="adadeh.svg" alt="logo" fill className="object-contain" />
+          <Image src="/adadeh.svg" alt="logo" fill className="object-contain" />
         </div>
         <nav className="flex h-full items-center gap-8">
           {nav.map((item, index) => (
