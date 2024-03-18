@@ -60,7 +60,13 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function role(){
-        return $this->hasMany(Role::class);
+        return $this->belongsTo(Role::class);
+    }
+    public function wishlist(){
+        return $this->hasMany(WishList::class);
+    }
+    public function cart(){
+        return $this->hasMany(Cart::class);
     }
 
     public static function user_data(){
