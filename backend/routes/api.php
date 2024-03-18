@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -69,4 +70,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
     Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
     Route::apiResource('/transaksi', TransaksiController::class);
+    Route::apiResource('/keranjang', KeranjangController::class);
 });
