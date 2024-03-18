@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 class MetodePembayaranController extends Controller
 {
     protected $responseData = [
-        "success" => false,
-        "message" => "",
-        "data" => null
+        'success' => false,
+        'message' => '',
+        'data' => null
     ];
 
     protected $responseCode = Response::HTTP_BAD_REQUEST;
@@ -27,13 +27,13 @@ class MetodePembayaranController extends Controller
             $listMetodeBayar = MetodePembayaran::all();
 
             if (count($listMetodeBayar) > 0) {
-                $this->responseData["message"] = "Daftar Metode Pembayaran Berhasil Ditemukan";
+                $this->responseData['message'] = 'Daftar Metode Pembayaran Berhasil Ditemukan';
             } else {
-                $this->responseData["message"] = "Daftar Metode Pembayaran Tidak Tersedia";
+                $this->responseData['message'] = 'Daftar Metode Pembayaran Tidak Tersedia';
             }
 
-            $this->responseData["success"] = true;
-            $this->responseData["data"] = $listMetodeBayar;
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $listMetodeBayar;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
@@ -58,9 +58,10 @@ class MetodePembayaranController extends Controller
 
             $metodePembayaran->save();
 
-            $this->responseData["message"] = "Metode Pembayaran Berhasil Ditambahkan";
-            $this->responseData["success"] = true;
-            $this->responseData["data"] = $metodePembayaran;
+            $this->responseData['message'] = 'Metode Pembayaran Berhasil Ditambahkan';
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $metodePembayaran;
+            $this->responseCode = Response::HTTP_CREATED;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
         }
@@ -76,14 +77,11 @@ class MetodePembayaranController extends Controller
         try {
             $metodeBayar = MetodePembayaran::find($id);
 
-            if ($metodeBayar === null) {
-                throw new Exception('Metode Pembayaran Tidak Tersedia');
-            } else {
-                $this->responseData["message"] = "Metode Pembayaran Berhasil Ditemukan";
-            }
-
-            $this->responseData["success"] = true;
-            $this->responseData["data"] = $metodeBayar;
+            if ($metodeBayar === null) throw new Exception('Metode Pembayaran Tidak Tersedia');
+            
+            $this->responseData['message'] = 'Metode Pembayaran Berhasil Ditemukan';
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $metodeBayar;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
@@ -103,19 +101,17 @@ class MetodePembayaranController extends Controller
             $deskripsi = $validated['deskripsi'];
 
             $metodePembayaran = MetodePembayaran::find($id);
-            if ($metodePembayaran === null) {
-                throw new Exception('Metode Pembayaran Tidak Tersedia');
-            } else {
-                $this->responseData["message"] = "Metode Pembayaran Berhasil Diupdate";
-            }
-
+            if ($metodePembayaran === null) throw new Exception('Metode Pembayaran Tidak Tersedia');
+            
             if($nama) $metodePembayaran->nama = $nama;
             if($deskripsi) $metodePembayaran->deskripsi = $deskripsi;
-
+            
             $metodePembayaran->save();
-
-            $this->responseData["success"] = true;
-            $this->responseData["data"] = $metodePembayaran;
+            
+            $this->responseData['message'] = 'Metode Pembayaran Berhasil Diupdate';
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $metodePembayaran;
+            $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
         }
@@ -131,14 +127,11 @@ class MetodePembayaranController extends Controller
         try {
             $metodeBayar = MetodePembayaran::find($id);
 
-            if ($metodeBayar === null) {
-                throw new Exception('Metode Pembayaran Tidak Tersedia');
-            } else {
-                $this->responseData["message"] = "Metode Pembayaran Berhasil Dihapus";
-            }
-
-            $this->responseData["success"] = true;
-            $this->responseData["data"] = $metodeBayar;
+            if ($metodeBayar === null) throw new Exception('Metode Pembayaran Tidak Tersedia');
+            
+            $this->responseData['message'] = 'Metode Pembayaran Berhasil Dihapus';
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $metodeBayar;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
