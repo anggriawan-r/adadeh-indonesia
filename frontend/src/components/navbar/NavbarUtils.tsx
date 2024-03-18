@@ -50,7 +50,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
       <Sheet>
         <SheetTrigger asChild>
           <button className="h-max w-max">
-            <RxHamburgerMenu className="block text-2xl md:hidden" />
+            <RxHamburgerMenu className="block text-2xl lg:hidden" />
           </button>
         </SheetTrigger>
         <SheetContent>
