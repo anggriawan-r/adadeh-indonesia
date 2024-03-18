@@ -30,7 +30,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
 
       {isLoggedIn && (
         <>
-          <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-zinc-900 transition-colors hover:bg-zinc-700">
+          <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
             <FiShoppingCart className="-ml-0.5 text-xl text-white" />
           </button>
           <Avatar>
