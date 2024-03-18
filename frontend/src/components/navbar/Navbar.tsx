@@ -18,7 +18,7 @@ export default function Navbar() {
             />
           </div>
         </Link>
-        <nav className="hidden h-full items-center gap-8 md:flex">
+        <nav className="hidden h-full items-center gap-8 lg:flex">
           {nav.map((item, index) => (
             <Link key={index} href="#" className="h-full">
               <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">

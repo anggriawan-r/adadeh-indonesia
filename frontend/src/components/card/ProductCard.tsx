@@ -6,11 +6,11 @@ import { GoHeartFill } from "react-icons/go";
 
 export default function ProductCard({ data }: { data: productsType }) {
   return (
-    <div className="relative flex flex-col justify-center border border-transparent pb-8 hover:border-black">
-      <div className="absolute right-4 top-4 z-10">
+    <div className="relative flex flex-col justify-center border border-transparent pb-4 hover:border-black sm:pb-8">
+      <button className="absolute right-4 top-4 z-10">
         <GoHeart className="text-xl text-black" />
-      </div>
-      <div className="w-[270px]">
+      </button>
+      <div className="w-full">
         <AspectRatio ratio={1 / 1}>
           <Image
             src={data.image_url}
@@ -22,8 +22,8 @@ export default function ProductCard({ data }: { data: productsType }) {
       </div>
       <div className="p-2">
         <p className="mb-2 text-xs font-light">{data.category}</p>
-        <h2 className="text-sm">{data.name}</h2>
-        <p className="text-sm font-light">{data.price}</p>
+        <h2 className="text-xs sm:text-sm">{data.name}</h2>
+        <p className="text-xs font-light sm:text-sm">{data.price}</p>
       </div>
     </div>
   );
