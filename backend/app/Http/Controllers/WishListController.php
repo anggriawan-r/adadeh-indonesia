@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\WishList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class RoleController extends Controller
+class WishListController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/role",
-     *     summary="Get all Role",
-     *     description="Get all Role data",
-     *     operationId="getAllRole",
+     *     path="/api/wishlists",
+     *     summary="Get all Wishlist",
+     *     description="Get all Wishlist data",
+     *     operationId="getAllWishlist",
      *     security={{ "bearerAuth": {} }},
-     *     tags={"Role"},
+     *     tags={"Wishlist"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Roles in the app"),
+     *             @OA\Property(property="message", type="string", example="Wishlists in the app"),
      *             @OA\Property(property="data", type="object",
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="admin"),
@@ -31,34 +31,37 @@ class RoleController extends Controller
      *     ),
      * )
      */
-    public function index(){
-        $role = Role::role_all_user_name();
+    public function index()
+    {
+        $wishLists = WishList::get_all_product_by_userID();
         return response()->json([
             "status"    =>  true,
-            "message"   =>  "Roles in the app",
-            "data"      =>  $role
+            "message"   =>  "Wishlist from user",
+            "data"      =>  $wishLists
         ]);
     }
 
     /**
      * @OA\Post(
-     *     path="/api/role",
-     *     summary="Post a Role",
-     *     description="Post a Role data",
-     *     operationId="PostRole",
+     *     path="/api/wishlists",
+     *     summary="Post a Wishlist",
+     *     description="Post a Wishlist data",
+     *     operationId="PostWishlist",
      *     security={{ "bearerAuth": {} }},
-     *     tags={"Role"},
+     *     tags={"Wishlist"},
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Add a Role",
-     *         @OA\Property(property="name", type="string", example="admin")
+     *         description="Add a Wishlist",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="product_id", type="string", example="Adidas")
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Roles in the app"),
+     *             @OA\Property(property="message", type="string", example="Wishlists in the app"),
      *             @OA\Property(property="data", type="object",
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="admin"),
@@ -80,9 +83,10 @@ class RoleController extends Controller
      *     ),
      * )
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validate = Validator::make($request->all(), [
-            "name"  =>  "required|unique:roles,name"
+            "product_id"    =>  "required"
         ]);
         if($validate->fails()){
             return response()->json([
@@ -90,28 +94,31 @@ class RoleController extends Controller
                 "message"   =>  $validate->errors()
             ], 419);
         }
-        $role = Role::create($request->all());
+        $wishList = WishList::create([
+            "user_id"   =>  auth()->user()->id,
+            "product_id"=>  $request->product_id
+        ]);
         return response()->json([
             "status"    =>  true,
-            "message"   =>  "Role created successfully",
-            "data"      =>  $role
+            "message"   =>  "Wishlist created successfully",
+            "data"      =>  $wishList
         ]);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/role/:id",
-     *     summary="Get a Role by id",
-     *     description="Get a Role by id",
-     *     operationId="getRole",
+     *     path="/api/wishlists/:id",
+     *     summary="Get a Wishlist by id",
+     *     description="Get a Wishlist by id",
+     *     operationId="getWishlist",
      *     security={{ "bearerAuth": {} }},
-     *     tags={"Role"},
+     *     tags={"Wishlist"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Roles in the app"),
+     *             @OA\Property(property="message", type="string", example="Wishlists in the app"),
      *             @OA\Property(property="data", type="object",
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="admin"),
@@ -124,38 +131,39 @@ class RoleController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Role not found"),
+     *             @OA\Property(property="message", type="string", example="Wishlist not found"),
      *         )
      *     ),
      * )
      */
-    public function show($id){
-        $role = Role::role_user_name($id);
-        if($role){
+    public function show($id)
+    {
+        $wishList = Wishlist::find($id);
+        if($wishList){
             return response()->json([
                 "status"    =>  true,
-                "message"   =>  "Role = $role->name",
-                "data"      =>  $role
+                "message"   =>  "Wishlist",
+                "data"      =>  $wishList
             ]);
         }else{
             return response()->json([
                 "status"    =>  false,
-                "message"   =>  "Role not found"
+                "message"   =>  "Wishlist not found"
             ], 404);
         }
     }
 
     /**
      * @OA\Patch(
-     *     path="/api/role/:id",
-     *     summary="Patch a Role",
-     *     description="Patch a Role data",
-     *     operationId="PatchRole",
+     *     path="/api/wishlists/:id",
+     *     summary="Patch a Wishlist",
+     *     description="Patch a Wishlist data",
+     *     operationId="PatchWishlist",
      *     security={{ "bearerAuth": {} }},
-     *     tags={"Role"},
+     *     tags={"Wishlist"},
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Add a Role",
+     *         description="Add a Wishlist",
      *         @OA\Property(property="name", type="string", example="admin")
      *     ),
      *     @OA\Response(
@@ -163,7 +171,7 @@ class RoleController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Roles in the app"),
+     *             @OA\Property(property="message", type="string", example="Wishlists in the app"),
      *             @OA\Property(property="data", type="object",
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="admin"),
@@ -188,51 +196,55 @@ class RoleController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Role not found"),
+     *             @OA\Property(property="message", type="string", example="Wishlist not found"),
      *         )
      *     ),
      * )
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $validate = Validator::make($request->all(), [
-            "name"  =>  "required|unique:roles,name"
+            "product_id"    =>  "required"
         ]);
         if($validate->fails()){
             return response()->json([
                 "status"    =>  false,
                 "message"   =>  $validate->errors()
-            ]);
+            ], 419);
         }
-        $role = Role::find($id);
-        if($role){
-            $role->update($request->all());
+        $wishList = WishList::find($id);
+        if($wishList){
+            $wishList->update([
+                "user_id"   =>  auth()->user()->id,
+                "product_id"=>  $request->product_id
+            ]);
             return response()->json([
                 "status"    =>  true,
-                "message"   =>  "Role successfully updated",
-                "data"      =>  $role
+                "message"   =>  "Wishlist successfully updated",
+                "data"      =>  $wishList
             ]);
         }else{
             return response()->json([
                 "status"    =>  false,
-                "message"   =>  "Role not found"
+                "message"   =>  "Wishlist not found"
             ], 404);
         }
     }
 
     /**
      * @OA\Delete(
-     *     path="/api/role/:id",
-     *     summary="Delete a Role by id",
-     *     description="Delete a Role by id",
-     *     operationId="DeleteRole",
+     *     path="/api/wishlists/:id",
+     *     summary="Delete a Wishlist by id",
+     *     description="Delete a Wishlist by id",
+     *     operationId="DeleteWishlist",
      *     security={{ "bearerAuth": {} }},
-     *     tags={"Role"},
+     *     tags={"Wishlist"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Role successfully deleted"),
+     *             @OA\Property(property="message", type="string", example="Wishlist successfully deleted"),
      *         )
      *     ),
      *     @OA\Response(
@@ -240,23 +252,24 @@ class RoleController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="Role not found"),
+     *             @OA\Property(property="message", type="string", example="Wishlist not found"),
      *         )
      *     ),
      * )
      */
-    public function destroy($id){
-        $role = Role::find($id);
-        if($role){
-            $role->delete();
+    public function destroy($id)
+    {
+        $wishList = WishList::find($id);
+        if($wishList){
+            $wishList->delete();
             return response()->json([
                 "status"    =>  true,
-                "message"   =>  "Role successfully deleted",
+                "message"   =>  "Wishlist successfully deleted"
             ]);
         }else{
             return response()->json([
                 "status"    =>  false,
-                "message"   =>  "Role not found"
+                "message"   =>  "Wishlist not found"
             ], 404);
         }
     }
