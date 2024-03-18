@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,4 +49,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
+    Route::apiResource('/transaksi', TransaksiController::class);
 });
