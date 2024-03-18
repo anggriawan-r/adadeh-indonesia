@@ -128,6 +128,8 @@ class MetodePembayaranController extends Controller
             $metodeBayar = MetodePembayaran::find($id);
 
             if ($metodeBayar === null) throw new Exception('Metode Pembayaran Tidak Tersedia');
+
+            $metodeBayar->delete();
             
             $this->responseData['message'] = 'Metode Pembayaran Berhasil Dihapus';
             $this->responseData['success'] = true;

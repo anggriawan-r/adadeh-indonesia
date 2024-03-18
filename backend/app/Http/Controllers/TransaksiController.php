@@ -139,6 +139,8 @@ class TransaksiController extends Controller
             $transaksi = Transaksi::find($id);
 
             if ($transaksi === null) throw new Exception('Transaksi Tidak Tersedia');
+
+            $transaksi->delete();
             
             $this->responseData['message'] = 'Transaksi Berhasil Dihapus';
             $this->responseData['success'] = true;
