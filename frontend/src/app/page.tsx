@@ -2,7 +2,6 @@ import ProductCard from "@/components/card/ProductCard";
 import HeroSection from "@/components/hero/HeroSection";
 import ProductCarousel from "@/components/ProductCarousel";
 import CategoryCard from "@/components/card/CategoryCard";
-import { products,  } from "@/lib/constants";
 import { products, heroes, categories } from "@/lib/constants";
 
 export default function Home() {
