@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DetailTransaksiController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -28,38 +29,61 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/register", [AuthController::class, "register"]);
 
-Route::controller(RoleController::class)->group(function () {
-    Route::get("/roles", "index");
-    Route::post("/roles", "store");
-    Route::get("/roles/{roles}", "show");
-    Route::patch("/roles/{roles}", "update");
-    Route::delete("/roles/{roles}", "destroy");
-});
-
+// Category
 Route::controller(CategoryController::class)->group(function () {
     Route::get("/categories", "index");
-    Route::post("/categories", "store");
-    Route::get("/categories/{categories}", "show");
-    Route::patch("/categories/{categories}", "update");
-    Route::delete("/categories/{categories}", "destroy");
     Route::get("/categories/{categories}/products", "product");
+    Route::get("/categories/{categories}", "show");
 });
 
+// Product
 Route::controller(ProductController::class)->group(function () {
     Route::get("/products", "index");
-    Route::post("/products", "store");
     Route::get("/products/{products}", "show");
-    Route::patch("/products/{products}", "update");
-    Route::delete("/products/{products}", "destroy");
-
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
+    // Role
+    Route::controller(RoleController::class)->group(function () {
+        Route::get("/roles", "index");
+        Route::get("/roles/{roles}", "show");
+        Route::post("/roles", "store");
+        Route::patch("/roles/{roles}", "update");
+        Route::delete("/roles/{roles}", "destroy");
+    });
+
+    // Detail Transaksi
+    Route::controller(DetailTransaksiController::class)->group(function () {
+        Route::get("/details-transaksi", "index");
+        Route::get("/details-transaksi/{details-transaksi}", "show");
+        Route::get("/details-transaksi/{details-transaksi}/transaksi", "index_transaksi");
+        Route::get("/details-transaksi/{details-transaksi}/product", "index_product");
+        Route::post("/details-transaksi", "store");
+        Route::patch("/details-transaksi/{details-transaksi}", "update");
+        Route::delete("/details-transaksi/{details-transaksi}", "destroy");
+    });
+
+    // Category
+    Route::controller(CategoryController::class)->group(function () {
+        Route::post("/categories", "store");
+        Route::patch("/categories/{categories}", "update");
+        Route::delete("/categories/{categories}", "destroy");
+    });
+
+    // Product
+    Route::controller(ProductController::class)->group(function () {
+        Route::post("/products", "store");
+        Route::patch("/products/{products}", "update");
+        Route::delete("/products/{products}", "destroy");
+    });
+
+    // Auth
     Route::controller(AuthController::class)->group(function () {
         Route::post("/logout", "logout");
         Route::post("/change_password", "change_password");
     });
 
+    // Wishlist
     Route::controller(WishListController::class)->group(function () {
         Route::get("/wishlists", "index");
         Route::post("/wishlists", "store");
@@ -67,6 +91,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::patch("/wishlists/{wishlists}", "update");
         Route::delete("/wishlists/{wishlists}", "destroy");
     });
+
     Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
     Route::apiResource('/transaksi', TransaksiController::class);
 });

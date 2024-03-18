@@ -20,8 +20,8 @@ class Product extends Model
     public function wishlist(){
         return $this->hasMany(WishList::class);
     }
-    public function cart(){
-        return $this->hasMany(WishList::class);
+    public function detailsTransaksi(){
+        return $this->hasMany(DetailTransaksi::class);
     }
 
     protected function image(): Attribute
