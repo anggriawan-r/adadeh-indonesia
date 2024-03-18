@@ -1,18 +1,26 @@
 import ProductCard from "@/components/card/ProductCard";
 import HeroSection from "@/components/hero/HeroSection";
-import { products, heroes } from "@/lib/constants";
+import ProductCarousel from "@/components/ProductCarousel";
+import CategoryCard from "@/components/card/CategoryCard";
+import { products,  } from "@/lib/constants";
+import { products, heroes, categories } from "@/lib/constants";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center py-24">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-20 py-24">
       <HeroSection heroes={heroes} />
-      <h1 className="my-4 text-3xl font-bold">PRODUK TERBAIK ADADEH</h1>
-
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-        {products.map((item, index) => (
-          <ProductCard key={index} data={item} />
+      <section className="grid w-full grid-cols-1 gap-8 px-8 sm:grid-cols-3">
+        {categories.map((item, index) => (
+          <CategoryCard data={item} key={index} />
         ))}
-      </div>
+      </section>
+
+      <section className="w-full">
+        <h1 className="mb-4 text-center text-xl font-bold sm:text-3xl">
+          PRODUK TERBAIK ADADEH
+        </h1>
+        <ProductCarousel data={products} />
+      </section>
     </main>
   );
 }
