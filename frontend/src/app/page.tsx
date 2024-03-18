@@ -1,10 +1,14 @@
+import ProductCard from "@/components/card/ProductCard";
+import HeroSection from "@/components/hero/HeroSection";
 import ProductCarousel from "@/components/ProductCarousel";
 import CategoryCard from "@/components/card/CategoryCard";
-import { products, categories } from "@/lib/constants";
+import { products,  } from "@/lib/constants";
+import { products, heroes, categories } from "@/lib/constants";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-20 py-24">
+      <HeroSection heroes={heroes} />
       <section className="grid w-full grid-cols-1 gap-8 px-8 sm:grid-cols-3">
         {categories.map((item, index) => (
           <CategoryCard data={item} key={index} />

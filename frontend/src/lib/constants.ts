@@ -66,6 +66,36 @@ type productsType = {
   image_url: string;
 };
 
+const heroes = [
+  {
+    id: 1,
+    imageUrl:
+      "https://www.adidas.co.id/media/scandiweb/slider/s/s/ss24-yeezy-hp-mh-500-stone-taupe-d.png",
+    title: "YEZZY 500 STONE TAUPE",
+    imageAlt: "YEZZY 500 STONE TAUPE",
+    buttonUrl: "#",
+    isButtonDark: true,
+  },
+  {
+    id: 2,
+    imageUrl:
+      "https://www.adidas.co.id/media/scandiweb/slider/h/p/hp_glp_masthead_desktop_1920x720px_2.jpg",
+    title: "KOLEKSI ADADEH BALI",
+    imageAlt: "BALI",
+    buttonUrl: "#",
+    isButtonDark: false,
+  },
+  {
+    id: 3,
+    imageUrl:
+      "https://www.adidas.co.id/media/scandiweb/slider/f/o/football-ss24-eurocopa-eurocopacombined-onsite-mh-d.jpg",
+    title: "KOLEKSI JERSEY ADADEH 2024",
+    imageAlt: "JERSEY",
+    buttonUrl: "#",
+    isButtonDark: false,
+  },
+];
+
 const categories: categoriesType[] = [
   {
     name: "LIFESTYLE",
@@ -88,5 +118,5 @@ type categoriesType = {
   image_url: string;
 };
 
-export { nav, products, categories };
+export { nav, products, categories, heroes };
 export type { navType, productsType, categoriesType };
