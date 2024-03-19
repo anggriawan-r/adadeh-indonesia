@@ -6,7 +6,7 @@ import { nav } from "@/lib/constants";
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 z-10 flex h-20 w-full items-center bg-white">
+    <header className="fixed top-0 z-10 flex h-20 w-screen items-center bg-white">
       <div className="mx-auto flex h-full w-full max-w-screen-xl items-center justify-between px-4">
         <Link href="/">
           <div className="relative size-12 md:size-16">
