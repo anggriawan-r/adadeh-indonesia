@@ -18,17 +18,26 @@ export default function Navbar() {
             />
           </div>
         </Link>
+        <div className="flex h-full space-x-4">
         <nav className="hidden h-full items-center gap-8 lg:flex">
-          {nav.map((item, index) => (
-            <Link key={index} href="#" className="h-full">
-              <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
-                {item}
-                <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
-              </div>
-            </Link>
-          ))}
+          <Link href="#" className="h-full">
+          <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
+            CATALOGUE
+            <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
+          </div>
+          </Link>
+          <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
+            CATEGORIES
+            <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
+            <ul className="absolute shadow-2xl left-0 bottom-0 translate-y-full bg-white invisible group-hover:visible">
+            {nav.map((item, index) => (
+              <li key={index}><Link className="p-4 inline-block hover:bg-slate-200 w-full" href="#">{item}</Link></li>
+            ))}
+            </ul>
+          </div>
         </nav>
         <NavbarUtils nav={nav} />
+        </div>
       </div>
     </header>
   );

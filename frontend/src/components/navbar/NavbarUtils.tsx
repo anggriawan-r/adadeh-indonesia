@@ -12,7 +12,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
 
   return (
     <div className="flex items-center gap-3">
-      <form className="flex">
+      <form className="hidden min-[500px]:flex">
         <div>
           <input
             type="text"
