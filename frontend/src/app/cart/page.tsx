@@ -130,7 +130,7 @@ export default function Cart() {
         </div>
       </header>
       <main className="flex">
-        <section className="m-5 lg:w-3/4">
+        <section className="my-5 w-full lg:w-3/4">
           {cartItems.map((item) => (
             <CartItem
               image_url={item.image_url}
@@ -147,12 +147,17 @@ export default function Cart() {
           ))}
         </section>
 
-        <section className="m-5 lg:w-1/4">
+        <section className="lg:m-5 lg:w-1/4">
           <div className="hidden border border-black p-4 lg:block">
             <h1 className="mb-4 text-xl font-semibold">ORDER SUMMARY</h1>
             <div className="flex justify-between">
               <p>SUBTOTAL</p>
-              <span className="font-semibold">Rp {totalPrice}</span>
+              <span className="font-semibold">
+                {totalPrice.toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                })}
+              </span>
             </div>
             <div className="flex justify-between">
               <p>TAX</p>
@@ -161,7 +166,12 @@ export default function Cart() {
             <div className="my-4 border-separate border-b"></div>
             <div className="flex justify-between">
               <p className="font-semibold">TOTAL</p>
-              <span className="font-semibold">Rp {totalPrice + 10000}</span>
+              <span className="font-semibold">
+                {(totalPrice + 10000).toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                })}
+              </span>
             </div>
             <div>
               <button className="my-6 inline-block w-full shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">

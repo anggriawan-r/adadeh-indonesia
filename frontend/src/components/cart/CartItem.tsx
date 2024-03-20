@@ -87,7 +87,12 @@ const CartItem: React.FC<CartItemProps> = ({
                 <span>{count}</span>
                 <button onClick={increment}>+</button>
               </div>
-              <h1 className="mx-4 mt-1">Rp {harga}</h1>
+              <h1 className="mx-4 mt-1">
+                {harga.toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                })}
+              </h1>
             </div>
           </div>
           <div className="mt-1 w-full">
@@ -112,7 +117,12 @@ const CartItem: React.FC<CartItemProps> = ({
               />
             </svg>
           </button>
-          <h1 className="hidden text-lg font-medium lg:block">Rp {harga}</h1>
+          <h1 className="hidden text-lg font-medium lg:block">
+            {harga.toLocaleString("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            })}
+          </h1>
         </div>
       </div>
     </div>
