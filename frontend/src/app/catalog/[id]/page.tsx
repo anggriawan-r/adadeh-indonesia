@@ -11,15 +11,16 @@ const ProductDetail = () => {
         </div>
       </header>
       <section className="body-font mt-12 overflow-hidden bg-white text-gray-700">
-        <div className="container mx-auto px-5 py-24">
+        <div className="container mx-auto px-5 lg:py-24">
           <div className="mx-auto flex flex-wrap lg:w-4/5">
             <Image
               width={1000}
               height={1000}
               alt="ecommerce"
-              className="w-full rounded border border-gray-200 object-cover object-center lg:w-1/2"
+              className="w-full transform-gpu overflow-hidden rounded border border-gray-200 object-cover object-center transition-transform duration-300 hover:scale-110 lg:w-1/2"
               src="https://www.adidas.co.id/media/catalog/product/i/f/if3219_lscl_ecom.jpg"
             />
+
             <div className="mt-6 w-full lg:mt-0 lg:w-1/2 lg:py-6 lg:pl-10">
               <h2 className="title-font text-sm tracking-widest text-gray-500">
                 SEPATU RUNNING
