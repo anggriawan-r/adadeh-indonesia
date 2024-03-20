@@ -3,6 +3,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import CartItem from "@/components/cart/CartItem";
 import { useEffect, useState } from "react";
+import ProductCarousel from "@/components/ProductCarousel";
+import { products } from "@/lib/constants";
 
 interface CartItem {
   id: number;
@@ -184,6 +186,9 @@ export default function Cart() {
       <div className="mb-40 border-y border-black p-4 lg:mb-4">
         <h1 className="ml-4 text-4xl font-semibold">RECOMMENDED PRODUCTS</h1>
       </div>
+      <section className="body-font my-12 overflow-hidden bg-white text-gray-700">
+        <ProductCarousel data={products} />
+      </section>
     </>
   );
 }
