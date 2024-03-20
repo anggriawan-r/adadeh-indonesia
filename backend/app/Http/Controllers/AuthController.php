@@ -151,7 +151,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!$token = auth()->attempt($credentials)) {
             return response()->json([
-                'status'    =>  true,
+                'status'    =>  false,
                 'message'   => 'You are not logged in successfully'
             ]);
         }

@@ -1,9 +1,48 @@
+"use client"
+
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { signInSchema } from "@/type/auth";
+import { useForm } from "react-hook-form";
+import { useLogin } from "@/stores/useAuth";
+import { useToast } from "@/components/ui/use-toast"
 
 export default function SignIn() {
+  const { message, handleSignIn } = useLogin()
+  const { toast } = useToast()
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+  });
+  const onSubmit = async (val: z.infer<typeof signInSchema>) => {
+    await handleSignIn(val)
+    .then(()=>{
+      toast({
+        title: "Success",
+        description: message
+      })
+    })
+    .catch(()=>{
+      toast({
+        variant: "destructive",
+        title: "Failed",
+        description: message
+      })
+    })
+  }
   return (
     <>
-      <section className="mt-20 bg-white lg:mt-0">
+      <section className="mt-20 bg-white lg:mt-0 h-[calc(100%-80px)] relative top-20">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
             <Image
@@ -53,7 +92,52 @@ export default function SignIn() {
                 <h1 className="hidden text-4xl font-bold lg:block">
                   WELCOME BACK.
                 </h1>
-                <form action="#" className="flex flex-col lg:mt-8 lg:w-96">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4 lg:mt-8 lg:w-96"
+                    autoComplete="false"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input type="password" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit">Submit</Button>
+                    <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                      Dont have an account?
+                      <a href="/auth/signup" className="text-gray-700 underline">
+                        Sign Up
+                      </a>
+                    </p>
+                  </form>
+                </Form>
+                {/* <form action="#" className="flex flex-col lg:mt-8 lg:w-96">
                   <div className="mt-2">
                     <label
                       htmlFor="Email"
@@ -103,7 +187,7 @@ export default function SignIn() {
                       .
                     </p>
                   </div>
-                </form>
+                </form> */}
               </div>
             </div>
           </main>
