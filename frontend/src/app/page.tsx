@@ -1,4 +1,3 @@
-import ProductCard from "@/components/card/ProductCard";
 import HeroSection from "@/components/hero/HeroSection";
 import ProductCarousel from "@/components/ProductCarousel";
 import CategoryCard from "@/components/card/CategoryCard";

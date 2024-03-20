@@ -58,6 +58,20 @@ const products: productsType[] = [
     image_url:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
+  {
+    category: "Running",
+    name: "SANDAL RUNNING TDR3000",
+    price: "Rp. 2.300.000",
+    image_url:
+      "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
+  },
+  {
+    category: "Outdoor",
+    name: "SEPATU OUTDOOR TDR3001",
+    price: "Rp. 2.300.000",
+    image_url:
+      "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
+  },
 ];
 type productsType = {
   category: string;
