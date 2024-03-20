@@ -5,8 +5,9 @@ import { products, heroes, categories } from "@/lib/constants";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-20 py-24">
+    <main className="my-20 flex min-h-screen flex-col items-center justify-center gap-20">
       <HeroSection heroes={heroes} />
+
       <section className="grid w-full grid-cols-1 gap-8 px-8 sm:grid-cols-3">
         {categories.map((item, index) => (
           <CategoryCard data={item} key={index} />

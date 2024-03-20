@@ -21,7 +21,7 @@ export default function CategoryCard({
         />
       </div>
       <div className="absolute bottom-10 flex w-full justify-center">
-        <button className="bg-black p-4 text-sm font-semibold text-white hover:bg-black/70">
+        <button className="z-[1] bg-black p-4 text-sm font-semibold text-white hover:bg-zinc-900">
           {data.name}
         </button>
         <div className="pointer-events-none absolute translate-x-1 translate-y-1 border border-black bg-transparent p-4 text-sm font-semibold text-transparent">

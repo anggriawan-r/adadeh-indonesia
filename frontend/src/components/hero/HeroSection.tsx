@@ -15,11 +15,11 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ heroes }) => {
   return (
-    <>
+    <section className="flex w-full flex-col gap-4">
       {heroes?.map((hero) => (
         <div
           key={hero.id}
-          className="mb-2 flex h-screen w-full items-center px-4 py-20 text-white sm:px-6 lg:px-8"
+          className="flex h-[calc(100vh-80px-80px)] w-full items-center px-4 text-white sm:px-6 lg:px-8"
           style={{
             backgroundImage: `url(${hero.imageUrl})`,
             backgroundSize: "cover",
@@ -30,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroes }) => {
           <div className="flex w-full items-center lg:flex lg:justify-start">
             <div>
               <h2
-                className={`mb-4 text-5xl font-semibold ${hero.isButtonDark ? "text-black" : "text-white"}`}
+                className={`mb-4 max-w-[500px] text-5xl font-bold ${hero.isButtonDark ? "text-black" : "text-white"}`}
               >
                 {hero.title}
               </h2>
@@ -61,7 +61,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroes }) => {
           </div>
         </div>
       ))}
-    </>
+    </section>
   );
 };
 
