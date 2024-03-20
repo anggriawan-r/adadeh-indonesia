@@ -9,8 +9,8 @@ import { FiShoppingCart } from "react-icons/fi";
 
 export default function UserPage() {
   return (
-    <main className="mt-20 flex min-h-[calc(100svh-80px-48px)] w-full items-start justify-center gap-4 sm:pr-4">
-      <div className="relative hidden h-[calc(100vh-80px-48px)] sm:block sm:basis-1/2">
+    <main className="mt-20 flex min-h-[calc(100svh-80px-44px)] w-full items-start justify-center gap-4 sm:pr-4">
+      <div className="relative hidden h-[calc(100vh-80px-44px)] sm:block sm:basis-1/2">
         <Image
           src="https://images.pexels.com/photos/322207/pexels-photo-322207.jpeg"
           alt="view of shoes"
