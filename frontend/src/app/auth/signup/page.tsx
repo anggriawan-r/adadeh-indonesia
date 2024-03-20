@@ -16,15 +16,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRegister } from "@/stores/useAuth"
-import { useToast } from "@/components/ui/use-toast"
+import { useRegister } from "@/stores/useAuth";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [validasi, setValidasi] = useState(false);
-  const { message, handleSignUp } = useRegister()
-  const { toast } = useToast()
-  const router = useRouter()
+  const { message, handleSignUp } = useRegister();
+  const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
   });
@@ -33,20 +33,20 @@ export default function SignUp() {
       setValidasi(true);
     }
     await handleSignUp(val)
-      .then(()=>{
+      .then(() => {
         toast({
           title: "Success",
-          description: message
-        })
-        router.push("/auth/signin")
+          description: message,
+        });
+        router.push("/auth/signin");
       })
-      .catch(()=>{
+      .catch(() => {
         toast({
           variant: "destructive",
           title: "Failed",
-          description: message
-        })
-      })
+          description: message,
+        });
+      });
   };
   return (
     <>
