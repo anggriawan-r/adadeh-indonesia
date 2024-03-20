@@ -8,7 +8,7 @@ import { FaAngleRight } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function NavbarUtils({ nav }: { nav: navType }) {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <div className="flex items-center gap-3">
