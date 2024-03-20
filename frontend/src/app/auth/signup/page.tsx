@@ -1,9 +1,56 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { signUpSchema } from "@/type/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useRegister } from "@/stores/useAuth"
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const [validasi, setValidasi] = useState(false);
+  const { message, handleSignUp } = useRegister()
+  const { toast } = useToast()
+  const router = useRouter()
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+  });
+  const onSubmit = async (val: z.infer<typeof signUpSchema>) => {
+    if (val.password !== val.password_confirmation) {
+      setValidasi(true);
+    }
+    await handleSignUp(val)
+      .then(()=>{
+        toast({
+          title: "Success",
+          description: message
+        })
+        router.push("/auth/signin")
+      })
+      .catch(()=>{
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: message
+        })
+      })
+  };
   return (
     <>
-      <section className="mt-20 bg-white lg:mt-0">
+      <section className="relative top-20 mt-20 h-[calc(100%-80px)] bg-white lg:mt-0">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
             <Image
@@ -51,7 +98,86 @@ export default function SignUp() {
 
               <div className="flex flex-col border-gray-300 px-8 py-14 lg:border">
                 <h1 className="hidden text-4xl font-bold lg:block">SIGN UP.</h1>
-                <form
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4 lg:mt-8 lg:w-96"
+                    autoComplete="false"
+                  >
+                    {validasi && (
+                      <p className="text-sm text-red-500">
+                        Konfirmasi password harus sama dengan password
+                      </p>
+                    )}
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input type="password" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password_confirmation"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password Confirmation</FormLabel>
+                          <FormControl>
+                            <Input type="password" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit">Submit</Button>
+                    <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                      Already have an account?
+                      <a
+                        href="/auth/signin"
+                        className="text-gray-700 underline"
+                      >
+                        Login.
+                      </a>
+                    </p>
+                  </form>
+                </Form>
+                {/* <form
                   action="#"
                   className="flex flex-col gap-6 lg:mt-8 lg:w-96"
                 >
@@ -68,7 +194,6 @@ export default function SignUp() {
                       placeholder="John Doe"
                       type="text"
                       id="Name"
-                      name="name"
                       className="mt-1 w-full border border-gray-300 bg-white p-2 text-sm text-gray-700"
                     />
                   </div>
@@ -86,7 +211,6 @@ export default function SignUp() {
                       placeholder="john.doe@example.com"
                       type="email"
                       id="Email"
-                      name="email"
                       className="mt-1 w-full border border-gray-300 bg-white p-2 text-sm text-gray-700"
                     />
                   </div>
@@ -108,6 +232,23 @@ export default function SignUp() {
                       className="mt-1 w-full border border-gray-300 bg-white p-2 text-sm text-gray-700"
                     />
                   </div>
+                  <div>
+                    <label
+                      htmlFor="PasswordC"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      {" "}
+                      Password Confirmation{" "}
+                    </label>
+
+                    <input
+                      type="password"
+                      placeholder="password"
+                      id="PasswordC"
+                      name="password_confirmation"
+                      className="mt-1 w-full border border-gray-300 bg-white p-2 text-sm text-gray-700"
+                    />
+                  </div>
 
                   <div>
                     <button className="mb-4 inline-block shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
@@ -115,14 +256,14 @@ export default function SignUp() {
                     </button>
 
                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                      Already habe an account?
+                      Already have an account?
                       <a href="#" className="text-gray-700 underline">
                         Login.
                       </a>
                       .
                     </p>
                   </div>
-                </form>
+                </form> */}
               </div>
             </div>
           </main>
