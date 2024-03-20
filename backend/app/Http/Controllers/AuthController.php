@@ -196,10 +196,10 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/reset-password",
-     *     summary="reset-password",
-     *     description="reset-password",
-     *     operationId="reset-password",
+     *     path="/api/update-data",
+     *     summary="update-data",
+     *     description="update-data",
+     *     operationId="update-data",
      *     tags={"Auth"},
      *     security={{ "bearerAuth": {} }},
      * @OA\RequestBody(
@@ -210,13 +210,21 @@ class AuthController extends Controller
      *       @OA\Property(property="password", type="string", format="password", example="Password value of at least 8"),
      *       @OA\Property(property="password_confirmation", type="string", format="password_confirmation", example="The value must be the same as the password"),
      *    ),
+     *    @OA\JsonContent(
+     *       required={"address"},
+     *       @OA\Property(property="address", type="string", example="Online"),
+     *    ),
+     *    @OA\JsonContent(
+     *       required={"phone"},
+     *       @OA\Property(property="phone", type="string", example="081234567890"),
+     *    ),
      * ),
      *     @OA\Response(
      *         response=200,
-     *         description="You successfully reset your password",
+     *         description="You successfully update data",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
-     *             @OA\Property(property="message", type="string", example="You successfully reset your password"),
+     *             @OA\Property(property="message", type="string", example="You successfully update data"),
      *         )
      *     ),
      *     @OA\Response(
@@ -229,24 +237,13 @@ class AuthController extends Controller
      *     ),
      * )
      */
-    public function change_password(Request $request){
-        $validate = Validator::make($request->all(), [
-            "password"  => "required|confirmed|min:8"
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                "status"    =>  false,
-                "message"   =>  $validate->errors()
-            ], 419);
-        }
-
+    public function update_user(Request $request){
         $user = User::find(auth()->user()->id);
         if($user){
             $user->update($request->all());
             return response()->json([
                 "status"    =>  true,
-                "message"   =>  "You successfully reset your password"
+                "message"   =>  "You successfully update data"
             ]);
         }else{
             return response()->json([
