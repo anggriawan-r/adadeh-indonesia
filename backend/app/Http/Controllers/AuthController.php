@@ -19,7 +19,7 @@ class AuthController extends Controller
      *     operationId="authRegister",
      *     @OA\RequestBody(
      *         required=true,
-     *         description="If the role is assigned"
+     *         description="If the role is assigned",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="name", type="string", example="Username"),
@@ -31,7 +31,7 @@ class AuthController extends Controller
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="If the role is not assigned"
+     *         description="If the role is not assigned",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="name", type="string", example="Username"),
@@ -139,7 +139,7 @@ class AuthController extends Controller
      *          @OA\Property(property="token", type="string", example="Top secret"),
      *          @OA\Property(property="user", type="object",
      *              @OA\Property(property="name", type="string", example="Username"),
-     *              @OA\Property(property="email, type="string", example="username@gmail.com")
+     *              @OA\Property(property="email", type="string", format="email", example="username@gmail.com"),
      *          ),
      *      ),
      *     )
@@ -223,7 +223,7 @@ class AuthController extends Controller
      *         response=404,
      *         description="Account not found",
      *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example="false")
+     *             @OA\Property(property="status", type="boolean", example="false"),
      *             @OA\Property(property="message", type="string", example="Account not found")
      *         ),
      *     ),

@@ -13,7 +13,7 @@ class CategoryController extends Controller
      *     path="/api/categories",
      *     summary="Get all Category",
      *     description="Get all Category data",
-     *     operationId="getCategory",
+     *     operationId="getAllCategory",
      *     tags={"Category"},
      *     @OA\Response(
      *         response=200,
@@ -29,7 +29,7 @@ class CategoryController extends Controller
         $category = Category::all();
         return response()->json([
             "status"    =>  true,
-            "message"   =>  "Categorys in the app",
+            "message"   =>  "Categories in the app",
             "data"      =>  $category
         ]);
     }
@@ -62,7 +62,7 @@ class CategoryController extends Controller
      *             @OA\Property(property="status", type="boolean", example="true"),
      *             @OA\Property(property="message", type="object",
      *                  @OA\Property(property="name", type="array",
-     *                      @OA\Item(item="name", example="The name is required")
+     *                      @OA\Items(type="string", example="The name is required"),
      *                  ),
      *             ),
      *         )
@@ -100,6 +100,7 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example="true"),
      *             @OA\Property(property="message", type="string", example="Categorys in the app"),
+     *             @OA\Property(property="data", type="object", example="[]"),
      *         )
      *     ),
      *     @OA\Response(
@@ -156,7 +157,7 @@ class CategoryController extends Controller
      *             @OA\Property(property="status", type="boolean", example="true"),
      *             @OA\Property(property="message", type="object",
      *                  @OA\Property(property="name", type="array",
-     *                      @OA\Item(item="name", example="The name is required")
+     *                      @OA\Items(type="string", example="The name is required")
      *                  ),
      *             ),
      *         )
@@ -173,7 +174,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id){
         $validate = Validator::make($request->all(), [
-            "name"  =>  "required|unique:Categorys,name"
+            "name"  =>  "required|unique:categories,name"
         ]);
         if($validate->fails()){
             return response()->json([
@@ -230,6 +231,48 @@ class CategoryController extends Controller
             return response()->json([
                 "status"    =>  true,
                 "message"   =>  "Category successfully deleted",
+            ]);
+        }else{
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  "Category not found"
+            ], 404);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/categories/:id/products",
+     *     summary="Get a Category by id",
+     *     description="Get a Category by id",
+     *     operationId="getProducyByCategory",
+     *     tags={"Category"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message", type="string", example="Categorys in the app"),
+     *             @OA\Property(property="data", type="object", example="[]"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *         )
+     *     ),
+     * )
+     */
+    public function product(Request $request, $id){
+        $category = Category::product_all_filter($request, $id);
+        if($category){
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Category = $category->name",
+                "data"      =>  $category
             ]);
         }else{
             return response()->json([
