@@ -18,8 +18,14 @@ export default function Navbar() {
             />
           </div>
         </Link>
-        <div className="flex h-full space-x-4">
+        <div className="flex h-full gap-8">
           <nav className="hidden h-full items-center gap-8 lg:flex">
+            <Link href="/" className="h-full">
+              <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
+                HOME
+                <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
+              </div>
+            </Link>
             <Link href="/catalogue" className="h-full">
               <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
                 CATALOGUE
@@ -33,7 +39,7 @@ export default function Navbar() {
                 {nav.map((item, index) => (
                   <li key={index}>
                     <Link
-                      className="inline-block w-full p-4 hover:bg-slate-200"
+                      className="inline-block w-full p-4 hover:bg-zinc-200"
                       href="#"
                     >
                       {item}
