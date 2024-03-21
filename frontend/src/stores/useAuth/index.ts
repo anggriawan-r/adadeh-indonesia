@@ -8,7 +8,7 @@ export const useRegister = create<useSignUp>((set) => ({
   handleSignUp: async (data: signUp) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/register`,
+        `${process.env.NEXT_PUBLIC_API_URL}/register`,
         data,
       );
       set({ message: response.data.message });
@@ -33,7 +33,7 @@ export const useLogin = create<useSignIn, []>(
       handleSignIn: async (data) => {
         try {
           const response = await axios.post(
-            "http://localhost:8000/api/login",
+            `${process.env.NEXT_PUBLIC_API_URL}/login`,
             data,
           );
           set({ status: response.data.status });

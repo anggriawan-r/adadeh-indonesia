@@ -51,16 +51,16 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Id
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Id
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "name",
@@ -89,32 +89,40 @@ export const columns: ColumnDef<Category>[] = [
     header: "Action",
     cell: ({ row }) => {
       const category = row.original;
-      const { destroy, message } = useCategory()
+      const { destroy, message } = useCategory();
       const { toast } = useToast();
-      const router = useRouter()
+      const router = useRouter();
       return (
         <>
-            <Button variant={"ghost"} className="border border-slate-200">View</Button>
-            <UpdateCategory id={category.id} />
-            <Button variant={"ghost"} className="border border-slate-200" onClick={async ()=> {
-                await destroy(category.id)
+          <Button variant={"ghost"} className="border border-slate-200">
+            View
+          </Button>
+          <UpdateCategory id={category.id} />
+          <Button
+            variant={"ghost"}
+            className="border border-slate-200"
+            onClick={async () => {
+              await destroy(category.id)
                 .then(() => {
-                    toast({
-                      title: "Success",
-                      description: message,
-                    });
-                  })
-                  .catch(() => {
-                    toast({
-                      variant: "destructive",
-                      title: "Failed",
-                      description: message,
-                    });
-                  })
-                  .finally(()=>{
-                    router.refresh();
-                  })
-            }}>Delete</Button>
+                  toast({
+                    title: "Success",
+                    description: message,
+                  });
+                })
+                .catch(() => {
+                  toast({
+                    variant: "destructive",
+                    title: "Failed",
+                    description: message,
+                  });
+                })
+                .finally(() => {
+                  router.refresh();
+                });
+            }}
+          >
+            Delete
+          </Button>
         </>
       );
     },
