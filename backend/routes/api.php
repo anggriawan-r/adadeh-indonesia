@@ -64,15 +64,6 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::delete("/details-transaksi/{details-transaksi}", "destroy");
     });
 
-
-
-    // Product
-    Route::controller(ProductController::class)->group(function () {
-        Route::post("/products", "store");
-        Route::patch("/products/{products}", "update");
-        Route::delete("/products/{products}", "destroy");
-    });
-
     // Auth
     Route::controller(AuthController::class)->group(function () {
         Route::post("/logout", "logout");
@@ -91,6 +82,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
     Route::apiResource('/transaksi', TransaksiController::class);
     Route::apiResource('/keranjang', KeranjangController::class);
+});
+// Product
+Route::controller(ProductController::class)->group(function () {
+    Route::post("/products", "store");
+    Route::patch("/products/{products}", "update");
+    Route::delete("/products/{products}", "destroy");
 });
 
     // Category
