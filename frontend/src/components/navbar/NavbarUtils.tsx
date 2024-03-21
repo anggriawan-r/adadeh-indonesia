@@ -1,3 +1,5 @@
+"use client";
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoSearch } from "react-icons/io5";
@@ -8,6 +10,7 @@ import { FaAngleRight } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MdAccountCircle } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
+import { PiSignOutBold } from "react-icons/pi";
 
 export default function NavbarUtils({ nav }: { nav: navType }) {
   const isLoggedIn = true;
@@ -32,9 +35,11 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
 
       {isLoggedIn && (
         <>
-          <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
-            <FiShoppingCart className="-ml-0.5 text-xl text-white" />
-          </button>
+          <Link href="/cart">
+            <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
+              <FiShoppingCart className="-ml-0.5 text-xl text-white" />
+            </button>
+          </Link>
           <div className="group relative flex h-full items-center">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -55,6 +60,13 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
                 <GoHeartFill className="basis-1/5 text-xl" />
                 <p className="basis-4/5">Wishlist</p>
               </Link>
+              <div
+                onClick={() => console.log("Logout")}
+                className="flex w-full cursor-pointer items-center gap-4 bg-white p-4 text-base font-semibold text-black hover:bg-zinc-100"
+              >
+                <PiSignOutBold className="basis-1/5 text-xl" />
+                <p className="basis-4/5">Sign Out</p>
+              </div>
             </div>
           </div>
         </>
@@ -93,7 +105,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
 
             <hr />
 
-            <Link href="#">
+            <Link href="/catalogue">
               <div className="group relative flex h-full cursor-pointer items-center justify-between p-2 text-lg font-bold text-black/80 hover:bg-black hover:text-white">
                 CATALOGUE
               </div>

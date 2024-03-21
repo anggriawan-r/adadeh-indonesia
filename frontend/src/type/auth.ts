@@ -35,7 +35,7 @@ export interface signIn {
 export interface useSignIn {
   message: string;
   status: boolean;
-  handleSignIn: (data: signUp) => Promise<void>;
+  handleSignIn: (data: signIn) => Promise<void>;
   data: any;
 }
 
