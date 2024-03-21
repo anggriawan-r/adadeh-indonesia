@@ -60,25 +60,28 @@ export default function UpdateProduct({id}: props) {
       values = {...values, image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`}
       console.log(values);
       await edit(values, id)
-        .finally(() => {
-          router.refresh();
-        });
+      router.refresh();
+      setIsSubmitted(true)
     }
   };
+  const [isSubmitted, setIsSubmitted] = useState(false);
   useEffect(()=>{
-    if(status){
-      toast({
-        title: "Success",
-        description: message,
-      });
-    }else{
-      toast({
-        variant: "destructive",
-        title: "Failed",
-        description: message,
-      });
+    if(isSubmitted){
+      if(status){
+        toast({
+          title: "Success",
+          description: message,
+        });
+      }else{
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: message,
+        });
+      }
+      setIsSubmitted(false)
     }
-  }, [status])
+  }, [status, message, isSubmitted])
   return (
     <Dialog>
       <DialogTrigger className="rounded-lg border border-slate-200 px-4 py-2">

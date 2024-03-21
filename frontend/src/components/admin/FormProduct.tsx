@@ -76,6 +76,7 @@ export default function FormProduct() {
           description: message,
         });
       }
+      setIsSubmitted(false)
     }
   }, [status, message, isSubmitted])
   return (
