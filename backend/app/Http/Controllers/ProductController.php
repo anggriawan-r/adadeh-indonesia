@@ -85,7 +85,7 @@ class ProductController extends Controller
             "stock"         =>  "required",
             "price"         =>  "required",
             "category_id"   =>  "required",
-            "image"         =>  "required|image|mimes:jpeg,png,jpg,gif,svg|max:1024"
+            "image"         =>  "required"
         ]);
 
         if($validate->fails()){
@@ -95,16 +95,13 @@ class ProductController extends Controller
             ], 419);
         }
 
-        $image = $request->file('image');
-        $image->storeAs('public/products', $image->hashName());
-
         $product = Product::create([
             "name"  =>  $request->name,
             "description"   =>  $request->description,
             "stock" =>  $request->stock,
             "price" =>  $request->price,
             "category_id"   =>  $request->category_id,
-            "image" =>  $image->hashName()
+            "image" =>  $request->image
         ]);
 
         return response()->json([
@@ -210,11 +207,11 @@ class ProductController extends Controller
     {
         $validate = Validator::make($request->all(), [
             "name"          =>  "required|unique:products,name",
-            "description"    =>  "required",
-            "stock"         => "required",
-            "price"         =>  "requied",
+            "description"   =>  "required",
+            "stock"         =>  "required",
+            "price"         =>  "required",
             "category_id"   =>  "required",
-            "image"         =>  "required|image|mimes:jpeg,png,jpg,gif,svg|max:1024"
+            "image"         =>  "required"
         ]);
 
         if($validate->fails()){
@@ -226,16 +223,13 @@ class ProductController extends Controller
 
         $product = Product::find($id);
         if($product){
-            $image = $request->file('image');
-            $image->storeAs('public/products', $image->hashName());
-            Storage::delete('public/posts/'.basename($product->image));
             $product->update([
                 "name"  =>  $request->name,
                 "description"   =>  $request->description,
                 "stock" =>  $request->stock,
                 "price" =>  $request->price,
                 "category_id"   =>  $request->category_id,
-                "image" =>  $image->hashName()
+                "image" =>  $request->image
             ]);
             return response()->json([
                 "status"    =>  true,

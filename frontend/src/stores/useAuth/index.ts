@@ -28,7 +28,7 @@ export const useLogin = create<useSignIn, []>(
   (persist as persist)(
     (set, get): useSignIn => ({
       message: "",
-      status: false,
+      status: get()?.status,
       data: get()?.data,
       handleSignIn: async (data) => {
         try {

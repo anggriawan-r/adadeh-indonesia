@@ -48,6 +48,10 @@ class Product extends Model
             return $products;
         }else{
             $products = Product::all();
+            foreach($products as $product){
+                $category = Category::find($product->category_id);
+                $product->category_id = $category->name;
+            }
             return $products;
         }
     }
