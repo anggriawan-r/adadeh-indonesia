@@ -11,9 +11,29 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MdAccountCircle } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { PiSignOutBold } from "react-icons/pi";
+import { useLogin } from "@/stores/useAuth";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 export default function NavbarUtils({ nav }: { nav: navType }) {
-  const isLoggedIn = true;
+  const { message, data, status, handleSignOut } = useLogin();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { toast } = useToast();
+
+  const onSignOut = () => {
+    handleSignOut();
+    setIsSubmitted(true);
+  };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      toast({
+        title: "Success",
+        description: message,
+      });
+      setIsSubmitted(false);
+    }
+  }, [message, toast, isSubmitted]);
 
   return (
     <div className="flex items-center gap-3">
@@ -33,7 +53,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
         </button>
       </form>
 
-      {isLoggedIn && (
+      {status && (
         <>
           <Link href="/cart">
             <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
@@ -42,8 +62,9 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
           </Link>
           <div className="group relative flex h-full items-center">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback className="font-bold">
+                {data.user.name[0]}
+              </AvatarFallback>
             </Avatar>
             <div className="invisible absolute bottom-0 right-[50%] translate-x-[30%] translate-y-full bg-white font-semibold shadow-2xl group-hover:visible">
               <Link
@@ -61,7 +82,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
                 <p className="basis-4/5">Wishlist</p>
               </Link>
               <div
-                onClick={() => console.log("Logout")}
+                onClick={onSignOut}
                 className="flex w-full cursor-pointer items-center gap-4 bg-white p-4 text-base font-semibold text-black hover:bg-zinc-100"
               >
                 <PiSignOutBold className="basis-1/5 text-xl" />
@@ -71,7 +92,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
           </div>
         </>
       )}
-      {!isLoggedIn && (
+      {!status && (
         <Link href="/auth/signup">
           <button className="ml-2 hidden shrink-0 text-xs font-bold hover:text-zinc-700 md:flex lg:text-sm">
             SIGN UP

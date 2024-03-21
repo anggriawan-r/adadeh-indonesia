@@ -17,6 +17,7 @@ import { signInSchema } from "@/type/auth";
 import { useForm } from "react-hook-form";
 import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 export default function SignIn() {
   const { message, status, handleSignIn } = useLogin();
@@ -24,30 +25,33 @@ export default function SignIn() {
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
   });
+
   const onSubmit = async (val: z.infer<typeof signInSchema>) => {
-    await handleSignIn(val)
-      .then(() => {
-        if(status){
-          toast({
-            title: "Success",
-            description: message,
-          });
-        }else{
-          toast({
-            variant: "destructive",
-            title: "Failed",
-            description: message,
-          });
-        }
-      })
-      .catch(() => {
+    await handleSignIn(val);
+    setIsSubmitted(true);
+  };
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      if (status) {
+        toast({
+          title: "Success",
+          description: message,
+        });
+        setIsSubmitted(false);
+      } else {
         toast({
           variant: "destructive",
           title: "Failed",
           description: message,
         });
-      });
-  };
+        setIsSubmitted(false);
+      }
+    }
+  }, [message, status, toast, isSubmitted]);
+
   return (
     <section className="relative mt-20 h-full bg-white lg:mt-0">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">

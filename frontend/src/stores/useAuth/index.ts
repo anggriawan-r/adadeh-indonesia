@@ -27,7 +27,7 @@ type persist = (
 export const useLogin = create<useSignIn, []>(
   (persist as persist)(
     (set, get): useSignIn => ({
-      message: "",
+      message: get()?.message,
       status: get()?.status,
       data: get()?.data,
       handleSignIn: async (data) => {
@@ -43,6 +43,11 @@ export const useLogin = create<useSignIn, []>(
           set({ status: error.response.data.status });
           set({ message: error.response.data.message });
         }
+      },
+      handleSignOut: () => {
+        set({ status: false });
+        set({ data: null });
+        set({ message: "Sign out success!" });
       },
     }),
     {

@@ -36,6 +36,7 @@ export interface useSignIn {
   message: string;
   status: boolean;
   handleSignIn: (data: signIn) => Promise<void>;
+  handleSignOut: () => void;
   data: any;
 }
 
