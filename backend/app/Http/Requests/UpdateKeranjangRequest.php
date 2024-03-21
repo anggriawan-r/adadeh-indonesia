@@ -34,7 +34,7 @@ class UpdateKeranjangRequest extends FormRequest
         $this->merge([
             'jumlah' => $this->input('jumlah') ?? null,
             'produkId' => $this->input('produkId') ?? null,
-            'userId' => $this->input('userId') ?? null
+            'userId' => auth()->user()->id
         ]);
     }
 }

@@ -91,11 +91,13 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
     Route::apiResource('/transaksi', TransaksiController::class);
     Route::apiResource('/keranjang', KeranjangController::class);
+
+    Route::get('/user/{userId}/keranjang', [KeranjangController::class, 'showByUserId']);
 });
 
-    // Category
-    Route::controller(CategoryController::class)->group(function () {
-        Route::post("/categories", "store");
-        Route::patch("/categories/{categories}", "update");
-        Route::delete("/categories/{categories}", "destroy");
-    });
+// Category
+Route::controller(CategoryController::class)->group(function () {
+    Route::post("/categories", "store");
+    Route::patch("/categories/{categories}", "update");
+    Route::delete("/categories/{categories}", "destroy");
+});
