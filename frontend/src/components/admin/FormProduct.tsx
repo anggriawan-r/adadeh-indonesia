@@ -29,7 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import axios from 'axios'
 import useSWR from "swr"
 import { createClient } from '@supabase/supabase-js'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
  
 const fetcher = (url: string) => axios.get(url).then(res => res.data.data)
 const supabase = createClient('https://vcowdsqhhhrcmyvetict.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjb3dkc3FoaGhyY215dmV0aWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2NTM2NDYsImV4cCI6MjAyNTIyOTY0Nn0.KY9p1Lz1x3fYcK86eYx4mrUI3F-nDPvZS4iW3FeGNn0')
@@ -51,31 +51,33 @@ export default function FormProduct() {
       toast({
         variant: "destructive",
         title: "Failed",
-        description: error,
+        description: "Gagal upload gambar",
       });
     } else {
       values = {...values, image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`}
       console.log(values);
       await store(values)
-        .finally(() => {
-          router.refresh();
-        });
+      router.refresh();
+      setIsSubmitted(true)
     }
   };
+  const [isSubmitted, setIsSubmitted] = useState(false);
   useEffect(()=>{
-    if(status){
-      toast({
-        title: "Success",
-        description: message,
-      });
-    }else{
-      toast({
-        variant: "destructive",
-        title: "Failed",
-        description: message,
-      });
+    if(isSubmitted){
+      if(status){
+        toast({
+          title: "Success",
+          description: message,
+        });
+      }else{
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: message,
+        });
+      }
     }
-  }, [status])
+  }, [status, message, isSubmitted])
   return (
     <Dialog>
       <DialogTrigger className="rounded-lg border border-slate-200 px-4 py-2">

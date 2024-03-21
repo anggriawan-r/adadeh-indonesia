@@ -16,7 +16,7 @@ export const productSchema = z.object({
     category_id: z.string({
         required_error: "Category harus diisi"
     }),
-    image: z.instanceof(FileList).optional(),
+    image: z.instanceof(FileList).optional() || z.any(),
 })
 
 export interface useProducts{
