@@ -64,12 +64,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::delete("/details-transaksi/{details-transaksi}", "destroy");
     });
 
-    // Category
-    Route::controller(CategoryController::class)->group(function () {
-        Route::post("/categories", "store");
-        Route::patch("/categories/{categories}", "update");
-        Route::delete("/categories/{categories}", "destroy");
-    });
+
 
     // Product
     Route::controller(ProductController::class)->group(function () {
@@ -81,7 +76,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     // Auth
     Route::controller(AuthController::class)->group(function () {
         Route::post("/logout", "logout");
-        Route::post("/change_password", "change_password");
+        Route::post("/update-user", "update_user");
     });
 
     // Wishlist
@@ -97,3 +92,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('/transaksi', TransaksiController::class);
     Route::apiResource('/keranjang', KeranjangController::class);
 });
+
+    // Category
+    Route::controller(CategoryController::class)->group(function () {
+        Route::post("/categories", "store");
+        Route::patch("/categories/{categories}", "update");
+        Route::delete("/categories/{categories}", "destroy");
+    });

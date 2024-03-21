@@ -20,12 +20,15 @@ class Category extends Model
     public static function product_all_filter(Request $request, $id){
         $category = Category::find($id);
         $products = Product::query()->where("category_id", $category->id);
-        if($request->name || $request->new){
+        if($request->name || $request->new || $request->price){
             if($request->name){
                 $products->where("name", "like", '%'. $request->name .'%');
             }
             if($request->new){
                 $products->orderBy("created_at", $request->new);
+            }
+            if($request->price){
+                $products->orderBy("price", $request->price);
             }
         }
         $category->products = $products->get();
