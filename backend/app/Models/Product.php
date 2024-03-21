@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         "name", "description", "stock", "price", "category_id", "image"
     ];
@@ -53,7 +54,7 @@ class Product extends Model
 
     public static function product_category_name($id){
         $product = Product::find($id);
-        $category = Category::find($product->id);
+        $category = Category::find($product->category_id);
         $product->category = $category->name;
 
         return $product;
