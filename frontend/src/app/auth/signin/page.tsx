@@ -19,7 +19,7 @@ import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function SignIn() {
-  const { message, handleSignIn } = useLogin();
+  const { message, status, handleSignIn } = useLogin();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -27,10 +27,18 @@ export default function SignIn() {
   const onSubmit = async (val: z.infer<typeof signInSchema>) => {
     await handleSignIn(val)
       .then(() => {
-        toast({
-          title: "Success",
-          description: message,
-        });
+        if(status){
+          toast({
+            title: "Success",
+            description: message,
+          });
+        }else{
+          toast({
+            variant: "destructive",
+            title: "Failed",
+            description: message,
+          });
+        }
       })
       .catch(() => {
         toast({
