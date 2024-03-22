@@ -40,6 +40,7 @@ class KeranjangController extends Controller
     {
         try {
             $listKeranjang = Keranjang::all();
+            $listKeranjang->load('produk');
             if(count($listKeranjang) > 0) {
                 $this->responseData['message'] = 'Daftar Keranjang Berhasil Ditemukan';
             } else {
@@ -131,6 +132,7 @@ class KeranjangController extends Controller
     {
         try {
             $keranjang = Keranjang::find($id);
+            $keranjang->load('produk');
             if($keranjang === null) throw new Exception('Keranjang Tidak Tersedia');
             
             $this->responseData['message'] = 'Keranjang Berhasil Ditemukan';
@@ -259,6 +261,7 @@ class KeranjangController extends Controller
     {
         try {
             $listKeranjang = Keranjang::where('user_id', $userId)->get();
+            $listKeranjang->load('produk');
             if(count($listKeranjang) > 0) {
                 $this->responseData['message'] = 'Daftar Keranjang Berhasil Ditemukan';
             } else {
