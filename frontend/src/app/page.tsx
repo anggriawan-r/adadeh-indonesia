@@ -15,7 +15,7 @@ export default function Home() {
       </section>
 
       <section className="w-full">
-        <h1 className="mb-4 text-center text-xl font-bold sm:text-3xl">
+        <h1 className="mb-8 text-center text-xl font-bold sm:text-3xl">
           PRODUK TERBAIK ADADEH
         </h1>
         <ProductCarousel data={products} />
