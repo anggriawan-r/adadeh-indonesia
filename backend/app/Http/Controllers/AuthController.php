@@ -244,7 +244,6 @@ class AuthController extends Controller
     if ($request->password) {
       $request['password'] = Hash::make($request->password);
     }
-
     if ($user) {
       $user->update($request->all());
       return response()->json([
@@ -256,6 +255,7 @@ class AuthController extends Controller
         "status"    =>  false,
         "message"   =>  "Account not found"
       ]);
+     }
     }
   }
 }

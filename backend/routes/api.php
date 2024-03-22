@@ -79,9 +79,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete("/wishlists/{wishlists}", "destroy");
   });
 
-  Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
-  Route::apiResource('/transaksi', TransaksiController::class);
-  Route::apiResource('/keranjang', KeranjangController::class);
+    Route::apiResource('/metode-pembayaran', MetodePembayaranController::class);
+    Route::apiResource('/transaksi', TransaksiController::class);
+    Route::apiResource('/keranjang', KeranjangController::class);
+
+    Route::get('/user/{userId}/keranjang', [KeranjangController::class, 'showByUserId']);
 });
 // Product
 Route::controller(ProductController::class)->group(function () {
