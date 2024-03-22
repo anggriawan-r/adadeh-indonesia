@@ -4,9 +4,11 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { MdOutlineSpaceDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdLogout } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useLogin } from "@/stores/useAuth";
 
 export default function Sidebar(){
     const router = useRouter()
+    const { handleSignOut } = useLogin()
     return(
         <>
             <header className="grid place-items-center h-40">
@@ -50,7 +52,10 @@ export default function Sidebar(){
                 </ul>
                 <ul>
                     <li>
-                        <Button className="w-full justify-start" variant={"ghost"}>
+                        <Button className="w-full justify-start" variant={"ghost"} onClick={()=>{
+                            handleSignOut()
+                            router.push("/auth/signin")
+                        }}>
                             <MdLogout className="text-xl mr-2" />
                             Logout
                         </Button>
