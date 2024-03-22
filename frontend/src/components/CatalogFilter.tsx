@@ -12,11 +12,10 @@ import { categories } from "@/lib/constants";
 import { twJoin } from "tailwind-merge";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useFilterStore } from "@/stores/useFilter";
 import {
   Form,
   FormControl,
@@ -36,11 +35,7 @@ export default function CatalogFilter({ className }: { className?: string }) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof filterSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  function onSubmit(values: z.infer<typeof filterSchema>) {}
 
   return (
     <aside

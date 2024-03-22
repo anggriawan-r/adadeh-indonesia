@@ -3,81 +3,102 @@ type navType = typeof nav;
 
 const products: productsType[] = [
   {
+    id: 1,
     category: "Lifestyle",
     name: "SANDAL MEHANA",
-    price: "Rp. 1.300.000",
-    image_url:
+    price: 1300000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 2,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22 XLG",
-    price: "Rp. 1.300.000",
-    image_url:
+    price: 1300000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5650_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 3,
     category: "Lifestyle",
     name: "SEPATU MULE ADIFOM STAN SMITH",
-    price: "Rp. 1.200.000",
-    image_url:
+    price: 1200000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie0483_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 4,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22",
-    price: "Rp. 840.000",
-    image_url:
+    price: 840000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 5,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22",
-    price: "Rp. 840.000",
-    image_url:
+    price: 840000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 6,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22",
-    price: "Rp. 840.000",
-    image_url:
+    price: 840000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 7,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22",
-    price: "Rp. 840.000",
-    image_url:
+    price: 840000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 8,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22",
-    price: "Rp. 840.000",
-    image_url:
+    price: 840000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 9,
     category: "Running",
     name: "SANDAL RUNNING TDR3000",
-    price: "Rp. 2.300.000",
-    image_url:
+    price: 2300000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
+    id: 10,
     category: "Outdoor",
     name: "SEPATU OUTDOOR TDR3001",
-    price: "Rp. 2.300.000",
-    image_url:
+    price: 2300000,
+    image:
       "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
   },
 ];
 type productsType = {
+  id: number;
   category: string;
   name: string;
-  price: string;
-  image_url: string;
+  price: number;
+  image: string;
+};
+
+type detailProductType = {
+  stock: number;
+  id: number;
+  description: string;
+  category: string;
+  name: string;
+  price: number;
+  image: string;
 };
 
 const heroes = [
@@ -132,5 +153,5 @@ type categoriesType = {
   image_url: string;
 };
 
-export { nav, products, categories, heroes };
-export type { navType, productsType, categoriesType };
+export { nav, categories, heroes, products };
+export type { navType, productsType, categoriesType, detailProductType };
