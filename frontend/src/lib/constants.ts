@@ -1,3 +1,6 @@
+export const protectedRoutes = ["/user", "/cart", "/wishlist"];
+export const loginRoutes = ["/auth/signin", "/auth/signup"];
+
 const nav = ["LIFESTYLE", "SPORTS", "OUTDOOR", "SLIDES", "ESSENTIALS"] as const;
 type navType = typeof nav;
 

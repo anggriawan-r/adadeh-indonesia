@@ -1,43 +1,100 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useUser } from "@/stores/useUser";
+import { useLogin } from "@/stores/useAuth";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { userChangePassword } from "@/type/user";
 
 export default function Password() {
+  const { data } = useLogin();
+  const { edit } = useUser();
+  const [message, setMessage] = useState<string>();
+
+  const form = useForm<z.infer<typeof userChangePassword>>({
+    resolver: zodResolver(userChangePassword),
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (val: z.infer<typeof userChangePassword>) => {
+    setMessage("");
+    try {
+      await edit(
+        {
+          password: val.newPassword,
+        },
+        data.token,
+      );
+      setMessage("Password has been changed successfully!");
+    } catch (error) {
+      setMessage("Failed to change password!");
+    }
+  };
+
   return (
-    <form className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Old Password</Label>
-        <Input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="******"
-          className="rounded-none"
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="newPassword">New Password</Label>
-        <Input
-          type="password"
-          id="newPassword"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
           name="newPassword"
-          placeholder="******"
-          className="rounded-none"
+          render={({ field }) => (
+            <FormItem className="space-y-1">
+              <FormLabel>New Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="********"
+                  className="rounded-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
-        <Input
-          type="password"
-          id="confirmPassword"
+        <FormField
+          control={form.control}
           name="confirmPassword"
-          placeholder="******"
-          className="rounded-none"
+          render={({ field }) => (
+            <FormItem className="space-y-1">
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="********"
+                  className="rounded-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
-        Save changed
-      </button>
-    </form>
+        <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
+          Save changed
+        </button>
+        {message && <p>{message}</p>}
+      </form>
+    </Form>
   );
 }
