@@ -3,6 +3,7 @@
 import { loginRoutes, protectedRoutes } from "@/lib/constants";
 import { useLogin } from "@/stores/useAuth";
 import { usePathname, redirect } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ProtectedRoutes({
   children,
@@ -12,15 +13,17 @@ export default function ProtectedRoutes({
   const { status } = useLogin();
   const path = usePathname();
 
-  if (status) {
-    if (loginRoutes.includes(path)) {
-      redirect("/");
+  useEffect(() => {
+    if (status) {
+      if (loginRoutes.includes(path)) {
+        redirect("/");
+      }
+    } else {
+      if (protectedRoutes.includes(path)) {
+        redirect("/auth/signin");
+      }
     }
-  } else {
-    if (protectedRoutes.includes(path)) {
-      redirect("/auth/signin");
-    }
-  }
+  }, [path, status]);
 
   return <>{children}</>;
 }

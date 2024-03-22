@@ -2,6 +2,7 @@ import { create, StateCreator } from "zustand";
 import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 import axios from "axios";
 import { signUp, useSignIn, useSignUp } from "@/type/auth";
+import { immer } from "zustand/middleware/immer";
 
 export const useRegister = create<useSignUp>((set) => ({
   message: "",
@@ -49,6 +50,36 @@ export const useLogin = create<useSignIn, []>(
         set({ data: null });
         set({ message: "Sign out success!" });
       },
+      mutateAddress: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              address: data,
+            },
+          },
+        })),
+      mutateName: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              name: data,
+            },
+          },
+        })),
+      mutatePhone: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              phone: data,
+            },
+          },
+        })),
     }),
     {
       name: "user-storage",
