@@ -202,23 +202,17 @@ class AuthController extends Controller
      *     operationId="update-data",
      *     tags={"Auth"},
      *     security={{ "bearerAuth": {} }},
-     * @OA\RequestBody(
-     *    required=true,
-     *    description="Reser password",
-     *    @OA\JsonContent(
-     *       required={"password_confirmation","password"},
-     *       @OA\Property(property="password", type="string", format="password", example="Password value of at least 8"),
-     *       @OA\Property(property="password_confirmation", type="string", format="password_confirmation", example="The value must be the same as the password"),
-     *    ),
-     *    @OA\JsonContent(
-     *       required={"address"},
-     *       @OA\Property(property="address", type="string", example="Online"),
-     *    ),
-     *    @OA\JsonContent(
-     *       required={"phone"},
-     *       @OA\Property(property="phone", type="string", example="081234567890"),
-     *    ),
-     * ),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          description="Reser password",
+     *          @OA\JsonContent(
+     *              required={"password_confirmation","password"},
+     *              @OA\Property(property="password", type="string", format="password", example="Password value of at least 8"),
+     *              @OA\Property(property="address", type="string", example="Online"),
+     *              @OA\Property(property="password_confirmation", type="string", format="password_confirmation", example="The value must be the same as the password"),
+     *              @OA\Property(property="phone", type="string", example="081234567890"),
+     *          ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="You successfully update data",
