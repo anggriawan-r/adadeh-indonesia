@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/stores/useUser";
@@ -23,6 +23,7 @@ import { userChangePassword } from "@/type/user";
 export default function Password() {
   const { data } = useLogin();
   const { edit } = useUser();
+  const [message, setMessage] = useState<string>();
 
   const form = useForm<z.infer<typeof userChangePassword>>({
     resolver: zodResolver(userChangePassword),
@@ -32,11 +33,27 @@ export default function Password() {
     },
   });
 
-  const onSubmit = async (val: z.infer<typeof userChangePassword>) => {};
+  const onSubmit = async (val: z.infer<typeof userChangePassword>) => {
+    setMessage("");
+    try {
+      await edit(
+        {
+          password: val.newPassword,
+        },
+        data.token,
+      );
+      setMessage("Password has been changed successfully!");
+    } catch (error) {
+      setMessage("Failed to change password!");
+    }
+  };
 
   return (
     <Form {...form}>
-      <form className="flex flex-col gap-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
         <FormField
           control={form.control}
           name="newPassword"
@@ -45,6 +62,7 @@ export default function Password() {
               <FormLabel>New Password</FormLabel>
               <FormControl>
                 <Input
+                  type="password"
                   placeholder="********"
                   className="rounded-none"
                   {...field}
@@ -62,6 +80,7 @@ export default function Password() {
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input
+                  type="password"
                   placeholder="********"
                   className="rounded-none"
                   {...field}
@@ -74,6 +93,7 @@ export default function Password() {
         <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
           Save changed
         </button>
+        {message && <p>{message}</p>}
       </form>
     </Form>
   );

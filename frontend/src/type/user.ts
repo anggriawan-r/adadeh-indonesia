@@ -19,7 +19,9 @@ export const userChangePassword = z
     newPassword: z
       .string()
       .min(8, { message: "Password harus terdiri minimal 8 karakter" }),
-    confirmPassword: z.string().min(8),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password harus terdiri minimal 8 karakter" }),
   })
   .refine((schema) => schema.newPassword === schema.confirmPassword, {
     path: ["confirmPassword"],
