@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
-import { Label } from "@/components/ui/label";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useLogin } from "@/stores/useAuth";
 import { useUser } from "@/stores/useUser";
+import { useLogin } from "@/stores/useAuth";
 
 import {
   Form,
@@ -18,38 +17,85 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { userChangeAccount } from "@/type/user";
 
 export default function Account() {
-  const { data } = useLogin();
+  const { data, mutateName } = useLogin();
   const { edit } = useUser();
+  const [message, setMessage] = useState<string>("");
 
-  const onEdit = async () => {};
+  const form = useForm<z.infer<typeof userChangeAccount>>({
+    resolver: zodResolver(userChangeAccount),
+    defaultValues: {
+      name: data.user.name ?? "",
+      email: data.user.email ?? "",
+    },
+  });
+
+  const onSubmit = async (val: z.infer<typeof userChangeAccount>) => {
+    setMessage("");
+    try {
+      await edit(
+        {
+          name: val.name,
+          email: val.email,
+        },
+        data.token,
+      );
+      setMessage("Account information has been changed successfully!");
+      mutateName(val.name);
+    } catch (error) {
+      setMessage("Failed to change account information!");
+    }
+  };
 
   return (
-    <form className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
           name="name"
-          defaultValue={data.user.name}
-          className="rounded-none"
+          render={({ field }) => (
+            <FormItem className="space-y-1">
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  className="rounded-none"
+                  required
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
+        <FormField
+          control={form.control}
           name="email"
-          type="email"
-          defaultValue={data.user.email}
-          className="rounded-none"
-          disabled
+          render={({ field }) => (
+            <FormItem className="space-y-1">
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  className="rounded-none"
+                  disabled
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
-        Save changed
-      </button>
-    </form>
+        <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
+          Save changed
+        </button>
+        {message && <p className="text-emerald-600">{message}</p>}
+      </form>
+    </Form>
   );
 }
