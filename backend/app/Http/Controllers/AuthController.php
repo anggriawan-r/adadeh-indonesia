@@ -255,7 +255,6 @@ class AuthController extends Controller
         "status"    =>  false,
         "message"   =>  "Account not found"
       ]);
-     }
     }
   }
 }
