@@ -2,7 +2,6 @@ import { create, StateCreator } from "zustand";
 import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 import axios from "axios";
 import { signUp, useSignIn, useSignUp } from "@/type/auth";
-import { immer } from "zustand/middleware/immer";
 
 export const useRegister = create<useSignUp>((set) => ({
   message: "",

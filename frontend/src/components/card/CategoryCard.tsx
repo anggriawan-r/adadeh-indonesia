@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { categoriesType } from "@/lib/constants";
 import { twJoin } from "tailwind-merge";
 
