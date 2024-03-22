@@ -130,8 +130,7 @@ const heroes = [
     isButtonDark: false,
   },
 ];
-
-const categories: categoriesType[] = [
+const categories: Categories[] = [
   {
     name: "LIFESTYLE",
     image_url:
@@ -148,10 +147,14 @@ const categories: categoriesType[] = [
       "https://images.pexels.com/photos/2346018/pexels-photo-2346018.jpeg",
   },
 ];
-type categoriesType = {
+type Categories = {
   name: string;
   image_url: string;
 };
+type categoriesType = {
+  name: string;
+  id: string;
+};
 
-export { nav, categories, heroes, products };
+export { nav, heroes, products, categories };
 export type { navType, productsType, categoriesType, detailProductType };

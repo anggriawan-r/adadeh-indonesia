@@ -3,6 +3,9 @@ import axios from "axios";
 import ProductCard from "./card/ProductCard";
 import { twJoin } from "tailwind-merge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFilterStore } from "@/stores/useFilter";
+import { mutate } from "swr";
+import { useEffect } from "react";
 
 interface Product {
   id: number;
@@ -12,18 +15,24 @@ interface Product {
   category: string;
 }
 
-const fetcher = async (url: string) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  try {
-    const response = await axios.get<{ data: Product[] }>(`${baseUrl}/${url}`);
-    return response.data.data;
-  } catch (error) {
-    throw new Error("Failed to fetch data");
-  }
-};
-
 export default function CatalogList({ className }: { className?: string }) {
-  const { data: products, error, isValidating } = useSWR("products", fetcher);
+  const params = useFilterStore((state) => state);
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const url = `${baseUrl}/products`;
+
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axios.get<{ data: Product[] }>(url, { params });
+      return response.data.data;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+  useEffect(() => {
+    mutate(url);
+  }, [params, url]);
+
+  const { data: products, error, isValidating } = useSWR(url, fetcher);
 
   if (error)
     return (
@@ -32,16 +41,20 @@ export default function CatalogList({ className }: { className?: string }) {
       </div>
     );
 
-  if (!products || isValidating)
+  if (isValidating)
     return (
       <div className="flex flex-col items-center justify-center gap-4 px-4 md:flex-row md:items-start">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {[...Array(6)].map((_, index) => (
-            <Skeleton key={index} className="h-24 w-32 lg:h-80 lg:w-72" />
+            <Skeleton key={index} className="h-24 w-32 lg:h-96 lg:w-80" />
           ))}
         </div>
       </div>
     );
+
+  if (!products) {
+    return <h1 className="text-center text-2xl">Produk tidak ditemukan</h1>;
+  }
 
   return (
     <div className={twJoin("grid grid-cols-2 gap-4 md:grid-cols-3", className)}>
