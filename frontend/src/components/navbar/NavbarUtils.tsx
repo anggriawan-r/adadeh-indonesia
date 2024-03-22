@@ -63,7 +63,7 @@ export default function NavbarUtils({ nav }: { nav: navType }) {
           <div className="group relative flex h-full items-center">
             <Avatar>
               <AvatarFallback className="font-bold">
-                {data.user.name[0]}
+                {data.user?.name[0]}
               </AvatarFallback>
             </Avatar>
             <div className="invisible absolute bottom-0 right-[50%] translate-x-[30%] translate-y-full bg-white font-semibold shadow-2xl group-hover:visible">

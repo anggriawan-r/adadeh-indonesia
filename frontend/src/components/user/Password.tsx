@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/stores/useUser";
 import { useLogin } from "@/stores/useAuth";
@@ -23,7 +22,7 @@ import { userChangePassword } from "@/type/user";
 export default function Password() {
   const { data } = useLogin();
   const { edit } = useUser();
-  const [message, setMessage] = useState<string>();
+  const [message, setMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof userChangePassword>>({
     resolver: zodResolver(userChangePassword),
@@ -43,6 +42,7 @@ export default function Password() {
         data.token,
       );
       setMessage("Password has been changed successfully!");
+      form.reset();
     } catch (error) {
       setMessage("Failed to change password!");
     }
@@ -65,6 +65,7 @@ export default function Password() {
                   type="password"
                   placeholder="********"
                   className="rounded-none"
+                  required
                   {...field}
                 />
               </FormControl>
@@ -77,12 +78,13 @@ export default function Password() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Confirm New Password</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   placeholder="********"
                   className="rounded-none"
+                  required
                   {...field}
                 />
               </FormControl>
@@ -93,7 +95,7 @@ export default function Password() {
         <button className="w-max bg-black px-4 py-3 text-sm text-white transition hover:bg-black/90">
           Save changed
         </button>
-        {message && <p>{message}</p>}
+        {message && <p className="text-emerald-600">{message}</p>}
       </form>
     </Form>
   );

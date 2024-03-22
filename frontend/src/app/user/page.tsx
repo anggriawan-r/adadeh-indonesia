@@ -6,6 +6,7 @@ import Address from "@/components/user/Address";
 import Phone from "@/components/user/Phone";
 import { GoHeart } from "react-icons/go";
 import { FiShoppingCart } from "react-icons/fi";
+import Link from "next/link";
 
 export default function UserPage() {
   return (
@@ -21,14 +22,18 @@ export default function UserPage() {
       <div className="mt-6 flex h-max w-full basis-1/2 justify-center self-start px-4 sm:mb-10 sm:mt-10">
         <div className="flex h-max w-max flex-col gap-4">
           <div className="flex gap-4">
-            <button className="flex items-center gap-2 border border-black bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-black hover:text-white">
-              <GoHeart className="text-xl" />
-              Wishlist
-            </button>
-            <button className="flex items-center gap-2 border border-black bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-black hover:text-white">
-              <FiShoppingCart className="text-xl" />
-              Cart
-            </button>
+            <Link href="/wishlist">
+              <button className="flex items-center gap-2 border border-black bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-black hover:text-white">
+                <GoHeart className="text-xl" />
+                Wishlist
+              </button>
+            </Link>
+            <Link href="/cart">
+              <button className="flex items-center gap-2 border border-black bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-black hover:text-white">
+                <FiShoppingCart className="text-xl" />
+                Cart
+              </button>
+            </Link>
           </div>
           <Tabs defaultValue="account" className="max-w-[400px]">
             <TabsList className="rounded-none">
