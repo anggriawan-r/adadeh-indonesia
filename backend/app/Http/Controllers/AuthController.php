@@ -206,16 +206,10 @@ class AuthController extends Controller
    *    required=true,
    *    description="Reser password",
    *    @OA\JsonContent(
-   *       required={"password_confirmation","password"},
+   *       required={"password_confirmation","password","address","phone"},
    *       @OA\Property(property="password", type="string", format="password", example="Password value of at least 8"),
    *       @OA\Property(property="password_confirmation", type="string", format="password_confirmation", example="The value must be the same as the password"),
-   *    ),
-   *    @OA\JsonContent(
-   *       required={"address"},
    *       @OA\Property(property="address", type="string", example="Online"),
-   *    ),
-   *    @OA\JsonContent(
-   *       required={"phone"},
    *       @OA\Property(property="phone", type="string", example="081234567890"),
    *    ),
    * ),
