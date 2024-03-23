@@ -1,3 +1,5 @@
+"use client";
+
 import CatalogFilter from "@/components/CatalogFilter";
 import CatalogList from "@/components/CatalogList";
 

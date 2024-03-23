@@ -8,15 +8,14 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
-import { categories } from "@/lib/constants";
+// import { categories } from "@/lib/constants";
 import { twJoin } from "tailwind-merge";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useFilterStore } from "@/stores/useFilter";
 import {
   Form,
   FormControl,
@@ -27,6 +26,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { filterSchema } from "@/type/filter";
+import axios from "axios";
+import useSWR from "swr";
+import { categoriesType } from "@/lib/constants";
 
 export default function CatalogFilter({ className }: { className?: string }) {
   const form = useForm<z.infer<typeof filterSchema>>({
@@ -36,10 +38,40 @@ export default function CatalogFilter({ className }: { className?: string }) {
     },
   });
 
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axios.get<{ data: categoriesType[] }>(url);
+      return response.data.data;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+
+  const { data: categories } = useSWR(`${baseUrl}/categories`, fetcher);
+
+  const setFilter = useFilterStore((state) => state.setFilter);
+
   function onSubmit(values: z.infer<typeof filterSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    let newKey = "";
+    let newValue = "";
+
+    if (values.sortBy === "newest") {
+      newKey = "new";
+    } else if (values.sortBy === "oldest") {
+      newKey = "new";
+      newValue = "desc";
+    } else if (values.sortBy === "cheapest") {
+      newKey = "price";
+    } else if (values.sortBy === "expensive") {
+      newKey = "price";
+      newValue = "desc";
+    }
+
+    const updatedValues = { ...values, [newKey]: newValue };
+    setFilter(updatedValues);
+    console.log("added to store", updatedValues);
   }
 
   return (
@@ -86,8 +118,8 @@ export default function CatalogFilter({ className }: { className?: string }) {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map((item, index) => (
-                        <SelectItem key={index} value={item.name}>
+                      {categories?.map((item) => (
+                        <SelectItem key={item.id} value={item.name}>
                           {item.name}
                         </SelectItem>
                       ))}
@@ -124,7 +156,7 @@ export default function CatalogFilter({ className }: { className?: string }) {
                       </SelectGroup>
                       <SelectGroup>
                         <Label className="shrink-0">Price</Label>
-                        <SelectItem value="cheap">Cheapest</SelectItem>
+                        <SelectItem value="cheapest">Cheapest</SelectItem>
                         <SelectItem value="expensive">
                           Most Expensive
                         </SelectItem>

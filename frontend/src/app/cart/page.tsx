@@ -5,6 +5,8 @@ import CartItem from "@/components/cart/CartItem";
 import { useEffect, useState } from "react";
 import ProductCarousel from "@/components/ProductCarousel";
 import { products } from "@/lib/constants";
+import axios from "axios";
+import useSWR from "swr";
 
 interface CartItem {
   id: number;
@@ -15,6 +17,13 @@ interface CartItem {
   checked: boolean;
 }
 
+interface Cart {
+  id: number;
+  jumlah: number;
+  produk_id: number;
+  user_id: number;
+}
+
 const getTotalHargaByChecked = (cartItems: CartItem[]): number => {
   const totalHarga = cartItems
     .filter((item) => item.checked)
@@ -23,66 +32,50 @@ const getTotalHargaByChecked = (cartItems: CartItem[]): number => {
 };
 
 export default function Cart() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const url = `${baseUrl}/cart`;
+
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axios.get<{ data: CartItem[] }>(url);
+      return response.data.data;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+
+  const { data: items, error, isValidating } = useSWR(url, fetcher);
+
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
       productId: 101,
-      name: "Produk Aezakmi jcnruad hesoyam",
+      name: "",
       jumlah: 2,
       userId: 1,
       image_url: "https://placeholder.co/200x200",
-      harga: 90_000,
-      checked: false,
-    },
-    {
-      id: 2,
-      productId: 102,
-      name: "Produk B",
-      jumlah: 6,
-      userId: 1,
-      image_url: "https://placeholder.co/200x200",
-      harga: 120_000,
-      checked: false,
-    },
-    {
-      id: 3,
-      productId: 103,
-      name: "Produk C",
-      jumlah: 1,
-      userId: 1,
-      image_url: "https://placeholder.co/200x200",
-      harga: 120_000,
-      checked: false,
-    },
-    {
-      id: 4,
-      productId: 104,
-      name: "Produk D",
-      jumlah: 3,
-      userId: 1,
-      image_url: "https://placeholder.co/200x200",
-      harga: 120_000,
-      checked: false,
-    },
-    {
-      id: 5,
-      productId: 105,
-      name: "Produk E",
-      jumlah: 5,
-      userId: 1,
-      image_url: "https://placeholder.co/200x200",
-      harga: 120_000,
+      harga: 0,
       checked: false,
     },
   ]);
-
   const [checkAll, setCheckAll] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const setData = (values: Cart) => {
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.userId === values.user_id) {
+        return { ...item, jumlah: values.jumlah, produk_id: values.user_id };
+      } else {
+        return item;
+      }
+    });
+    setCartItems(updatedCartItems);
+  };
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
     setTotalPrice(totalHarga);
-  }, [cartItems]);
+  }, [cartItems, items]);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {
