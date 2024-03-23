@@ -33,7 +33,7 @@ class StoreTransaksiRequest extends FormRequest
     {
         $this->merge([
             'userId' => auth()->user()->id,
-            'detailTransaksi' => json_decode($this->input('detailTransaksi')) ?? null,
+            'detailTransaksi' => $this->input('detailTransaksi') ?? null,
         ]);
     }
 }
