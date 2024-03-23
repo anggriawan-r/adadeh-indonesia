@@ -113,7 +113,7 @@ class TransaksiController extends Controller
 
             if ($transaksi === null) throw new Exception('Transaksi Tidak Tersedia');
 
-            $detailTransaksi = DetailTransaksi::where('transaksi_id', $id);
+            $detailTransaksi = DetailTransaksi::where('transaksi_id', $id)->get();
             $detailTransaksi->load('product');
             $transaksi['detailTransaksi'] = $detailTransaksi;
                 
