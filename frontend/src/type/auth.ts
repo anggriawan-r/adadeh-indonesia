@@ -23,7 +23,7 @@ export const signUpSchema = z.object({
     message: "Password harus terdiri minimal 8 kata",
   }),
   password_confirmation: z.string().min(8, {
-    message: "Password confirmation harus terdiri minimal 8 kata",
+    message: "Password confirmation harus terdiri minimal 8 karakter",
   }),
 });
 
@@ -35,7 +35,11 @@ export interface signIn {
 export interface useSignIn {
   message: string;
   status: boolean;
-  handleSignIn: (data: signUp) => Promise<void>;
+  handleSignIn: (data: signIn) => Promise<void>;
+  handleSignOut: () => void;
+  mutateAddress: (data: string) => void;
+  mutateName: (data: string) => void;
+  mutatePhone: (data: string) => void;
   data: any;
 }
 
@@ -44,6 +48,6 @@ export const signInSchema = z.object({
     message: "Email harus berformat email",
   }),
   password: z.string().min(8, {
-    message: "Password harus terdiri minimal 8 kata",
+    message: "Password harus terdiri minimal 8 karakter",
   }),
 });

@@ -265,14 +265,14 @@
                 ]
             }
         },
-        "/api/reset-password": {
+        "/api/update-data": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
-                "summary": "reset-password",
-                "description": "reset-password",
-                "operationId": "reset-password",
+                "summary": "update-data",
+                "description": "update-data",
+                "operationId": "update-data",
                 "requestBody": {
                     "description": "Reser password",
                     "required": true,
@@ -289,10 +289,18 @@
                                         "format": "password",
                                         "example": "Password value of at least 8"
                                     },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Online"
+                                    },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password_confirmation",
                                         "example": "The value must be the same as the password"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "081234567890"
                                     }
                                 },
                                 "type": "object"
@@ -302,7 +310,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "You successfully reset your password",
+                        "description": "You successfully update data",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -313,7 +321,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "You successfully reset your password"
+                                            "example": "You successfully update data"
                                         }
                                     },
                                     "type": "object"
@@ -692,6 +700,265 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Category not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/keranjang": {
+            "get": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Get All Item Keranjang",
+                "description": "Get All Item Keranjang",
+                "operationId": "getKeranjang",
+                "responses": {
+                    "200": {
+                        "description": "Daftar Keranjang Berhasil Ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daftar Keranjang Berhasil Ditemukan"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Add Item Keranjang",
+                "description": "Add Item Keranjang",
+                "operationId": "postKeranjang",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "produkId": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "jumlah": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Register",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keranjang Berhasil Ditambahkan"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/keranjang/:id": {
+            "get": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Get Single Item Keranjang",
+                "description": "Get Single Item Keranjang",
+                "operationId": "getKeranjangById",
+                "responses": {
+                    "200": {
+                        "description": "Daftar Keranjang Berhasil Ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daftar Keranjang Berhasil Ditemukan"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Delete Item Keranjang",
+                "description": "Delete Item Keranjang",
+                "operationId": "deleteKeranjang",
+                "responses": {
+                    "200": {
+                        "description": "Successful Register",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keranjang Berhasil Dihapus"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Update Item Keranjang",
+                "description": "Update Item Keranjang",
+                "operationId": "patchKeranjang",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "produkId": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "jumlah": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Register",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keranjang Berhasil Diupdate"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/:id/keranjang": {
+            "get": {
+                "tags": [
+                    "Keranjang"
+                ],
+                "summary": "Get Item Keranjang By User Id",
+                "description": "Get Item Keranjang By User Id",
+                "operationId": "getKeranjangByUserId",
+                "responses": {
+                    "200": {
+                        "description": "Daftar Keranjang Berhasil Ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daftar Keranjang Berhasil Ditemukan"
+                                        },
+                                        "data": {
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"

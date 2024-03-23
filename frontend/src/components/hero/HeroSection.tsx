@@ -19,18 +19,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroes }) => {
       {heroes?.map((hero) => (
         <div
           key={hero.id}
-          className="flex h-[calc(100vh-80px-80px)] w-full items-center px-4 text-white sm:px-6 lg:px-8"
+          className="flex h-[calc(100vh-80px-80px)] w-full items-center bg-[100%_50%] px-4 text-black sm:px-6 md:bg-center lg:px-8"
           style={{
             backgroundImage: `url(${hero.imageUrl})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
           }}
         >
-          <div className="flex w-full items-center lg:flex lg:justify-start">
+          <div className="flex w-full self-end pb-16 md:self-center md:pb-0 lg:flex lg:justify-start">
             <div>
               <h2
-                className={`mb-4 max-w-[500px] text-5xl font-bold ${hero.isButtonDark ? "text-black" : "text-white"}`}
+                className={`mb-4 max-w-[500px] text-4xl font-bold sm:text-5xl ${hero.isButtonDark ? "text-black" : "text-white"}`}
               >
                 {hero.title}
               </h2>

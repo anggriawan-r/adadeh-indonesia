@@ -11,68 +11,74 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+  use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role_id'
-    ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'role_id',
+    'address',
+    'phone'
+  ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  /**
+   * The attributes that should be hidden for serialization.
+   *
+   * @var array<int, string>
+   */
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+  /**
+   * The attributes that should be cast.
+   *
+   * @var array<string, string>
+   */
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+  ];
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+  public function getJWTIdentifier()
+  {
+    return $this->getKey();
+  }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+  /**
+   * Return a key value array, containing any custom claims to be added to the JWT.
+   *
+   * @return array
+   */
+  public function getJWTCustomClaims()
+  {
+    return [];
+  }
 
-    public function role(){
-        return $this->belongsTo(Role::class);
-    }
-    public function wishlist(){
-        return $this->hasMany(WishList::class);
-    }
-    public function cart(){
-        return $this->hasMany(Cart::class);
-    }
+  public function role()
+  {
+    return $this->belongsTo(Role::class);
+  }
+  public function wishlist()
+  {
+    return $this->hasMany(WishList::class);
+  }
+  public function cart()
+  {
+    return $this->hasMany(Cart::class);
+  }
 
-    public static function user_data(){
-        $user = auth()->user();
-        $role = Role::find($user->role_id);
-        $user->role = $role->name;
-        return $user;
-    }
+  public static function user_data()
+  {
+    $user = auth()->user();
+    $role = Role::find($user->role_id);
+    $user->role = $role->name;
+    return $user;
+  }
 }

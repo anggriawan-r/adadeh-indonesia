@@ -8,7 +8,7 @@ export const useRegister = create<useSignUp>((set) => ({
   handleSignUp: async (data: signUp) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/register`,
+        `${process.env.NEXT_PUBLIC_API_URL}/register`,
         data,
       );
       set({ message: response.data.message });
@@ -27,13 +27,13 @@ type persist = (
 export const useLogin = create<useSignIn, []>(
   (persist as persist)(
     (set, get): useSignIn => ({
-      message: "",
-      status: false,
+      message: get()?.message,
+      status: get()?.status,
       data: get()?.data,
       handleSignIn: async (data) => {
         try {
           const response = await axios.post(
-            "http://localhost:8000/api/login",
+            `${process.env.NEXT_PUBLIC_API_URL}/login`,
             data,
           );
           set({ status: response.data.status });
@@ -44,6 +44,41 @@ export const useLogin = create<useSignIn, []>(
           set({ message: error.response.data.message });
         }
       },
+      handleSignOut: () => {
+        set({ status: false });
+        set({ data: null });
+        set({ message: "Sign out success!" });
+      },
+      mutateAddress: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              address: data,
+            },
+          },
+        })),
+      mutateName: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              name: data,
+            },
+          },
+        })),
+      mutatePhone: (data) =>
+        set((state) => ({
+          data: {
+            ...state.data,
+            user: {
+              ...state.data.user,
+              phone: data,
+            },
+          },
+        })),
     }),
     {
       name: "user-storage",

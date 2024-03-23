@@ -22,4 +22,15 @@ class Keranjang extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public static function getDataByUserId($id){
+        $keranjang = Keranjang::where("user_id", $id)->get();
+
+        $product = Product::find($keranjang->produk_id);
+        $category = Category::find($product->category_id);
+
+        $product->category_id = $category->name;
+        $keranjang->product = $product;
+        return $keranjang;
+    }
 }

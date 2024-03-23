@@ -3,6 +3,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { productsType } from "@/lib/constants";
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
+import { Button } from "@/components/ui/button";
 
 export default function ProductCard({ data }: { data: productsType }) {
   return (

@@ -1,19 +1,20 @@
-import { useCategories } from "@/type/category";
+import { useProducts } from "@/type/product";
 import axios from "axios";
 import { create } from "zustand";
 
-export const useCategory = create<useCategories>((set, get) => ({
-  status: false,
+export const useProduct = create<useProducts>((set, get) => ({
+  status: get()?.status,
   message: get()?.message,
   store: async (data) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+        `${process.env.NEXT_PUBLIC_API_URL}/products`,
         data,
       );
       set({ status: response.data.status });
       set({ message: response.data.message });
     } catch (error: any) {
+      console.log(error)
       set({ status: error.response.data.status });
       set({ message: error.response.data.message });
     }
@@ -21,12 +22,13 @@ export const useCategory = create<useCategories>((set, get) => ({
   edit: async (data, id) => {
     try {
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`,
         data,
       );
       set({ status: response.data.status });
       set({ message: response.data.message });
     } catch (error: any) {
+      console.log(error)
       set({ status: error.response.data.status });
       set({ message: error.response.data.message });
     }
@@ -34,7 +36,7 @@ export const useCategory = create<useCategories>((set, get) => ({
   destroy: async (id) => {
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`,
       );
       set({ status: response.data.status });
       set({ message: response.data.message });

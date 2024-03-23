@@ -1,3 +1,6 @@
+export const protectedRoutes = ["/user", "/cart", "/wishlist"];
+export const loginRoutes = ["/auth/signin", "/auth/signup"];
+
 const nav = ["LIFESTYLE", "SPORTS", "OUTDOOR", "SLIDES", "ESSENTIALS"] as const;
 type navType = typeof nav;
 
@@ -108,26 +111,24 @@ const heroes = [
       "https://www.adidas.co.id/media/scandiweb/slider/s/s/ss24-yeezy-hp-mh-500-stone-taupe-d.png",
     title: "YEZZY 500 STONE TAUPE",
     imageAlt: "YEZZY 500 STONE TAUPE",
-    buttonUrl: "#",
+    buttonUrl: "/catalogue",
     isButtonDark: true,
   },
   {
     id: 2,
-    imageUrl:
-      "https://www.adidas.co.id/media/scandiweb/slider/h/p/hp_glp_masthead_desktop_1920x720px_2.jpg",
-    title: "KOLEKSI ADADEH BALI",
-    imageAlt: "BALI",
-    buttonUrl: "#",
-    isButtonDark: false,
+    imageUrl: "superbounce.jpg",
+    title: "ULTRABOUNCE",
+    imageAlt: "ULTRABOUNCE",
+    buttonUrl: "/catalogue",
+    isButtonDark: true,
   },
   {
-    id: 3,
-    imageUrl:
-      "https://www.adidas.co.id/media/scandiweb/slider/f/o/football-ss24-eurocopa-eurocopacombined-onsite-mh-d.jpg",
-    title: "KOLEKSI JERSEY ADADEH 2024",
-    imageAlt: "JERSEY",
-    buttonUrl: "#",
-    isButtonDark: false,
+    id: 2,
+    imageUrl: "ultraboost.jpg",
+    title: "ULTRABOOST",
+    imageAlt: "ULTRABOOST",
+    buttonUrl: "/catalogue",
+    isButtonDark: true,
   },
 ];
 const categories: Categories[] = [
@@ -137,7 +138,7 @@ const categories: Categories[] = [
       "https://images.pexels.com/photos/2041832/pexels-photo-2041832.jpeg",
   },
   {
-    name: "SPORTS",
+    name: "BASKET",
     image_url:
       "https://images.pexels.com/photos/220383/pexels-photo-220383.jpeg",
   },

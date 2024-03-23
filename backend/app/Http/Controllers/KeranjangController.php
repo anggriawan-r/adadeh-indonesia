@@ -17,13 +17,30 @@ class KeranjangController extends Controller
     ];
 
     protected $responseCode = Response::HTTP_BAD_REQUEST;
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/keranjang",
+     *     tags={"Keranjang"},
+     *     summary="Get All Item Keranjang",
+     *     description="Get All Item Keranjang",
+     *     operationId="getKeranjang",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Daftar Keranjang Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Daftar Keranjang Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
         try {
             $listKeranjang = Keranjang::all();
+            $listKeranjang->load('produk');
             if(count($listKeranjang) > 0) {
                 $this->responseData['message'] = 'Daftar Keranjang Berhasil Ditemukan';
             } else {
@@ -41,7 +58,31 @@ class KeranjangController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/keranjang",
+     *     tags={"Keranjang"},
+     *     summary="Add Item Keranjang",
+     *     description="Add Item Keranjang",
+     *     operationId="postKeranjang",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="produkId", type="integer", example="1"),
+     *             @OA\Property(property="jumlah", type="integer", example="2"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Keranjang Berhasil Ditambahkan"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function store(StoreKeranjangRequest $request)
     {
@@ -70,14 +111,30 @@ class KeranjangController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/keranjang/:id",
+     *     tags={"Keranjang"},
+     *     summary="Get Single Item Keranjang",
+     *     description="Get Single Item Keranjang",
+     *     operationId="getKeranjangById",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Daftar Keranjang Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Daftar Keranjang Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function show(int $id)
     {
         try {
             $keranjang = Keranjang::find($id);
+            $keranjang->load('produk');
             if($keranjang === null) throw new Exception('Keranjang Tidak Tersedia');
-            
+
             $this->responseData['message'] = 'Keranjang Berhasil Ditemukan';
             $this->responseData['success'] = true;
             $this->responseData['data'] = $keranjang;
@@ -90,7 +147,31 @@ class KeranjangController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Patch(
+     *     path="/api/keranjang/:id",
+     *     tags={"Keranjang"},
+     *     summary="Update Item Keranjang",
+     *     description="Update Item Keranjang",
+     *     operationId="patchKeranjang",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="produkId", type="integer", example="1"),
+     *             @OA\Property(property="jumlah", type="integer", example="2"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Keranjang Berhasil Diupdate"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function update(UpdateKeranjangRequest $request, int $id)
     {
@@ -121,7 +202,23 @@ class KeranjangController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/keranjang/:id",
+     *     tags={"Keranjang"},
+     *     summary="Delete Item Keranjang",
+     *     description="Delete Item Keranjang",
+     *     operationId="deleteKeranjang",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Keranjang Berhasil Dihapus"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function destroy(int $id)
     {
@@ -130,10 +227,50 @@ class KeranjangController extends Controller
             if($keranjang === null) throw new Exception('Keranjang Tidak Tersedia');
 
             $keranjang->delete();
-            
+
             $this->responseData['message'] = 'Keranjang Berhasil Dihapus';
             $this->responseData['success'] = true;
             $this->responseData['data'] = $keranjang;
+            $this->responseCode = Response::HTTP_OK;
+        } catch (\Throwable $th) {
+            $this->responseData['message'] = $th->getMessage();
+        }
+
+        return response()->json($this->responseData, $this->responseCode);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user/:id/keranjang",
+     *     tags={"Keranjang"},
+     *     summary="Get Item Keranjang By User Id",
+     *     description="Get Item Keranjang By User Id",
+     *     operationId="getKeranjangByUserId",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Daftar Keranjang Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Daftar Keranjang Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
+     */
+    public function showByUserId(int $userId)
+    {
+        try {
+            $listKeranjang = Keranjang::where('user_id', $userId)->get();
+            $listKeranjang->load('produk');
+
+            if(count($listKeranjang) > 0) {
+                $this->responseData['message'] = 'Daftar Keranjang Berhasil Ditemukan';
+            } else {
+                $this->responseData['message'] = 'Daftar Keranjang Tidak Tersedia';
+            }
+
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $listKeranjang;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
