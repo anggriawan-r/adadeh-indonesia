@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
+use App\Models\DetailTransaksi;
 use App\Http\Requests\StoreTransaksiRequest;
 use App\Http\Requests\UpdateTransaksiRequest;
 use Exception;
@@ -45,25 +46,71 @@ class TransaksiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(StoreTransaksiRequest $request)
+    // {
+    //     try {
+    //         $validated = $request->safe()->only(['totalHarga', 'status', 'userId', 'metodePembayaranId']);
+    //         $totalHarga = $validated['totalHarga'];
+    //         $status = $validated['status'];
+    //         $userId = $validated['userId'];
+    //         $metodePembayaranId = $validated['metodePembayaranId'];
+
+    //         $transaksi = new Transaksi;
+    //         $transaksi->total_harga = $totalHarga;
+    //         $transaksi->status = $status;
+    //         $transaksi->user_id = $userId;
+    //         $transaksi->metode_pembayaran_id = $metodePembayaranId;
+
+    //         $kodeTransaksi = 'adadeh' . date('YmdHis') . bin2hex(random_bytes(3));
+    //         $transaksi->kode_transaksi = $kodeTransaksi;
+
+    //         $transaksi->save();
+
+    //         $this->responseData['message'] = 'Transaksi Berhasil Ditambahkan';
+    //         $this->responseData['success'] = true;
+    //         $this->responseData['data'] = $transaksi;
+    //         $this->responseCode = Response::HTTP_CREATED;
+    //     } catch (\Throwable $th) {
+    //         $this->responseData['message'] = $th->getMessage();
+    //     }
+
+    //     return response()->json($this->responseData, $this->responseCode);
+    // }
     public function store(StoreTransaksiRequest $request)
     {
         try {
-            $validated = $request->safe()->only(['totalHarga', 'status', 'userId', 'metodePembayaranId']);
-            $totalHarga = $validated['totalHarga'];
-            $status = $validated['status'];
+            $validated = $request->safe()->only(['detailTransaksi', 'userId']);
+            $detailTransaksi = $validated['detailTransaksi'];
             $userId = $validated['userId'];
-            $metodePembayaranId = $validated['metodePembayaranId'];
+
+            $listDetailTransaksi = [];
 
             $transaksi = new Transaksi;
-            $transaksi->total_harga = $totalHarga;
-            $transaksi->status = $status;
             $transaksi->user_id = $userId;
-            $transaksi->metode_pembayaran_id = $metodePembayaranId;
+            $transaksi->total_harga = 0;
+            $transaksi->status = 'Menunggu Pembayaran';
+            $transaksi->metode_pembayaran_id = 1;
 
             $kodeTransaksi = 'adadeh' . date('YmdHis') . bin2hex(random_bytes(3));
             $transaksi->kode_transaksi = $kodeTransaksi;
 
             $transaksi->save();
+
+            foreach ($detailTransaksi as $key => $value) {
+                $newDetailTransaksi = new DetailTransaksi;
+                $newDetailTransaksi->product_id = $value->produkId;
+                $newDetailTransaksi->jumlah = $value->jumlah;
+                $newDetailTransaksi->transaksi_id = $transaksi->id;
+
+                $newDetailTransaksi->save();
+
+                $newDetailTransaksi->load('product');
+                $transaksi->total_harga += $newDetailTransaksi->product->price * $newDetailTransaksi->jumlah;
+
+                array_push($listDetailTransaksi, $newDetailTransaksi);
+            }
+
+            $transaksi['detailTransaksi'] = $listDetailTransaksi;
 
             $this->responseData['message'] = 'Transaksi Berhasil Ditambahkan';
             $this->responseData['success'] = true;
