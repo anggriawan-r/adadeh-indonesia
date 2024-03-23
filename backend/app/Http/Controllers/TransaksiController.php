@@ -20,7 +20,22 @@ class TransaksiController extends Controller
     protected $responseCode = Response::HTTP_BAD_REQUEST;
 
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/transaksi",
+     *     tags={"Transaksi"},
+     *     summary="Get All Transaksi",
+     *     description="Get All Transaksi",
+     *     operationId="getTransaksi",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Daftar Transaksi Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Daftar Transaksi Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
@@ -52,7 +67,30 @@ class TransaksiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/transaksi",
+     *     tags={"Transaksi"},
+     *     summary="Add Transaksi",
+     *     description="Add Transaksi",
+     *     operationId="postTransaksi",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="detailTransaksi", type="object", example="{produkId: 2, jumlah: 3}"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Transaksi Berhasil Ditambahkan"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function store(StoreTransaksiRequest $request)
     {
@@ -104,7 +142,22 @@ class TransaksiController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/transaksi/:id",
+     *     tags={"Transaksi"},
+     *     summary="Get Single Transaksi",
+     *     description="Get Single Transaksi",
+     *     operationId="getTransaksiById",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Transaksi Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Transaksi Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function show(int $id)
     {
@@ -129,7 +182,30 @@ class TransaksiController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Patch(
+     *     path="/api/transaksi/:id",
+     *     tags={"Transaksi"},
+     *     summary="Update Transaksi",
+     *     description="Update Transaksi",
+     *     operationId="patchTransaksi",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="integer", example="1"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Transaksi Berhasil Diupdate"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function update(UpdateTransaksiRequest $request, int $id)
     {
@@ -158,7 +234,23 @@ class TransaksiController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/transaksi/:id",
+     *     tags={"Transaksi"},
+     *     summary="Delete Transaksi",
+     *     description="Delete Transaksi",
+     *     operationId="deleteTransaksi",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful Register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Transaksi Berhasil Dihapus"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
      */
     public function destroy(int $id)
     {
@@ -172,6 +264,55 @@ class TransaksiController extends Controller
             $this->responseData['message'] = 'Transaksi Berhasil Dihapus';
             $this->responseData['success'] = true;
             $this->responseData['data'] = $transaksi;
+            $this->responseCode = Response::HTTP_OK;
+        } catch (\Throwable $th) {
+            $this->responseData['message'] = $th->getMessage();
+        }
+
+        return response()->json($this->responseData, $this->responseCode);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user/transaksi",
+     *     tags={"Transaksi"},
+     *     summary="Get Transaksi By User Id",
+     *     description="Get Transaksi By User Id",
+     *     operationId="getTransaksiByUserId",
+     *     security={{ "bearerAuth": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Daftar Transaksi Berhasil Ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message",type="string",example="Daftar Transaksi Berhasil Ditemukan",),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
+     */
+    public function showByUserId()
+    {
+        try {
+            $userId = auth()->user()->id;
+            $listTransaksi = Transaksi::where('user_id', $userId)->get();
+            $listTransaksiResult = [];
+
+            if (count($listTransaksi) > 0) {
+                $this->responseData['message'] = 'Daftar Transaksi Berhasil Ditemukan';
+
+                foreach ($listTransaksi as $key => $transaksi) {
+                    $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->get();
+                    $detailTransaksi->load('product');
+                    $transaksi['detailTransaksi'] = $detailTransaksi;
+                    array_push($listTransaksiResult, $transaksi);
+                }
+            } else {
+                $this->responseData['message'] = 'Daftar Transaksi Tidak Tersedia';
+            }
+
+            $this->responseData['success'] = true;
+            $this->responseData['data'] = $listTransaksiResult;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
