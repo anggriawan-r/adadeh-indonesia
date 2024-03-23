@@ -24,20 +24,16 @@ class StoreTransaksiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'totalHarga' => ['bail', 'required', 'integer', 'min:0'],
-            'status' => ['bail', 'required', 'string', Rule::in(['paid', 'unpaid'])],
             'userId' => ['bail', 'required', 'integer', 'min:0'],
-            'metodePembayaranId' => ['bail', 'required', 'integer', 'min:0'],
+            'detailTransaksi' => ['bail', 'required']
         ];
     }
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'totalHarga' => $this->input('totalHarga') ?? null,
-            'status' => strtolower($this->input('status')) ?? null,
-            'userId' => $this->input('userId') ?? null,
-            'metodePembayaranId' => $this->input('metodePembayaranId') ?? null,
+            'userId' => auth()->user()->id,
+            'detailTransaksi' => json_decode($this->input('detailTransaksi')) ?? null,
         ]);
     }
 }
