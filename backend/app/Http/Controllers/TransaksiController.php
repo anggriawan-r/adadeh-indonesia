@@ -97,7 +97,6 @@ class TransaksiController extends Controller
             $transaksi->save();
 
             foreach ($detailTransaksi as $key => $value) {
-                $value = json_decode($value);
                 $newDetailTransaksi = new DetailTransaksi;
                 $newDetailTransaksi->product_id = $value->produkId;
                 $newDetailTransaksi->jumlah = $value->jumlah;
