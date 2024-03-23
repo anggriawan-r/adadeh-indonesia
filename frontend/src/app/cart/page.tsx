@@ -35,47 +35,42 @@ export default function Cart() {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const url = `${baseUrl}/cart`;
 
-  const fetcher = async (url: string) => {
-    try {
-      const response = await axios.get<{ data: CartItem[] }>(url);
-      return response.data.data;
-    } catch (error) {
-      throw new Error("Failed to fetch data");
-    }
-  };
-
-  const { data: items, error, isValidating } = useSWR(url, fetcher);
-
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      productId: 101,
-      name: "",
-      jumlah: 2,
-      userId: 1,
-      image_url: "https://placeholder.co/200x200",
-      harga: 0,
-      checked: false,
-    },
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [checkAll, setCheckAll] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const setData = (values: Cart) => {
-    const updatedCartItems = cartItems.map((item) => {
-      if (item.userId === values.user_id) {
-        return { ...item, jumlah: values.jumlah, produk_id: values.user_id };
-      } else {
-        return item;
-      }
-    });
-    setCartItems(updatedCartItems);
-  };
-
   useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/keranjang`, {
+          headers: {
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vNDcuMjM2LjEwLjIwNC9hcGkvbG9naW4iLCJpYXQiOjE3MTExMDE4MjYsImV4cCI6MTcxMTEwNTQyNiwibmJmIjoxNzExMTAxODI2LCJqdGkiOiJBeWNhMHc1SmZDTWhidEhOIiwic3ViIjoiNCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xbew09LnhByVa8duStj1gDucppPdaxDFrb9UnAOH8WM`,
+          },
+        });
+        const responseData = response.data.data;
+        console.log(responseData);
+        const transformedData: CartItem[] = [
+          {
+            id: responseData.id,
+            name: responseData.produk.name,
+            jumlah: responseData.jumlah,
+            image_url: responseData.produk.image,
+            harga: responseData.produk.price,
+            checked: true,
+          },
+        ];
+        setCartItems(transformedData);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+
     const totalHarga = getTotalHargaByChecked(cartItems);
     setTotalPrice(totalHarga);
-  }, [cartItems, items]);
+  }, [cartItems]);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {
