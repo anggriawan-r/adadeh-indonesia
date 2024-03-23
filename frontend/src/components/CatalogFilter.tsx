@@ -59,11 +59,13 @@ export default function CatalogFilter({ className }: { className?: string }) {
 
     if (values.sortBy === "newest") {
       newKey = "new";
+      newValue = "asc";
     } else if (values.sortBy === "oldest") {
       newKey = "new";
       newValue = "desc";
     } else if (values.sortBy === "cheapest") {
       newKey = "price";
+      newValue = "asc";
     } else if (values.sortBy === "expensive") {
       newKey = "price";
       newValue = "desc";
