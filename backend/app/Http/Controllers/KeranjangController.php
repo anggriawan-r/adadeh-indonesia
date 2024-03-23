@@ -246,6 +246,7 @@ class KeranjangController extends Controller
      *     summary="Get Item Keranjang By User Id",
      *     description="Get Item Keranjang By User Id",
      *     operationId="getKeranjangByUserId",
+     *     security={{ "bearerAuth": {} }},
      *     @OA\Response(
      *         response="200",
      *         description="Daftar Keranjang Berhasil Ditemukan",

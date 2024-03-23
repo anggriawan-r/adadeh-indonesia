@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('/keranjang', KeranjangController::class);
 
     Route::get('/user/keranjang', [KeranjangController::class, 'showByUserId']);
+    Route::get('/user/transaksi', [TransaksiController::class, 'showByUserId']);
 });
 // Product
 Route::controller(ProductController::class)->group(function () {
