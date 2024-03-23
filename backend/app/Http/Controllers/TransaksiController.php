@@ -26,15 +26,23 @@ class TransaksiController extends Controller
     {
         try {
             $listTransaksi = Transaksi::all();
+            $listTransaksiResult = [];
 
             if (count($listTransaksi) > 0) {
                 $this->responseData['message'] = 'Daftar Transaksi Berhasil Ditemukan';
+
+                foreach ($listTransaksi as $key => $transaksi) {
+                    $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->get();
+                    $detailTransaksi->load('product');
+                    $transaksi['detailTransaksi'] = $detailTransaksi;
+                    array_push($listTransaksiResult, $transaksi);
+                }
             } else {
                 $this->responseData['message'] = 'Daftar Transaksi Tidak Tersedia';
             }
 
             $this->responseData['success'] = true;
-            $this->responseData['data'] = $listTransaksi;
+            $this->responseData['data'] = $listTransaksiResult;
             $this->responseCode = Response::HTTP_OK;
         } catch (\Throwable $th) {
             $this->responseData['message'] = $th->getMessage();
@@ -46,36 +54,6 @@ class TransaksiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(StoreTransaksiRequest $request)
-    // {
-    //     try {
-    //         $validated = $request->safe()->only(['totalHarga', 'status', 'userId', 'metodePembayaranId']);
-    //         $totalHarga = $validated['totalHarga'];
-    //         $status = $validated['status'];
-    //         $userId = $validated['userId'];
-    //         $metodePembayaranId = $validated['metodePembayaranId'];
-
-    //         $transaksi = new Transaksi;
-    //         $transaksi->total_harga = $totalHarga;
-    //         $transaksi->status = $status;
-    //         $transaksi->user_id = $userId;
-    //         $transaksi->metode_pembayaran_id = $metodePembayaranId;
-
-    //         $kodeTransaksi = 'adadeh' . date('YmdHis') . bin2hex(random_bytes(3));
-    //         $transaksi->kode_transaksi = $kodeTransaksi;
-
-    //         $transaksi->save();
-
-    //         $this->responseData['message'] = 'Transaksi Berhasil Ditambahkan';
-    //         $this->responseData['success'] = true;
-    //         $this->responseData['data'] = $transaksi;
-    //         $this->responseCode = Response::HTTP_CREATED;
-    //     } catch (\Throwable $th) {
-    //         $this->responseData['message'] = $th->getMessage();
-    //     }
-
-    //     return response()->json($this->responseData, $this->responseCode);
-    // }
     public function store(StoreTransaksiRequest $request)
     {
         try {
