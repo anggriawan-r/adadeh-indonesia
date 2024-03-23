@@ -241,7 +241,7 @@ class KeranjangController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/user/:id/keranjang",
+     *     path="/api/user/keranjang",
      *     tags={"Keranjang"},
      *     summary="Get Item Keranjang By User Id",
      *     description="Get Item Keranjang By User Id",
@@ -257,9 +257,10 @@ class KeranjangController extends Controller
      *     )
      * )
      */
-    public function showByUserId(int $userId)
+    public function showByUserId()
     {
         try {
+            $userId = auth()->user()->id;
             $listKeranjang = Keranjang::where('user_id', $userId)->get();
             $listKeranjang->load('produk');
 
