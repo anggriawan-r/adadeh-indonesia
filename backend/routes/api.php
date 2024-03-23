@@ -3,8 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DetailTransaksiController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\MetodePembayaranController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TransaksiController;
@@ -43,15 +45,21 @@ Route::controller(ProductController::class)->group(function () {
   Route::get("/products/{products}", "show");
 });
 
+Route::controller(RoleController::class)->group(function () {
+  Route::get("/roles", "index");
+  Route::get("/roles/{roles}", "show");
+  Route::post("/roles", "store");
+  Route::patch("/roles/{roles}", "update");
+  Route::delete("/roles/{roles}", "destroy");
+});
+
+Route::post("/history", [HistoryController::class, "store"]);
+
 Route::group(['middleware' => ['auth:api']], function () {
+    // Payment
+    Route::post("/payment", [PaymentController::class, "payment"]);
+    Route::patch("/payment/status/{payment}", [PaymentController::class, "updateStatus"]);
   // Role
-  Route::controller(RoleController::class)->group(function () {
-    Route::get("/roles", "index");
-    Route::get("/roles/{roles}", "show");
-    Route::post("/roles", "store");
-    Route::patch("/roles/{roles}", "update");
-    Route::delete("/roles/{roles}", "destroy");
-  });
 
   // Detail Transaksi
   Route::controller(DetailTransaksiController::class)->group(function () {
