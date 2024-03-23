@@ -24,20 +24,16 @@ class UpdateTransaksiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'totalHarga' => ['bail', 'nullable', 'integer', 'min:0'],
-            'status' => ['bail', 'nullable', 'string', Rule::in(['paid', 'unpaid'])],
-            'userId' => ['bail', 'nullable', 'integer', 'min:0'],
-            'metodePembayaranId' => ['bail', 'nullable', 'integer', 'min:0'],
+            'status' => ['bail', 'nullable', 'string', Rule::in(['pending', 'success', 'canceled'])],
+            'userId' => ['bail', 'nullable', 'integer', 'min:0']
         ];
     }
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'totalHarga' => $this->input('totalHarga') ?? null,
             'status' => strtolower($this->input('status')) ?? null,
-            'userId' => $this->input('userId') ?? null,
-            'metodePembayaranId' => $this->input('metodePembayaranId') ?? null,
+            'userId' => auth()->user()->id
         ]);
     }
 }

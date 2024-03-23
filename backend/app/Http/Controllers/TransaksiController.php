@@ -66,7 +66,7 @@ class TransaksiController extends Controller
             $transaksi = new Transaksi;
             $transaksi->user_id = $userId;
             $transaksi->total_harga = 0;
-            $transaksi->status = 'Menunggu Pembayaran';
+            $transaksi->status = 'pending';
             $transaksi->metode_pembayaran_id = 1;
 
             $kodeTransaksi = 'adadeh' . date('YmdHis') . bin2hex(random_bytes(3));
@@ -87,6 +87,8 @@ class TransaksiController extends Controller
 
                 array_push($listDetailTransaksi, $newDetailTransaksi);
             }
+
+            $transaksi->save();
 
             $transaksi['detailTransaksi'] = $listDetailTransaksi;
 
@@ -110,6 +112,10 @@ class TransaksiController extends Controller
             $transaksi = Transaksi::find($id);
 
             if ($transaksi === null) throw new Exception('Transaksi Tidak Tersedia');
+
+            $detailTransaksi = DetailTransaksi::where('transaksi_id', $id);
+            $detailTransaksi->load('product');
+            $transaksi['detailTransaksi'] = $detailTransaksi;
                 
             $this->responseData['message'] = 'Transaksi Berhasil Ditemukan';
             $this->responseData['success'] = true;
@@ -128,19 +134,15 @@ class TransaksiController extends Controller
     public function update(UpdateTransaksiRequest $request, int $id)
     {
         try {
-            $validated = $request->safe()->only(['totalHarga', 'status', 'userId', 'metodePembayaranId']);
-            $totalHarga = $validated['totalHarga'];
+            $validated = $request->safe()->only(['status', 'userId']);
             $status = $validated['status'];
             $userId = $validated['userId'];
-            $metodePembayaranId = $validated['metodePembayaranId'];
 
             $transaksi = Transaksi::find($id);
             if($transaksi === null) throw new Exception('Transaksi Tidak Tersedia');
 
-            if($totalHarga) $transaksi->total_harga = $totalHarga;
             if($status) $transaksi->status = $status;
             if($userId) $transaksi->user_id = $userId;
-            if($metodePembayaranId) $transaksi->metode_pembayaran_id = $metodePembayaranId;
 
             $transaksi->save();
 
