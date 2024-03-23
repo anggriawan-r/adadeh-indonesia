@@ -98,8 +98,8 @@ class TransaksiController extends Controller
 
             foreach ($detailTransaksi as $key => $value) {
                 $newDetailTransaksi = new DetailTransaksi;
-                $newDetailTransaksi->product_id = $value->produkId;
-                $newDetailTransaksi->jumlah = $value->jumlah;
+                $newDetailTransaksi->product_id = $value['produkId'];
+                $newDetailTransaksi->jumlah = $value['jumlah'];
                 $newDetailTransaksi->transaksi_id = $transaksi->id;
 
                 $newDetailTransaksi->save();
