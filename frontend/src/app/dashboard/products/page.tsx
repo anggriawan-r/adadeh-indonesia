@@ -19,14 +19,14 @@ export default async function Products() {
   const data = await getData();
   return (
     <>
-      <div className="container space-y-2">
+      <div className="container space-y-2 md:w-full w-screen">
         <div className="mt-10 flex items-center justify-between">
           <p className="text-2xl font-bold">Product</p>
           <FormProduct />
         </div>
         <Separator />
       </div>
-      <div className="container mx-auto py-2">
+      <div className="container mx-auto py-2 md:w-full w-screen">
         <DataTable columns={columns} data={data} />
       </div>
     </>

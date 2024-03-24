@@ -51,7 +51,9 @@ class RoleController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         description="Add a Role",
-     *         @OA\Property(property="name", type="string", example="admin")
+     *         @OA\JsonContent(
+     *              @OA\Property(property="name", type="string", example="admin")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
