@@ -10,20 +10,24 @@ export default function ProtectedRoutes({
 }: {
   children: React.ReactNode;
 }) {
-  const { status } = useLogin();
+  const { status, data } = useLogin();
   const path = usePathname();
 
   useEffect(() => {
     if (status) {
       if (loginRoutes.includes(path)) {
-        redirect("/");
+        if (data.user.role == "admin") {
+          redirect("/dashboard");
+        } else {
+          redirect("/user");
+        }
       }
     } else {
       if (protectedRoutes.includes(path)) {
         redirect("/auth/signin");
       }
     }
-  }, [path, status]);
+  }, [path, status, data]);
 
   return <>{children}</>;
 }

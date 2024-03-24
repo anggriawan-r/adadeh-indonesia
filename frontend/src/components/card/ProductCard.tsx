@@ -3,7 +3,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { productsType } from "@/lib/constants";
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
-import { Button } from "@/components/ui/button";
 
 export default function ProductCard({ data }: { data: productsType }) {
   return (
@@ -14,13 +13,25 @@ export default function ProductCard({ data }: { data: productsType }) {
         </button>
         <div className="w-full">
           <AspectRatio ratio={1 / 1}>
-            <Image src={data.image} alt="Image" fill className="object-cover" />
+            <Image
+              src={data.image}
+              alt="Image"
+              fill
+              sizes="33vw, (min-width:640px) 25vw"
+              className="object-cover"
+            />
           </AspectRatio>
         </div>
         <div className="h-full p-2">
           <p className="mb-2 text-xs font-light">{data.category}</p>
           <h2 className="text-xs sm:text-sm">{data.name}</h2>
-          <p className="text-xs font-light sm:text-sm">{data.price}</p>
+          <p className="text-xs font-light sm:text-sm">
+            {data.price.toLocaleString("id-ID", {
+              style: "currency",
+              currency: "IDR",
+              maximumFractionDigits: 0,
+            })}
+          </p>
         </div>
       </div>
     </a>

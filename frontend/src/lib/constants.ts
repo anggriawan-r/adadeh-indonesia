@@ -99,7 +99,7 @@ const heroes = [
     isButtonDark: true,
   },
   {
-    id: 2,
+    id: 3,
     imageUrl: "ultraboost.jpg",
     title: "ULTRABOOST",
     imageAlt: "ULTRABOOST",
@@ -109,17 +109,20 @@ const heroes = [
 ];
 const categories: Categories[] = [
   {
-    name: "LIFESTYLE",
+    id: 1,
+    name: "Lifestyle",
     image_url:
       "https://images.pexels.com/photos/2041832/pexels-photo-2041832.jpeg",
   },
   {
-    name: "BASKET",
+    id: 4,
+    name: "Basket",
     image_url:
       "https://images.pexels.com/photos/220383/pexels-photo-220383.jpeg",
   },
   {
-    name: "OUTDOOR",
+    id: 3,
+    name: "Outdoor",
     image_url:
       "https://images.pexels.com/photos/2346018/pexels-photo-2346018.jpeg",
   },
@@ -127,10 +130,12 @@ const categories: Categories[] = [
 type Categories = {
   name: string;
   image_url: string;
+  id: number;
 };
 type categoriesType = {
   name: string;
-  id: string;
+  id: number;
+  image_url: string;
 };
 
 export { nav, heroes, products, categories };

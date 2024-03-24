@@ -4,6 +4,7 @@ import React from "react";
 import NavbarUtils from "./NavbarUtils";
 import axios from "axios";
 import { categoryType } from "@/type/category";
+import NavList from "./NavList";
 
 const getCategories = async () => {
   try {
@@ -37,39 +38,8 @@ export default async function Navbar() {
           </div>
         </Link>
         <div className="flex h-full gap-8">
-          <nav className="hidden h-full items-center gap-8 lg:flex">
-            <Link href="/" className="h-full">
-              <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
-                HOME
-                <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
-              </div>
-            </Link>
-            <Link href="/catalogue" className="h-full">
-              <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
-                CATALOGUE
-                <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
-              </div>
-            </Link>
-            <div className="group relative flex h-full cursor-pointer items-center text-xs font-bold text-black/80 lg:text-sm">
-              CATEGORIES
-              <div className="invisible absolute bottom-0 h-1 w-full bg-black group-hover:visible" />
-              <ul className="invisible absolute bottom-0 left-0 w-[150px] translate-y-full bg-white shadow-2xl group-hover:visible">
-                {categories &&
-                  categories.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        className="inline-block w-full p-4 hover:bg-zinc-200"
-                        href="#"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </nav>
-
-          <NavbarUtils navList={categories} />
+          <NavList categories={categories} />
+          {categories && <NavbarUtils navList={categories} />}
         </div>
       </div>
     </header>
