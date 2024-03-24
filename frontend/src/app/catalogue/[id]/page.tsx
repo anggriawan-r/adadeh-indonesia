@@ -5,15 +5,31 @@ import { detailProductType, products } from "@/lib/constants";
 import ProductCarousel from "@/components/ProductCarousel";
 import axios from "axios";
 import useSWR from "swr";
+import { useLogin } from "@/stores/useAuth";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const fetcher = async (url: string) => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await axios.get<{ data: detailProductType }>(
       `${baseUrl}/${url}/${params.id}`,
     );
     return response.data.data;
   };
+
+  const token = useLogin((state) => state.data);
+
+  const addToCart = async () => {
+    const data = {
+      produkId: params.id,
+      jumlah: 1,
+    };
+    await axios.post(`${baseUrl}/keranjang`, data, {
+      headers: {
+        Authorization: `Bearer ${token.data}`,
+      },
+    });
+  };
+
   const { data, error, isLoading } = useSWR("products", fetcher);
   if (error) {
     return <h1>error</h1>;
@@ -65,7 +81,10 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
                       currency: "IDR",
                     })}
                   </span>
-                  <button className="ml-auto inline-block shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
+                  <button
+                    onClick={addToCart}
+                    className=" ml-auto inline-block shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
+                  >
                     ADD TO CART
                   </button>
                   <button className="ml-4 inline-flex h-12 w-12 items-center justify-center border border-black bg-black p-0 text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
