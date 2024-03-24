@@ -41,7 +41,7 @@ export default function ProductCarousel({ data }: { data: productsType[] }) {
         <CarouselContent className="-ml-[4px]">
           {data.map((item, index) => (
             <CarouselItem
-              className="basis-1/2 pl-[4px] md:basis-1/3 xl:basis-1/4"
+              className="basis-1/2 pl-[4px] md:basis-1/4 xl:basis-1/5"
               key={index}
             >
               <ProductCard data={item} />

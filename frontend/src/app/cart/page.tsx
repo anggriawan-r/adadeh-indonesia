@@ -39,7 +39,7 @@ export default function Cart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const token = useLogin((state) => state.data);
+  const { data } = useLogin();
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
@@ -51,7 +51,7 @@ export default function Cart() {
       try {
         const response = await axios.get(`${baseUrl}/user/keranjang`, {
           headers: {
-            Authorization: `Bearer ${token.data.token}`,
+            Authorization: `Bearer ${data.token}`,
           },
         });
         const responseData = response.data.data;
@@ -91,7 +91,7 @@ export default function Cart() {
     try {
       await axios.delete(`${baseUrl}/keranjang/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${data.token}`,
         },
       });
     } catch (error) {
