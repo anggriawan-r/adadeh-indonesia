@@ -39,8 +39,7 @@ export default function Cart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data } = useLogin();
-  const token = data?.data.token;
+  const token = useLogin((state) => state.data);
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
@@ -52,7 +51,7 @@ export default function Cart() {
       try {
         const response = await axios.get(`${baseUrl}/user/keranjang`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token.data.token}`,
           },
         });
         const responseData = response.data.data;
@@ -74,7 +73,6 @@ export default function Cart() {
         console.error("Failed to fetch data:", error);
       }
     };
-
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
