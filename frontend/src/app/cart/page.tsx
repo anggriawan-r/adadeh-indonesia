@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ProductCarousel from "@/components/ProductCarousel";
 import { products } from "@/lib/constants";
 import axios from "axios";
-import useSWR from "swr";
+import { useLogin } from "@/stores/useAuth";
 
 interface CartItem {
   id: number;
@@ -33,44 +33,51 @@ const getTotalHargaByChecked = (cartItems: CartItem[]): number => {
 
 export default function Cart() {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const url = `${baseUrl}/cart`;
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [checkAll, setCheckAll] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { data } = useLogin();
+  const token = data?.data.token;
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const totalHarga = getTotalHargaByChecked(cartItems);
+    setTotalPrice(totalHarga);
+  }, [cartItems]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/keranjang`, {
+        const response = await axios.get(`${baseUrl}/user/keranjang`, {
           headers: {
-            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vNDcuMjM2LjEwLjIwNC9hcGkvbG9naW4iLCJpYXQiOjE3MTExMDE4MjYsImV4cCI6MTcxMTEwNTQyNiwibmJmIjoxNzExMTAxODI2LCJqdGkiOiJBeWNhMHc1SmZDTWhidEhOIiwic3ViIjoiNCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xbew09LnhByVa8duStj1gDucppPdaxDFrb9UnAOH8WM`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const responseData = response.data.data;
-        console.log(responseData);
-        const transformedData: CartItem[] = [
-          {
-            id: responseData.id,
-            name: responseData.produk.name,
-            jumlah: responseData.jumlah,
-            image_url: responseData.produk.image,
-            harga: responseData.produk.price,
-            checked: true,
-          },
-        ];
+
+        const transformedData: CartItem[] = responseData.map((item: any) => ({
+          id: item.id,
+          name: item.produk.name,
+          jumlah: item.jumlah,
+          image_url: item.produk.image,
+          harga: item.produk.price,
+          checked: false,
+        }));
+
         setCartItems(transformedData);
+        const totalHarga = getTotalHargaByChecked(transformedData);
+        setTotalPrice(totalHarga);
+        setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
 
     fetchData();
-
-    const totalHarga = getTotalHargaByChecked(cartItems);
-    setTotalPrice(totalHarga);
-  }, [cartItems]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {
@@ -80,6 +87,18 @@ export default function Cart() {
       return item;
     });
     setCartItems(updatedCartItems);
+  };
+
+  const deleteItem = async (id: number) => {
+    try {
+      await axios.delete(`${baseUrl}/keranjang/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCheckAll = () => {
@@ -102,9 +121,15 @@ export default function Cart() {
     setCartItems(updatedCartItems);
   };
 
-  const handleRemoveItem = (id: number) => {
+  const handleRemoveItem = async (id: number) => {
     const updatedCartItems = cartItems.filter((item) => item.id !== id);
+    await deleteItem(id);
     setCartItems(updatedCartItems);
+  };
+
+  const handleSubmit = () => {
+    const selectedItems = cartItems.filter((item) => item.checked);
+    console.log(selectedItems);
   };
 
   return (
@@ -119,20 +144,30 @@ export default function Cart() {
       </header>
       <main className="flex">
         <section className="my-5 w-full lg:w-3/4">
-          {cartItems.map((item) => (
-            <CartItem
-              image_url={item.image_url}
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              jumlah={item.jumlah}
-              onRemove={handleRemoveItem}
-              harga={item.harga}
-              checked={item.checked}
-              onCheck={(id, isChecked) => handleCheck(id, isChecked)}
-              onCount={handleCountChange}
-            />
-          ))}
+          {isLoading ? (
+            <div className="mt-10 flex justify-center">
+              <div className="h-16 w-16 animate-spin rounded-full border-4 border-dashed dark:border-red-400"></div>
+            </div>
+          ) : cartItems.length > 0 ? (
+            cartItems.map((item) => (
+              <CartItem
+                image_url={item.image_url}
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                jumlah={item.jumlah}
+                onRemove={handleRemoveItem}
+                harga={item.harga}
+                checked={item.checked}
+                onCheck={(id, isChecked) => handleCheck(id, isChecked)}
+                onCount={handleCountChange}
+              />
+            ))
+          ) : (
+            <h1 className="mt-10 text-center text-xl font-semibold">
+              Anda belum memiliki produk dalam keranjang
+            </h1>
+          )}
         </section>
 
         <section className="lg:m-5 lg:w-1/4">
@@ -162,7 +197,10 @@ export default function Cart() {
               </span>
             </div>
             <div>
-              <button className="my-6 inline-block w-full shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
+              <button
+                onClick={handleSubmit}
+                className="my-6 inline-block w-full shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
+              >
                 CHECKOUT
               </button>
             </div>
@@ -173,7 +211,10 @@ export default function Cart() {
               <span className="font-semibold">Rp {totalPrice + 10000}</span>
             </div>
             <div>
-              <button className="my-6 inline-block w-full shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
+              <button
+                onClick={handleSubmit}
+                className="my-6 inline-block w-full shrink-0 border border-black bg-black px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
+              >
                 CHECKOUT
               </button>
             </div>
