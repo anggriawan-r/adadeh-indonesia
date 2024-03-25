@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { useLogin } from "@/stores/useAuth";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function WishList() {
   const { toast } = useToast();
@@ -24,7 +25,7 @@ export default function WishList() {
     console.log(response.data.data);
     return response.data.data;
   };
-  const { data: wishlist, error, isLoading } = useSWR("wishlists", fetcher);
+  const { data: wishlist, error, isValidating } = useSWR("wishlists", fetcher);
   const [deleteSucceed, setDeleteSucceed] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
@@ -90,8 +91,6 @@ export default function WishList() {
     }
   }, [deleteSucceed, deleteError, toast]);
 
-  if (isLoading) return <div className="mt-20">Loading...</div>;
-  if (error) return <div className="mt-20">Error: {error.message}</div>;
   return (
     <>
       <header className="black mt-20 border-y border-black p-4">
@@ -103,85 +102,104 @@ export default function WishList() {
         <div className="container mx-auto flex items-center justify-center px-4 py-12 md:px-6 2xl:px-0">
           <div className="flex flex-col items-start justify-start">
             <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 lg:mt-12 lg:grid-cols-3">
-              {wishlist?.map((product: any) => (
-                <div key={product.id} className="flex flex-col">
-                  <div className="relative border border-b-0 border-gray-400">
-                    <Image
-                      height={500}
-                      width={500}
-                      className="block"
-                      src={product.product.image}
-                      alt="Product Image"
+              {isValidating ? (
+                <div className="flex w-full space-x-3 lg:w-screen">
+                  {[...Array(4)].map((_, index) => (
+                    <Skeleton
+                      key={index}
+                      className="h-24 w-32 lg:h-96 lg:w-80"
                     />
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      aria-label="close"
-                      className="absolute right-4 top-4 bg-gray-800 p-1.5 text-white hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 dark:bg-white dark:text-gray-800"
-                    >
-                      <svg
-                        className="fill-current"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                  ))}
+                </div>
+              ) : wishlist?.length === 0 ? (
+                <h1 className="w-full self-start text-center text-2xl">
+                  Belum ada produk dalam wishlist anda
+                </h1>
+              ) : error ? (
+                <div className="flex flex-col items-center justify-center gap-4 px-4 md:flex-row md:items-start">
+                  <h1 className="text-2xl">Error loading products</h1>
+                </div>
+              ) : (
+                wishlist?.map((product: any) => (
+                  <div key={product.id} className="flex flex-col">
+                    <div className="relative border border-b-0 border-gray-400">
+                      <Image
+                        height={500}
+                        width={500}
+                        className="block"
+                        src={product.product.image}
+                        alt="Product Image"
+                      />
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        aria-label="close"
+                        className="absolute right-4 top-4 bg-gray-800 p-1.5 text-white hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 dark:bg-white dark:text-gray-800"
                       >
-                        <path
-                          d="M13 1L1 13"
-                          stroke="currentColor"
-                          strokeWidth="1.25"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M1 1L13 13"
-                          stroke="currentColor"
-                          strokeWidth="1.25"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="border border-t-0 border-gray-400 p-2">
-                    <div className="mt-6 flex flex-col items-start justify-between">
-                      <div className="flex items-center justify-center">
-                        <Link href={`/catalog/${product.id}`}>
-                          <p className="text-2xl font-semibold leading-6 tracking-tight text-gray-800 hover:underline dark:text-white">
-                            {product.product.name}
-                          </p>
-                        </Link>
-                      </div>
-                      <div className="">
-                        <p className="mt-2 text-base font-medium leading-4 tracking-tight text-gray-800 dark:text-white">
-                          STOCK {product.product.stock}
-                        </p>
-                      </div>
+                        <svg
+                          className="fill-current"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M13 1L1 13"
+                            stroke="currentColor"
+                            strokeWidth="1.25"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M1 1L13 13"
+                            stroke="currentColor"
+                            strokeWidth="1.25"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
                     </div>
-
-                    <div className="mt-12 flex flex-col items-start justify-start">
-                      <div className="mt-6">
-                        <p className="text-2xl font-medium leading-4 tracking-tight text-gray-800 dark:text-white">
-                          {product.product.price.toLocaleString("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                          })}
-                        </p>
+                    <div className="border border-t-0 border-gray-400 p-2">
+                      <div className="mt-6 flex flex-col items-start justify-between">
+                        <div className="flex items-center justify-center">
+                          <Link href={`/catalog/${product.id}`}>
+                            <p className="text-2xl font-semibold leading-6 tracking-tight text-gray-800 hover:underline dark:text-white">
+                              {product.product.name}
+                            </p>
+                          </Link>
+                        </div>
+                        <div className="">
+                          <p className="mt-2 text-base font-medium leading-4 tracking-tight text-gray-800 dark:text-white">
+                            STOCK {product.product.stock}
+                          </p>
+                        </div>
                       </div>
-                      <div className="mt-10 flex w-full flex-col items-center justify-between space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0 xl:space-x-8">
-                        <div className="w-full">
-                          <button
-                            onClick={() => handlePostCart(product.product.id)}
-                            className="w-full border border-gray-800 bg-gray-800 py-4 text-lg leading-4 tracking-tight text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
-                          >
-                            Add to cart
-                          </button>
+
+                      <div className="mt-12 flex flex-col items-start justify-start">
+                        <div className="mt-6">
+                          <p className="text-2xl font-medium leading-4 tracking-tight text-gray-800 dark:text-white">
+                            {product.product.price.toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                            })}
+                          </p>
+                        </div>
+                        <div className="mt-10 flex w-full flex-col items-center justify-between space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0 xl:space-x-8">
+                          <div className="w-full">
+                            <button
+                              onClick={() => handlePostCart(product.product.id)}
+                              className="w-full border border-gray-800 bg-gray-800 py-4 text-lg leading-4 tracking-tight text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
+                            >
+                              Add to cart
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
