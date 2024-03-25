@@ -33,8 +33,8 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
 
   const onSignOut = () => {
     handleSignOut();
-    setIsSubmitted(true);
     router.push("/auth/signin");
+    setIsSubmitted(true);
   };
 
   useEffect(() => {
@@ -127,13 +127,23 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
         </>
       )}
       {!status && (
-        <Button
-          disabled={isLoading}
-          className="flex w-max items-center gap-2 rounded-none text-xs"
-          asChild
-        >
-          <Link href="/auth/signup">{isLoading ? "Loading" : "SIGN UP"}</Link>
-        </Button>
+        <>
+          <Button
+            disabled={isLoading}
+            variant="outline"
+            className="hidden w-max items-center gap-2 rounded-none text-xs sm:flex"
+            asChild
+          >
+            <Link href="/auth/signup">{isLoading ? "Loading" : "SIGN UP"}</Link>
+          </Button>
+          <Button
+            disabled={isLoading}
+            className="hidden w-max items-center gap-2 rounded-none text-xs sm:flex"
+            asChild
+          >
+            <Link href="/auth/signin">{isLoading ? "Loading" : "SIGN IN"}</Link>
+          </Button>
+        </>
       )}
 
       <Sheet>
@@ -145,9 +155,18 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
         <SheetContent className="flex flex-col gap-4 overflow-y-scroll">
           {!status && (
             <SheetClose asChild>
-              <Button className="mt-16 w-max rounded-none" asChild>
-                <Link href="/auth/signup">SIGN UP</Link>
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="mt-16 w-max rounded-none"
+                  asChild
+                >
+                  <Link href="/auth/signup">SIGN UP</Link>
+                </Button>
+                <Button className="mt-16 w-max rounded-none" asChild>
+                  <Link href="/auth/signin">SIGN IN</Link>
+                </Button>
+              </div>
             </SheetClose>
           )}
           <nav className={`flex flex-col gap-2 ${status && "mt-16"}`}>
