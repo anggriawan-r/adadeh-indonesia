@@ -48,6 +48,7 @@ Route::controller(ProductController::class)->group(function () {
   Route::get("/products/{products}", "show");
 });
 
+// Roles
 Route::controller(RoleController::class)->group(function () {
   Route::get("/roles", "index");
   Route::get("/roles/{roles}", "show");

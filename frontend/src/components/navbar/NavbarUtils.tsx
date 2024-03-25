@@ -21,16 +21,19 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { categoryType } from "@/type/category";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
   const { message, data, status, handleSignOut } = useLogin();
   const { isLoading } = useUserLoading();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  const router = useRouter()
 
   const onSignOut = () => {
     handleSignOut();
     setIsSubmitted(true);
+    router.push("/auth/signin")
   };
 
   useEffect(() => {
