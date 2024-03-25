@@ -40,7 +40,7 @@ export interface useSignIn {
   mutateAddress: (data: string) => void;
   mutateName: (data: string) => void;
   mutatePhone: (data: string) => void;
-  data: any;
+  data: (() => void) | any;
 }
 
 export const signInSchema = z.object({
