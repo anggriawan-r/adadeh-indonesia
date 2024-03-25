@@ -19,18 +19,33 @@ export const useRegister = create<useSignUp>((set) => ({
   },
 }));
 
+type userLoading = {
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+};
+
 type persist = (
   confiq: StateCreator<useSignIn>,
   options: PersistOptions<useSignIn>,
 ) => StateCreator<useSignIn>;
 
+export const useUserLoading = create<userLoading>((set) => ({
+  isLoading: false,
+  setIsLoading: (isLoading: boolean) => set({ isLoading: isLoading }),
+}));
+
 export const useLogin = create<useSignIn, []>(
   (persist as persist)(
     (set, get): useSignIn => ({
       message: get()?.message,
-      status: get()?.status,
-      data: get()?.data,
+      status: false,
+      data: () => {
+        useUserLoading.getState().setIsLoading(true);
+        get()?.data;
+        useUserLoading.getState().setIsLoading(false);
+      },
       handleSignIn: async (data) => {
+        useUserLoading.getState().setIsLoading(true);
         try {
           const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/login`,
@@ -39,9 +54,11 @@ export const useLogin = create<useSignIn, []>(
           set({ status: response.data.status });
           set({ message: response.data.message });
           set({ data: response.data.data });
+          useUserLoading.getState().setIsLoading(false);
         } catch (error: any) {
           set({ status: error.response.data.status });
           set({ message: error.response.data.message });
+          useUserLoading.getState().setIsLoading(false);
         }
       },
       handleSignOut: () => {

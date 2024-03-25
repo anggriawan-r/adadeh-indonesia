@@ -45,7 +45,22 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     })
   };
 
-  const { data, error, isLoading } = useSWR("products", fetcher);
+  useEffect(() => {
+    if (postSucceed) {
+      toast({
+        title: "Success",
+        description: "Keranjang ditambahkan!",
+      });
+    }
+    if (postError) {
+      toast({
+        variant: "destructive",
+        title: "Failed",
+        description: "Gagal Menambah Keranjang!",
+      });
+    }
+  }, [postSucceed, postError, toast]);
+
   if (error) {
     return <h1>error</h1>;
   }
