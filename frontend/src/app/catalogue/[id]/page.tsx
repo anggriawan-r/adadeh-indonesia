@@ -29,7 +29,6 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
       produkId: params.id,
       jumlah: 1,
     };
-
     try {
       await axios.post(`${baseUrl}/keranjang`, data, {
         headers: {

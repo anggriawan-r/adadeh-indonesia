@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MdAccountCircle } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { PiSignOutBold } from "react-icons/pi";
-import { useLogin } from "@/stores/useAuth";
+import { useLogin, useUserLoading } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -24,6 +24,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 
 export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
   const { message, data, status, handleSignOut } = useLogin();
+  const { isLoading } = useUserLoading();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
 
@@ -60,7 +61,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
         </button>
       </form>
 
-      {status && (
+      {!isLoading && status && (
         <>
           <Link href="/cart">
             <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
@@ -70,7 +71,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
           <div className="group relative flex h-full items-center">
             <Avatar>
               <AvatarFallback className="font-bold">
-                {data.user?.name[0]}
+                {!isLoading && data.user?.name[0]}
               </AvatarFallback>
             </Avatar>
             <div className="invisible absolute bottom-0 right-[50%] translate-x-[30%] translate-y-full bg-white font-semibold shadow-2xl group-hover:visible">
@@ -81,7 +82,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
                 <MdAccountCircle className="basis-1/5 text-2xl" />
                 <p className="basis-4/5">Account</p>
               </Link>
-              {data.user.role == "admin" && (
+              {!isLoading && data.user?.role == "admin" && (
                 <Link
                   href="/dashboard"
                   className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"

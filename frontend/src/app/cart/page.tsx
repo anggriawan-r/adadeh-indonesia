@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ProductCarousel from "@/components/ProductCarousel";
 import { products } from "@/lib/constants";
 import axios from "axios";
-import { useLogin } from "@/stores/useAuth";
+import { useLogin, useUserLoading } from "@/stores/useAuth";
 
 interface CartItem {
   id: number;
@@ -40,6 +40,7 @@ export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { data } = useLogin();
+  const { isLoading: userLoading } = useUserLoading();
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
@@ -73,9 +74,12 @@ export default function Cart() {
         console.error("Failed to fetch data:", error);
       }
     };
-    fetchData();
+
+    if (!userLoading) {
+      fetchData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userLoading, data]);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {

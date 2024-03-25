@@ -34,13 +34,13 @@ export interface signIn {
 
 export interface useSignIn {
   message: string;
-  status: boolean;
+  status: (() => void) | boolean;
   handleSignIn: (data: signIn) => Promise<void>;
   handleSignOut: () => void;
   mutateAddress: (data: string) => void;
   mutateName: (data: string) => void;
   mutatePhone: (data: string) => void;
-  data: any;
+  data: (() => void) | any;
 }
 
 export const signInSchema = z.object({
