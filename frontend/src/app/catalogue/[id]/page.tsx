@@ -25,7 +25,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     };
     await axios.post(`${baseUrl}/keranjang`, data, {
       headers: {
-        Authorization: `Bearer ${token.data}`,
+        Authorization: `Bearer ${token.token}`,
       },
     });
   };
