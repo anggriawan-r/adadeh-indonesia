@@ -27,6 +27,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
   const { message, data, status, handleSignOut } = useLogin();
   const { isLoading } = useUserLoading();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [productName, setProductName] = useState("");
   const { toast } = useToast();
   const router = useRouter()
 
@@ -46,14 +47,27 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
     }
   }, [message, toast, isSubmitted]);
 
+  function handleSubmitSearchProduct(event) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams();
+    urlParams.set("name", productName);
+    router.push(`/catalogue?${urlParams.toString()}`)
+  }
+
+  function handleChangeProductName(event) {
+    setProductName(event.target.value)
+  }
+
   return (
     <div className="flex items-center gap-3">
-      <form className="hidden min-[500px]:flex">
+      <form onSubmit={handleSubmitSearchProduct} className="hidden min-[500px]:flex">
         <div>
           <input
             type="text"
             className="h-full rounded-none border border-gray-300 p-2 text-sm"
             placeholder="Search our products"
+            value={productName}
+            onChange={handleChangeProductName}
           />
         </div>
         <button

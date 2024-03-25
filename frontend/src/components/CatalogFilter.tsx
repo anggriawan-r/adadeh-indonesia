@@ -33,6 +33,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function CatalogFilter({ className }: { className?: string }) {
   const searchParams = useSearchParams().get("category");
+  const searchParamsProductName = useSearchParams().get("name");
   const form = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -83,12 +84,15 @@ export default function CatalogFilter({ className }: { className?: string }) {
   }
 
   useEffect(() => {
-    if (searchParams) {
-      setFilter({ category: searchParams });
+    if (searchParams || searchParamsProductName) {
+      setFilter({ 
+        category: searchParams ?? "",
+        name: searchParamsProductName ?? "",
+       });
     } else {
       setFilter({});
     }
-  }, [searchParams, setFilter]);
+  }, [searchParams, searchParamsProductName, setFilter]);
 
   return (
     <aside
