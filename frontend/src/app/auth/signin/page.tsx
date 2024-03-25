@@ -52,13 +52,6 @@ export default function SignIn() {
       }
     }
   }, [message, status, toast, isSubmitted]);
-  if(data?.user){
-    if(data?.user.role == "admin"){
-      router.push("/dashboard")
-    }else{
-      router.push("/user")
-    }
-  }
   return (
     <section className="relative mt-20 h-full bg-white lg:mt-0">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
