@@ -6,6 +6,7 @@ import ProductCarousel from "@/components/ProductCarousel";
 import axios from "axios";
 import useSWR from "swr";
 import { useLogin } from "@/stores/useAuth";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
@@ -17,26 +18,47 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     return response.data.data;
   };
 
-  const { token } = useLogin((state) => state.data);
+  const { data: token } = useLogin();
+  const [postError, setPostError] = useState(false);
+  const [postSucceed, setPostSucceed] = useState(false);
   const { toast } = useToast();
+  const { data, error, isLoading } = useSWR("products", fetcher);
 
   const addToCart = async () => {
     const data = {
       produkId: params.id,
       jumlah: 1,
     };
-    await axios.post(`${baseUrl}/keranjang`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    toast({
-      title: "Success",
-      description: "Item ditambahkan ke keranjang",
-    });
+
+    try {
+      await axios.post(`${baseUrl}/keranjang`, data, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      setPostSucceed(true);
+    } catch (error) {
+      setPostError(true);
+      console.error("error post data", error);
+    }
   };
 
-  const { data, error, isLoading } = useSWR("products", fetcher);
+  useEffect(() => {
+    if (postSucceed) {
+      toast({
+        title: "Success",
+        description: "Keranjang ditambahkan!",
+      });
+    }
+    if (postError) {
+      toast({
+        variant: "destructive",
+        title: "Failed",
+        description: "Gagal Menambah Keranjang!",
+      });
+    }
+  }, [postSucceed, postError, toast]);
+
   if (error) {
     return <h1>error</h1>;
   }
