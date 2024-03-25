@@ -48,7 +48,7 @@ export default function Cart() {
   }, [cartItems]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       try {
         const response = await axios.get(`${baseUrl}/user/keranjang`, {
           headers: {
@@ -73,13 +73,13 @@ export default function Cart() {
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
-    };
+    }
 
-    if (!userLoading) {
+    if (!userLoading && data.user) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userLoading, data]);
+  }, [data, userLoading]);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {
@@ -131,41 +131,50 @@ export default function Cart() {
 
   const handleSubmit = async () => {
     const selectedItems = cartItems.filter((item) => item.checked);
-    let item_details: any[] = []
-    selectedItems.forEach((item)=>{
+    let item_details: any[] = [];
+    selectedItems.forEach((item) => {
       const payment = {
-        "id": item.id,
-        "price": item.harga,
-        "name": item.name,
-        "quantity": item.jumlah,
-        "url": item.image_url
-      }
-      item_details.push(payment)
-    })
+        id: item.id,
+        price: item.harga,
+        name: item.name,
+        quantity: item.jumlah,
+        url: item.image_url,
+      };
+      item_details.push(payment);
+    });
     try {
       const payment = {
         jumlah: totalPrice + 10000,
-        item_details: item_details
-      }
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payments/buy`, payment, {
-        headers:{
-          Authorization: `Bearer ${data.token}`
-        }
-      })
+        item_details: item_details,
+      };
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/payments/buy`,
+        payment,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+      // SNAP IS WORKING AS INTENDED
       snap.pay(response.data.data.snap_token, {
         onSuccess: async function (result: any) {
           try {
             const payment = {
               status: "success",
-              payment_type: result.payment_type
+              payment_type: result.payment_type,
             };
-            await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`, payment, {
-              headers: {
-                Authorization: `Bearer ${data.token}`,
+            await axios.patch(
+              `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
+              payment,
+              {
+                headers: {
+                  Authorization: `Bearer ${data.token}`,
+                },
               },
-            });
+            );
           } catch (error) {
-              console.log(error)
+            console.log(error);
           }
         },
         onPending: async function (result: any) {
@@ -174,15 +183,19 @@ export default function Cart() {
           try {
             const payment = {
               status: "pending",
-              payment_type: result.payment_type
+              payment_type: result.payment_type,
             };
-            await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`, payment, {
-              headers: {
-                Authorization: `Bearer ${data.token}`,
+            await axios.patch(
+              `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
+              payment,
+              {
+                headers: {
+                  Authorization: `Bearer ${data.token}`,
+                },
               },
-            });
+            );
           } catch (error) {
-              console.log(error)
+            console.log(error);
           }
         },
         onError: function (result: any) {
@@ -191,26 +204,29 @@ export default function Cart() {
         },
         onClose: function (result: any) {
           console.log(result);
-          console.log("customer closed the popup without finishing the payment");
+          console.log(
+            "customer closed the popup without finishing the payment",
+          );
         },
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     console.log(selectedItems);
   };
-  useEffect(()=>{
-    let script = document.createElement("script")
-    script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js")
-    script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-")
-    script.async = true
 
-    document.body.appendChild(script)
-    return ()=>{
-      document.body.removeChild(script)
-    }
+  useEffect(() => {
+    let script = document.createElement("script");
+    script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js");
+    script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-");
+    script.async = true;
 
-  }, [])
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <>
       <header className="black mt-20 border-y border-black p-4">

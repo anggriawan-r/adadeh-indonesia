@@ -17,7 +17,9 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     return response.data.data;
   };
 
-  const { toast } = useToast()
+  const { toast } = useToast();
+
+  const { data, error, isLoading } = useSWR("products", fetcher);
 
   const token = useLogin((state) => state.data.token);
   const addToCart = async () => {
@@ -25,41 +27,26 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
       produkId: params.id,
       jumlah: 1,
     };
-    await axios.post(`${baseUrl}/keranjang`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res)=>{
-      toast({
-        title: "Success",
-        description: res.data.message,
+    await axios
+      .post(`${baseUrl}/keranjang`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-    })
-    .catch((err)=>{
-      toast({
-        variant: "destructive",
-        title: "Failed",
-        description: err.response.data.message,
+      .then((res) => {
+        toast({
+          title: "Success",
+          description: res.data.message,
+        });
       })
-    })
+      .catch((err) => {
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: err.response.data.message,
+        });
+      });
   };
-
-  useEffect(() => {
-    if (postSucceed) {
-      toast({
-        title: "Success",
-        description: "Keranjang ditambahkan!",
-      });
-    }
-    if (postError) {
-      toast({
-        variant: "destructive",
-        title: "Failed",
-        description: "Gagal Menambah Keranjang!",
-      });
-    }
-  }, [postSucceed, postError, toast]);
 
   if (error) {
     return <h1>error</h1>;
