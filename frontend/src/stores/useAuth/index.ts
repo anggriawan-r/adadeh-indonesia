@@ -38,11 +38,7 @@ export const useLogin = create<useSignIn, []>(
   (persist as persist)(
     (set, get): useSignIn => ({
       message: get()?.message,
-      status: () => {
-        useUserLoading.getState().setIsLoading(true);
-        get()?.status;
-        useUserLoading.getState().setIsLoading(false);
-      },
+      status: false,
       data: () => {
         useUserLoading.getState().setIsLoading(true);
         get()?.data;

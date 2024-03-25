@@ -110,8 +110,12 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
         </>
       )}
       {!status && (
-        <Button className="w-max rounded-none text-xs" asChild>
-          <Link href="/auth/signup">SIGN UP</Link>
+        <Button
+          disabled={isLoading}
+          className="flex w-max items-center gap-2 rounded-none text-xs"
+          asChild
+        >
+          <Link href="/auth/signup">{isLoading ? "Loading" : "SIGN UP"}</Link>
         </Button>
       )}
 

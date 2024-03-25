@@ -15,7 +15,7 @@ export default function ProtectedRoutes({
   const path = usePathname();
 
   useEffect(() => {
-    if (!isLoading && !status) {
+    if (!status) {
       if (protectedRoutes.includes(path)) {
         redirect("/auth/signin");
       }
@@ -28,21 +28,7 @@ export default function ProtectedRoutes({
         }
       }
     }
-
-    // if (status) {
-    //   if (loginRoutes.includes(path)) {
-    //     if (data.user.role == "admin") {
-    //       redirect("/dashboard");
-    //     } else {
-    //       redirect("/user");
-    //     }
-    //   }
-    // } else {
-    //   if (protectedRoutes.includes(path)) {
-    //     redirect("/auth/signin");
-    //   }
-    // }
-  }, [path, status, data]);
+  }, [path, status, data, isLoading]);
 
   return <>{children}</>;
 }

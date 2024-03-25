@@ -6,6 +6,7 @@ import ProductCarousel from "@/components/ProductCarousel";
 import axios from "axios";
 import useSWR from "swr";
 import { useLogin } from "@/stores/useAuth";
+import { useToast } from "@/components/ui/use-toast";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -16,7 +17,8 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     return response.data.data;
   };
 
-  const token = useLogin((state) => state.data);
+  const { token } = useLogin((state) => state.data);
+  const { toast } = useToast();
 
   const addToCart = async () => {
     const data = {
@@ -25,8 +27,12 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     };
     await axios.post(`${baseUrl}/keranjang`, data, {
       headers: {
-        Authorization: `Bearer ${token.data}`,
+        Authorization: `Bearer ${token}`,
       },
+    });
+    toast({
+      title: "Success",
+      description: "Item ditambahkan ke keranjang",
     });
   };
 

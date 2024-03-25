@@ -34,7 +34,7 @@ export interface signIn {
 
 export interface useSignIn {
   message: string;
-  status: (() => void) | boolean;
+  status: boolean;
   handleSignIn: (data: signIn) => Promise<void>;
   handleSignOut: () => void;
   mutateAddress: (data: string) => void;
