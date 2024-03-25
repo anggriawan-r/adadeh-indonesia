@@ -15,11 +15,11 @@ export default function ProtectedRoutes({
   const path = usePathname();
 
   useEffect(() => {
-    if (!status) {
+    if (!isLoading && !status) {
       if (protectedRoutes.includes(path)) {
         redirect("/auth/signin");
       }
-    } else if (!isLoading && status) {
+    } else if (!isLoading && data) {
       if (loginRoutes.includes(path)) {
         if (data.user.role == "admin") {
           redirect("/dashboard");

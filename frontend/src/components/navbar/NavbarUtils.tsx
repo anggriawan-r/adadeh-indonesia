@@ -28,12 +28,12 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
   const { isLoading } = useUserLoading();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
-  const router = useRouter()
+  const router = useRouter();
 
   const onSignOut = () => {
     handleSignOut();
     setIsSubmitted(true);
-    router.push("/auth/signin")
+    router.push("/auth/signin");
   };
 
   useEffect(() => {
