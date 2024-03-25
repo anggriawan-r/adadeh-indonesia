@@ -29,8 +29,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+// Auth
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/register", [AuthController::class, "register"]);
+Route::get("/customers", [AuthController::class, "customer"]);
 
 // Category
 Route::controller(CategoryController::class)->group(function () {
@@ -55,10 +57,13 @@ Route::controller(RoleController::class)->group(function () {
 
 Route::post("/history", [HistoryController::class, "store"]);
 
+// Payment
+Route::get("/payments", [PaymentController::class, "index"]);
+
 Route::group(['middleware' => ['auth:api']], function () {
     // Payment
-    Route::post("/payment", [PaymentController::class, "payment"]);
-    Route::patch("/payment/status/{payment}", [PaymentController::class, "updateStatus"]);
+    Route::post("/payments/buy", [PaymentController::class, "payment"]);
+    Route::patch("/payments/status/{payment}", [PaymentController::class, "updateStatus"]);
   // Role
 
   // Detail Transaksi
