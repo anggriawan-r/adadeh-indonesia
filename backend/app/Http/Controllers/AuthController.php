@@ -166,7 +166,7 @@ class AuthController extends Controller
     ]);
   }
 
-  /**
+    /**
    * @OA\Post(
    *     path="/api/logout",
    *     summary="logout",
@@ -252,6 +252,24 @@ class AuthController extends Controller
     }
   }
 
+    /**
+     * @OA\Get(
+     *     path="/api/customers",
+     *     summary="Get all Customer",
+     *     description="Get all customer data",
+     *     operationId="getAllcustomer",
+     *     security={{ "bearerAuth": {} }},
+     *     tags={"Customer"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message", type="string", example="customers in the app"),
+     *         )
+     *     ),
+     * )
+     */
   public function customer(){
     try {
         $user = User::where("role_id", 2)->get();
@@ -275,11 +293,39 @@ class AuthController extends Controller
     }
   }
 
+    /**
+     * @OA\Post(
+     *     path="/api/reset-password/:id",
+     *     summary="Get all Customer",
+     *     description="Get all customer data",
+     *     operationId="Reset Password",
+     *     security={{ "bearerAuth": {} }},
+     *     tags={"Customer"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message", type="string", example="Password successfully updated"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example="true"),
+     *             @OA\Property(property="message", type="string", example="Data not found"),
+     *         )
+     *     ),
+     * )
+     */
   public function resetPassword($id){
     try {
         $user = User::find($id);
         if($user){
-            $user->password = Hash::make("password123");
+            $user->update([
+                "password"  =>  Hash::make("password123")
+            ]);
             return response()->json([
                 "status"    =>  true,
                 "message"   =>  "Password successfully updated"

@@ -18,6 +18,31 @@ class PaymentController extends Controller
         \Midtrans\Config::$is3ds        = config('services.midtrans.is3ds');
     }
 
+    /**
+   * @OA\Post(
+   *     path="/api/payments/buy",
+   *     summary="payment",
+   *     description="payment",
+   *     operationId="payment",
+   *     tags={"Payment"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\RequestBody(
+   *         @OA\JsonContent(
+   *            @OA\Property(property="jumlah", type="integer", example="10000"),
+   *            @OA\Property(property="item_details", type="string", example="[]"),
+   *         ),
+   *     ),
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="Payment gat way"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
     public function payment(Request $request)
     {
         DB::transaction(function () use ($request) {
@@ -55,6 +80,31 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+   * @OA\Post(
+   *     path="/api/payments/status/:id",
+   *     summary="payment",
+   *     description="payment",
+   *     operationId="payment status",
+   *     tags={"Payment"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\RequestBody(
+   *         @OA\JsonContent(
+   *            @OA\Property(property="status", type="integer", example="pending"),
+   *            @OA\Property(property="payment_type", type="string", example="bank"),
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="Payment gat way"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
     public function updateStatus(Request $request, $id)
     {
         $payment = Payment::find($id);
@@ -66,6 +116,25 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+   * @OA\Post(
+   *     path="/api/payments",
+   *     summary="payment",
+   *     description="payment",
+   *     operationId="all payment",
+   *     tags={"Payment"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="Payment gat way"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
     function index(){
         try {
             $payments = Payment::all();
