@@ -16,10 +16,12 @@ import { useCategory } from "@/stores/useCategory";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import UpdateCategory from "@/components/admin/UpdateCategory";
+import axios from "axios";
 
 export type Category = {
   id: string;
   name: string;
+  email: string;
   address: string;
   phone: string;
   action: string;
@@ -77,6 +79,10 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
   {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
     accessorKey: "address",
     header: "Address",
   },
@@ -88,13 +94,28 @@ export const columns: ColumnDef<Category>[] = [
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
-      const category = row.original;
-      const { destroy, message } = useCategory();
+      const user = row.original;
       const { toast } = useToast();
       const router = useRouter();
+      const handleReset = async () =>{
+        await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password/${user.id}`)
+        .then((res)=>{
+          toast({
+            title: "Success",
+            description: res.data.message,
+          });
+        }).catch((error)=>{
+          toast({
+            variant: "destructive",
+            title: "Failed",
+            description: "Password unsuccessfully updated",
+          });
+        })
+        router.refresh()
+      }
       return (
         <>
-          <Button variant={"ghost"} className="border border-slate-200">
+          <Button variant={"ghost"} className="border border-slate-200" onClick={handleReset}>
             Reset Password
           </Button>
         </>
