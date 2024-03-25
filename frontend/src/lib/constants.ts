@@ -138,5 +138,18 @@ type categoriesType = {
   image_url: string;
 };
 
+type wishListType = {
+  id: number;
+  name: string;
+  stock: number;
+  price: number;
+  image: number;
+};
 export { nav, heroes, products, categories };
-export type { navType, productsType, categoriesType, detailProductType };
+export type {
+  wishListType,
+  navType,
+  productsType,
+  categoriesType,
+  detailProductType,
+};
