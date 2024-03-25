@@ -129,11 +129,88 @@ export default function Cart() {
     setCartItems(updatedCartItems);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const selectedItems = cartItems.filter((item) => item.checked);
+    let item_details: any[] = []
+    selectedItems.forEach((item)=>{
+      const payment = {
+        "id": item.id,
+        "price": item.harga,
+        "name": item.name,
+        "quantity": item.jumlah,
+        "url": item.image_url
+      }
+      item_details.push(payment)
+    })
+    try {
+      const payment = {
+        jumlah: totalPrice + 10000,
+        item_details: item_details
+      }
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payments/buy`, payment, {
+        headers:{
+          Authorization: `Bearer ${data.token}`
+        }
+      })
+      snap.pay(response.data.data.snap_token, {
+        onSuccess: async function (result: any) {
+          try {
+            const payment = {
+              status: "success",
+              payment_type: result.payment_type
+            };
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`, payment, {
+              headers: {
+                Authorization: `Bearer ${data.token}`,
+              },
+            });
+          } catch (error) {
+              console.log(error)
+          }
+        },
+        onPending: async function (result: any) {
+          console.log("pending");
+          console.log(result);
+          try {
+            const payment = {
+              status: "pending",
+              payment_type: result.payment_type
+            };
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`, payment, {
+              headers: {
+                Authorization: `Bearer ${data.token}`,
+              },
+            });
+          } catch (error) {
+              console.log(error)
+          }
+        },
+        onError: function (result: any) {
+          console.log("error");
+          console.log(result);
+        },
+        onClose: function (result: any) {
+          console.log(result);
+          console.log("customer closed the popup without finishing the payment");
+        },
+      });
+    } catch (error) {
+      console.log(error)
+    }
     console.log(selectedItems);
   };
+  useEffect(()=>{
+    let script = document.createElement("script")
+    script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js")
+    script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-")
+    script.async = true
 
+    document.body.appendChild(script)
+    return ()=>{
+      document.body.removeChild(script)
+    }
+
+  }, [])
   return (
     <>
       <header className="black mt-20 border-y border-black p-4">

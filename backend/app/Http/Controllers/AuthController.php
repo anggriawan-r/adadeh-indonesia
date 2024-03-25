@@ -251,4 +251,31 @@ class AuthController extends Controller
       ]);
     }
   }
+
+  public function customer(){
+    try {
+        $user = User::where("role_id", 2)->get();
+        if($user){
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Data customer",
+                "data"      =>  $user
+              ]);
+        }else{
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  "Data not found"
+              ]);
+        }
+    } catch (\Throwable $th) {
+        return response()->json([
+            "status"    =>  false,
+            "message"   =>  $th
+          ]);
+    }
+  }
+
+  public function resetPassword($id){
+
+  }
 }

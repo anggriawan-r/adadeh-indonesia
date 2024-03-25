@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { MdOutlineSpaceDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdLogout, MdMenu } from "react-icons/md";
+import { MdOutlineSpaceDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdLogout, MdMenu, MdPayment } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/stores/useAuth";
+import { FaUsers } from "react-icons/fa6";
 
 interface props{
     click: any
@@ -40,6 +41,16 @@ export default function Sidebar({ click }: props){
                         <Button 
                             className="w-full justify-start" 
                             variant={"ghost"}
+                            onClick={()=>router.push("/dashboard/customers")}
+                        >
+                            <FaUsers className="text-xl mr-2" />
+                            Customer
+                        </Button>
+                    </li>
+                    <li>
+                        <Button 
+                            className="w-full justify-start" 
+                            variant={"ghost"}
                             onClick={()=>router.push("/dashboard/categories")}
                         >
                             <MdCategory className="text-xl mr-2" />
@@ -54,6 +65,16 @@ export default function Sidebar({ click }: props){
                         >
                             <MdOutlineProductionQuantityLimits className="text-xl mr-2" />
                             Product
+                        </Button>
+                    </li>
+                    <li>
+                        <Button 
+                            className="w-full justify-start" 
+                            variant={"ghost"}
+                            onClick={()=>router.push("/dashboard/payments")}
+                        >
+                            <MdPayment className="text-xl mr-2" />
+                            Payment
                         </Button>
                     </li>
                 </ul>
