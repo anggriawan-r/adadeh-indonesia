@@ -22,15 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-5o_Ubr0-SXDlQGP-"></script>
+        <script
+          type="text/javascript"
+          src="https://app.sandbox.midtrans.com/snap/snap.js"
+          data-client-key="SB-Mid-client-5o_Ubr0-SXDlQGP-"
+        ></script>
       </head>
       <body className={`${inter.className} antialiased`}>
-        <ProtectedRoutes>
-          <Navbar />
-          {children}
-          <Toaster />
-          <Footer />
-        </ProtectedRoutes>
+        <Navbar />
+        {children}
+        <Toaster />
+        <Footer />
       </body>
     </html>
   );
