@@ -92,8 +92,8 @@ class KeranjangController extends Controller
       $produkId = $validated['produkId'];
       $userId = $validated['userId'];
 
-      if (Keranjang::where('produk_id', $produkId)->first()) {
-        $keranjang = Keranjang::where('produk_id', $produkId)->first();
+      $keranjang = Keranjang::where('produk_id', $produkId)->where('user_id', $userId)->first();
+      if ($keranjang) {
         $keranjang->jumlah += 1;
         $keranjang->save();
       } else {

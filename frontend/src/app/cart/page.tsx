@@ -75,7 +75,7 @@ export default function Cart() {
       }
     }
 
-    if (!userLoading && data.user) {
+    if (!userLoading && data) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
