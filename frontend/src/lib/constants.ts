@@ -6,7 +6,7 @@ type navType = typeof nav;
 
 const products: productsType[] = [
   {
-    id: 1,
+    id: 2,
     category: "Lifestyle",
     name: "SANDAL MEHANA",
     price: 1300000,
@@ -14,7 +14,7 @@ const products: productsType[] = [
       "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
-    id: 2,
+    id: 3,
     category: "Lifestyle",
     name: "SLIDES ADILETTE 22 XLG",
     price: 1300000,
@@ -22,20 +22,12 @@ const products: productsType[] = [
       "https://www.adidas.co.id/media/catalog/product/i/e/ie5650_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
-    id: 3,
+    id: 4,
     category: "Lifestyle",
     name: "SEPATU MULE ADIFOM STAN SMITH",
     price: 1200000,
     image:
       "https://www.adidas.co.id/media/catalog/product/i/e/ie0483_2_footwear_photography_side20lateral20view_grey.jpg",
-  },
-  {
-    id: 4,
-    category: "Lifestyle",
-    name: "SLIDES ADILETTE 22",
-    price: 840000,
-    image:
-      "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
     id: 5,
@@ -48,42 +40,26 @@ const products: productsType[] = [
   {
     id: 6,
     category: "Lifestyle",
-    name: "SLIDES ADILETTE 22",
-    price: 840000,
+    name: "COUNTRY OG LOW TRAINERS",
+    price: 2200000,
     image:
-      "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
+      "https://www.adidas.co.id/media/catalog/product/i/d/id3545_2_footwear_photography_side20lateral20view_grey.jpg",
   },
   {
     id: 7,
+    name: "SEPATU GAZELLE",
+    price: 1700000,
     category: "Lifestyle",
-    name: "SLIDES ADILETTE 22",
-    price: 840000,
     image:
-      "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
+      "https://www.adidas.co.id/media/catalog/product/b/b/bb5478_sl_ecom.jpg",
   },
   {
     id: 8,
-    category: "Lifestyle",
-    name: "SLIDES ADILETTE 22",
-    price: 840000,
-    image:
-      "https://www.adidas.co.id/media/catalog/product/i/e/ie5645_2_footwear_photography_side20lateral20view_grey.jpg",
-  },
-  {
-    id: 9,
+    name: "SEPATU SUPERNOVA STRIDE",
+    price: 1900000,
     category: "Running",
-    name: "SANDAL RUNNING TDR3000",
-    price: 2300000,
     image:
-      "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
-  },
-  {
-    id: 10,
-    category: "Outdoor",
-    name: "SEPATU OUTDOOR TDR3001",
-    price: 2300000,
-    image:
-      "https://www.adidas.co.id/media/catalog/product/i/g/ig3537_2_footwear_photography_side20lateral20view_grey.jpg",
+      "https://www.adidas.co.id/media/catalog/product/i/g/ig8317_2_footwear_photography_side20lateral20view_grey.jpg",
   },
 ];
 type productsType = {
@@ -123,7 +99,7 @@ const heroes = [
     isButtonDark: true,
   },
   {
-    id: 2,
+    id: 3,
     imageUrl: "ultraboost.jpg",
     title: "ULTRABOOST",
     imageAlt: "ULTRABOOST",
@@ -133,17 +109,20 @@ const heroes = [
 ];
 const categories: Categories[] = [
   {
-    name: "LIFESTYLE",
+    id: 1,
+    name: "Lifestyle",
     image_url:
       "https://images.pexels.com/photos/2041832/pexels-photo-2041832.jpeg",
   },
   {
-    name: "BASKET",
+    id: 4,
+    name: "Basket",
     image_url:
       "https://images.pexels.com/photos/220383/pexels-photo-220383.jpeg",
   },
   {
-    name: "OUTDOOR",
+    id: 3,
+    name: "Outdoor",
     image_url:
       "https://images.pexels.com/photos/2346018/pexels-photo-2346018.jpeg",
   },
@@ -151,10 +130,12 @@ const categories: Categories[] = [
 type Categories = {
   name: string;
   image_url: string;
+  id: number;
 };
 type categoriesType = {
   name: string;
-  id: string;
+  id: number;
+  image_url: string;
 };
 
 export { nav, heroes, products, categories };

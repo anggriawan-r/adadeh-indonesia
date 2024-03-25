@@ -1,10 +1,11 @@
+"use client";
+
 import useSWR from "swr";
 import axios from "axios";
 import ProductCard from "./card/ProductCard";
 import { twJoin } from "tailwind-merge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFilterStore } from "@/stores/useFilter";
-import { mutate } from "swr";
 import { useEffect } from "react";
 
 interface Product {
@@ -28,11 +29,12 @@ export default function CatalogList({ className }: { className?: string }) {
       throw new Error("Failed to fetch data");
     }
   };
-  useEffect(() => {
-    mutate(url);
-  }, [params, url]);
 
-  const { data: products, error, isValidating } = useSWR(url, fetcher);
+  const { data: products, error, isValidating, mutate } = useSWR(url, fetcher);
+
+  useEffect(() => {
+    mutate();
+  }, [params, url, mutate]);
 
   if (error)
     return (
@@ -52,15 +54,17 @@ export default function CatalogList({ className }: { className?: string }) {
       </div>
     );
 
-  if (!products) {
-    return <h1 className="text-center text-2xl">Produk tidak ditemukan</h1>;
+  if (products?.length === 0) {
+    return (
+      <h1 className="w-full self-start text-center text-2xl">
+        Produk tidak ditemukan
+      </h1>
+    );
   }
 
   return (
     <div className={twJoin("grid grid-cols-2 gap-4 md:grid-cols-3", className)}>
-      {products.map((item) => (
-        <ProductCard key={item.id} data={item} />
-      ))}
+      {products?.map((item) => <ProductCard key={item.id} data={item} />)}
     </div>
   );
 }

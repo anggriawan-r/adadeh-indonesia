@@ -8,7 +8,6 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
-// import { categories } from "@/lib/constants";
 import { twJoin } from "tailwind-merge";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -29,8 +28,11 @@ import { filterSchema } from "@/type/filter";
 import axios from "axios";
 import useSWR from "swr";
 import { categoriesType } from "@/lib/constants";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function CatalogFilter({ className }: { className?: string }) {
+  const searchParams = useSearchParams().get("category");
   const form = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -57,6 +59,10 @@ export default function CatalogFilter({ className }: { className?: string }) {
     let newKey = "";
     let newValue = "";
 
+    if (values.category == "All") {
+      values.category = "";
+    }
+
     if (values.sortBy === "newest") {
       newKey = "new";
       newValue = "asc";
@@ -75,6 +81,14 @@ export default function CatalogFilter({ className }: { className?: string }) {
     setFilter(updatedValues);
     console.log("added to store", updatedValues);
   }
+
+  useEffect(() => {
+    if (searchParams) {
+      setFilter({ category: searchParams });
+    } else {
+      setFilter({});
+    }
+  }, [searchParams, setFilter]);
 
   return (
     <aside
@@ -112,7 +126,11 @@ export default function CatalogFilter({ className }: { className?: string }) {
               <FormItem className="space-y-1">
                 <FormLabel>Category</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} {...field}>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...(searchParams && { defaultValue: searchParams })}
+                    {...field}
+                  >
                     <SelectTrigger
                       id="category"
                       className="w-full rounded-none hover:bg-zinc-100 focus:ring-2"
@@ -120,6 +138,9 @@ export default function CatalogFilter({ className }: { className?: string }) {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem key="All" value="All">
+                        All
+                      </SelectItem>
                       {categories?.map((item) => (
                         <SelectItem key={item.id} value={item.name}>
                           {item.name}

@@ -20,6 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { categoryType } from "@/type/category";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 
 export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
   const { message, data, status, handleSignOut } = useLogin();
@@ -80,6 +81,15 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
                 <MdAccountCircle className="basis-1/5 text-2xl" />
                 <p className="basis-4/5">Account</p>
               </Link>
+              {data.user.role == "admin" && (
+                <Link
+                  href="/dashboard"
+                  className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
+                >
+                  <MdOutlineSpaceDashboard className="basis-1/5 text-2xl" />
+                  <p className="basis-4/5">Dashboard</p>
+                </Link>
+              )}
               <Link
                 href="/wishlist"
                 className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"

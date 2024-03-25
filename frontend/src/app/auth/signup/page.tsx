@@ -180,7 +180,7 @@ export default function SignUp() {
                     )}
                   />
                   <Button type="submit" className="rounded-none">
-                    Submit
+                    SIGN UP
                   </Button>
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Already have an account?{" "}

@@ -16,12 +16,10 @@ export default function ProtectedRoutes({
   useEffect(() => {
     if (status) {
       if (loginRoutes.includes(path)) {
-        if(data?.user){
-          if(data?.user.role == "admin"){
-            redirect("/dashboard")
-          }else{
-            redirect("/")
-          }
+        if (data.user.role == "admin") {
+          redirect("/dashboard");
+        } else {
+          redirect("/user");
         }
       }
     } else {
@@ -29,7 +27,7 @@ export default function ProtectedRoutes({
         redirect("/auth/signin");
       }
     }
-  }, [path, status]);
+  }, [path, status, data]);
 
   return <>{children}</>;
 }

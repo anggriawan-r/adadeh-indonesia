@@ -8,7 +8,7 @@ interface SetFilterState {
 
 interface FilterState {
   name?: string;
-  category?: string;
+  category?: string | null;
   sortBy?: string;
   setFilter: (filter: SetFilterState) => void;
 }
