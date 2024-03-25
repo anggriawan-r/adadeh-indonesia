@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/register", [AuthController::class, "register"]);
 Route::get("/customers", [AuthController::class, "customer"]);
+Route::patch("/reset-password/{id}", [AuthController::class, "resetPassword"]);
 
 // Category
 Route::controller(CategoryController::class)->group(function () {

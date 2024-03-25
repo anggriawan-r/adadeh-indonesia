@@ -270,12 +270,31 @@ class AuthController extends Controller
     } catch (\Throwable $th) {
         return response()->json([
             "status"    =>  false,
-            "message"   =>  $th
+            "message"   =>  $th->getMessage()
           ]);
     }
   }
 
   public function resetPassword($id){
-
+    try {
+        $user = User::find($id);
+        if($user){
+            $user->password = Hash::make("password123");
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Password successfully updated"
+            ]);
+        }else{
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  "Data not found"
+              ]);
+        }
+    } catch (\Throwable $th) {
+        return response()->json([
+            "status"    =>  false,
+            "message"   =>  $th->getMessage()
+          ]);
+    }
   }
 }
