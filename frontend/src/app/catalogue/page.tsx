@@ -2,16 +2,7 @@
 
 import CatalogFilter from "@/components/CatalogFilter";
 import CatalogList from "@/components/CatalogList";
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-
-// function Search({ children }: { children: React.ReactNode }) {
-//   const searchParams = useSearchParams();
-//   const searchCat = searchParams.get("category") ?? null;
-//   const searchName = searchParams.get("name") ?? null;
-
-//   return <>{children}</>;
-// }
 
 export default function CatalogPage() {
   return (

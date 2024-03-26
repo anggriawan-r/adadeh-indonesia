@@ -28,7 +28,7 @@ export default function Address() {
   const form = useForm<z.infer<typeof userChangeAddress>>({
     resolver: zodResolver(userChangeAddress),
     defaultValues: {
-      address: data?.user.address ?? "",
+      address: data?.user?.address ?? "",
     },
   });
 
