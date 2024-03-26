@@ -1,4 +1,5 @@
 "use client";
+
 import ProductCarousel from "@/components/ProductCarousel";
 import Image from "next/image";
 import { products } from "@/lib/constants";
@@ -9,7 +10,6 @@ import { useLogin } from "@/stores/useAuth";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 
 export default function WishList() {
   const { toast } = useToast();
@@ -17,6 +17,7 @@ export default function WishList() {
   const [postError, setPostError] = useState(false);
   const [postSucceed, setPostSucceed] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const fetcher = async (url: string) => {
     const response = await axios.get(`${baseUrl}/${url}`, {
       headers: {
@@ -26,12 +27,14 @@ export default function WishList() {
     console.log(response.data.data);
     return response.data.data;
   };
+
   const {
     data: wishlist,
     error,
     isValidating,
     mutate,
-  } = useSWR("wishlists", fetcher);
+  } = useSWR(data ? "wishlists" : null, fetcher);
+
   const [deleteSucceed, setDeleteSucceed] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
