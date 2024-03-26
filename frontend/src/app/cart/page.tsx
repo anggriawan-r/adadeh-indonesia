@@ -44,7 +44,7 @@ export default function Cart() {
 
   const { data } = useLogin();
   const { isLoading: userLoading } = useUserLoading();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
@@ -177,8 +177,8 @@ export default function Cart() {
           },
         },
       );
-      
-      router.push("/transaction")
+
+      router.push("/transaction");
     } catch (error) {
       console.log(error);
     }
@@ -244,6 +244,7 @@ export default function Cart() {
                 {totalPrice.toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
+                  maximumFractionDigits: 0,
                 })}
               </span>
             </div>
@@ -258,6 +259,7 @@ export default function Cart() {
                 {(totalPrice + 10000).toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
+                  maximumFractionDigits: 0,
                 })}
               </span>
             </div>

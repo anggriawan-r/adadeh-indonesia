@@ -128,6 +128,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
                     {data?.price.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
+                      maximumFractionDigits: 0,
                     })}
                   </span>
                   <button

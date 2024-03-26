@@ -1,8 +1,8 @@
 "use client";
+
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -14,9 +14,11 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import { useLogin } from "@/stores/useAuth";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
+import { convertDate } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const fetcher = async (url: string, token: string) => {
   const res = await axios.get(url, {
@@ -29,11 +31,12 @@ const fetcher = async (url: string, token: string) => {
 };
 
 export default function TransactionPage() {
-  const [history, setHistory] = useState({
-    get: true,
-    data: [],
-  });
+  const searchParams = useSearchParams();
   const { data } = useLogin();
+
+  useEffect(() => {
+    console.log(searchParams);
+  }, [searchParams]);
 
   const {
     data: historyData,
@@ -44,41 +47,34 @@ export default function TransactionPage() {
     ([url, token]) => fetcher(url, token),
   );
 
-  // useEffect(() => {
-  //   if (history.get) {
-  //     axios
-  //       .get(`${process.env.NEXT_PUBLIC_API_URL}/histories`, {
-  //         headers: {
-  //           Authorization: `Bearer ${data.token}`,
-  //         },
-  //       })
-  //       .then((res: any) => {
-  //         setHistory({ ...history, data: res.data.data, get: false });
-  //       });
-  //   }
-  // }, [history]);
-
   return (
-    <>
-      <div className="px-4 pt-20">
-        <h1 className="text-2xl font-bold">Riwayat Transaksi</h1>
-        <hr className="my-4 border-black" />
-        {historyData?.data.length == 0 && <div>Loading....</div>}
-        {historyData?.data.length > 0 &&
-          historyData?.data.map((hist: any, i: number) => (
+    <div className="mt-20 flex min-h-[calc(100vh-80px-44px)] w-full flex-col px-4">
+      <h1 className="text-2xl font-bold">Riwayat Transaksi</h1>
+
+      <hr className="my-4 border-black" />
+
+      {(isValidating || isLoading) && (
+        <div className="self-center justify-self-center">Loading....</div>
+      )}
+      {historyData?.data.length > 0 &&
+        historyData?.data.map((hist: any, i: number) => {
+          const { day, month, year } = convertDate(hist.created_at);
+          return (
             <div className="mb-3 border-2 border-black" key={i}>
-              <div className="flex justify-between bg-black p-2 text-white">
+              <div className="flex h-max items-center justify-between bg-black p-2 text-white">
                 <p>{hist.order_id}</p>
-                <div className="space-x-3 text-nowrap text-right text-sm lg:flex">
-                  <p>{hist.created_at}</p>
+                <div className="flex flex-col items-center gap-4 text-sm sm:flex-row">
+                  <p>
+                    {day} {month} {year}
+                  </p>
                   {hist.status == "pending" && (
-                    <>
-                      <Badge variant="secondary">
-                        <Link href={hist.payment_url} target="_blank">
-                          Bayar
-                        </Link>
-                      </Badge>
-                    </>
+                    <Link
+                      href={hist.payment_url}
+                      className="self-end justify-self-end"
+                      target="_blank"
+                    >
+                      <Badge variant="secondary">Bayar</Badge>
+                    </Link>
                   )}
                   {hist.status == "success" && (
                     <Badge variant="secondary">Sudah Dibayar</Badge>
@@ -91,7 +87,7 @@ export default function TransactionPage() {
                     <TableRow className="text-center">
                       <TableHead className="text-start">Produk</TableHead>
                       <TableHead className="text-center">Jumlah</TableHead>
-                      <TableHead className="text-center">Harga</TableHead>
+                      <TableHead className="text-end">Harga</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -118,16 +114,24 @@ export default function TransactionPage() {
                             {his.quantity} Pcs
                           </TableCell>
                           <TableCell className="text-nowrap text-right">
-                            Rp. {his.price}
+                            {his.price.toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              maximumFractionDigits: 0,
+                            })}
                           </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>
                   <TableFooter>
-                    <TableRow>
+                    <TableRow className="bg-zinc-100 hover:bg-zinc-100">
                       <TableCell colSpan={2}>Total Harga</TableCell>
                       <TableCell className="text-nowrap text-right">
-                        Rp. {hist.jumlah}
+                        {hist.jumlah.toLocaleString("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                          maximumFractionDigits: 0,
+                        })}
                       </TableCell>
                     </TableRow>
                   </TableFooter>
@@ -135,8 +139,8 @@ export default function TransactionPage() {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
             </div>
-          ))}
-      </div>
-    </>
+          );
+        })}
+    </div>
   );
 }

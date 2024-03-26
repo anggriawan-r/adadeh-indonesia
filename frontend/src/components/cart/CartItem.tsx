@@ -121,6 +121,7 @@ const CartItem: React.FC<CartItemProps> = ({
             {harga.toLocaleString("id-ID", {
               style: "currency",
               currency: "IDR",
+              maximumFractionDigits: 0,
             })}
           </h1>
         </div>
