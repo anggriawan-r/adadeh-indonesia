@@ -135,6 +135,7 @@ export default function Cart() {
     selectedItems.forEach((item) => {
       const payment = {
         id: item.id,
+        user_id: data.user.id,
         price: item.harga,
         name: item.name,
         quantity: item.jumlah,
@@ -156,54 +157,56 @@ export default function Cart() {
           },
         },
       );
+      item_details.forEach((a)=>{
+        a.payment_id = response.data.data.id
+        delete a.url
+      })
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/histories`,
+        item_details,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`
+          }
+        }
+      )
       // SNAP IS WORKING AS INTENDED
       snap.pay(response.data.data.snap_token, {
         onSuccess: async function (result: any) {
-          try {
-            const payment = {
-              status: "success",
-              payment_type: result.payment_type,
-            };
-            await axios.patch(
-              `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
-              payment,
-              {
-                headers: {
-                  Authorization: `Bearer ${data.token}`,
-                },
+          const payment = {
+            status: "success",
+            payment_type: result.payment_type,
+          };
+          await axios.patch(
+            `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
+            payment,
+            {
+              headers: {
+                Authorization: `Bearer ${data.token}`,
               },
-            );
-          } catch (error) {
-            console.log(error);
-          }
+            },
+          );
         },
         onPending: async function (result: any) {
-          console.log("pending");
-          console.log(result);
-          try {
-            const payment = {
-              status: "pending",
-              payment_type: result.payment_type,
-            };
-            await axios.patch(
-              `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
-              payment,
-              {
-                headers: {
-                  Authorization: `Bearer ${data.token}`,
-                },
+          const payment = {
+            status: "pending",
+            payment_type: result.payment_type,
+          };
+          await axios.patch(
+            `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
+            payment,
+            {
+              headers: {
+                Authorization: `Bearer ${data.token}`,
               },
-            );
-          } catch (error) {
-            console.log(error);
-          }
+            },
+          );
         },
         onError: function (result: any) {
           console.log("error");
           console.log(result);
         },
-        onClose: function (result: any) {
-          console.log(result);
+        onClose: async function (result: any) {
           console.log(
             "customer closed the popup without finishing the payment",
           );

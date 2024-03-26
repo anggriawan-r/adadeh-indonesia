@@ -8,34 +8,29 @@ use Illuminate\Http\Request;
 class HistoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $history = History::insert($request->all());
-        return response()->json($history);
+        try {
+            $history = History::insert($request->all());
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "History successfully created",
+                "data"      =>  $history
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  $th->getMessage()
+            ]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
     public function show(History $history)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(History $history)
     {
         //
     }

@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("payment_id");
+            $table->unsignedBigInteger("user_id");
             $table->string("name");
-            $table->string("category");
             $table->unsignedBigInteger("price");
             $table->unsignedBigInteger("quantity");
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

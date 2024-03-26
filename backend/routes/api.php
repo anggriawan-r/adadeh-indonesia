@@ -57,7 +57,6 @@ Route::controller(RoleController::class)->group(function () {
   Route::delete("/roles/{roles}", "destroy");
 });
 
-Route::post("/history", [HistoryController::class, "store"]);
 
 // Payment
 Route::get("/payments", [PaymentController::class, "index"]);
@@ -66,6 +65,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     // Payment
     Route::post("/payments/buy", [PaymentController::class, "payment"]);
     Route::patch("/payments/status/{payment}", [PaymentController::class, "updateStatus"]);
+
+    // History
+    Route::post("/histories", [HistoryController::class, "store"]);
+    Route::get("/histories", [PaymentController::class, "getHistory"]);
   // Role
 
   // Detail Transaksi

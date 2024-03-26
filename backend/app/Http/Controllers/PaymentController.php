@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -153,5 +154,26 @@ class PaymentController extends Controller
                 "message"   => $th->getMessage(),
             ]);
         }
+    }
+
+    public function getHistory(){
+        try {
+            $payments = Payment::where("user_id", auth()->user()->id)->get();
+            foreach($payments as $payment){
+                $histories = History::where("payment_id", $payment->id)->get();
+                $payment->history = $histories;
+            }
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Data histori pembelanjaan",
+                "data"      =>  $payments
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  $th->getMessage()
+            ]);
+        }
+
     }
 }
