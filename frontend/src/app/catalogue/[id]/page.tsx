@@ -7,6 +7,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -17,12 +18,16 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     return response.data.data;
   };
 
+  const router = useRouter();
   const { toast } = useToast();
-
   const { data, error, isLoading } = useSWR("products", fetcher);
 
-  const token = useLogin((state) => state.data.token);
+  const { data: token, status } = useLogin();
   const addToCart = async () => {
+    if (!status) {
+      return router.push("/auth/signin");
+    }
+
     const data = {
       produkId: params.id,
       jumlah: 1,
@@ -30,7 +35,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     await axios
       .post(`${baseUrl}/keranjang`, data, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.token}`,
         },
       })
       .then((res) => {

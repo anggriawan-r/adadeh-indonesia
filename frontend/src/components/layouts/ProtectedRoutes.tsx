@@ -2,7 +2,7 @@
 
 import { loginRoutes, protectedRoutes } from "@/lib/constants";
 import { useLogin, useUserLoading } from "@/stores/useAuth";
-import { usePathname, redirect } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedRoutes({
@@ -10,6 +10,7 @@ export default function ProtectedRoutes({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const { status, data } = useLogin();
   const { isLoading } = useUserLoading();
   const path = usePathname();
@@ -17,18 +18,18 @@ export default function ProtectedRoutes({
   useEffect(() => {
     if (!isLoading && !status) {
       if (protectedRoutes.includes(path)) {
-        redirect("/auth/signin");
+        router.push("/auth/signin");
       }
     } else if (!isLoading && data) {
       if (loginRoutes.includes(path)) {
         if (data.user.role == "admin") {
-          redirect("/dashboard");
+          router.push("/dashboard");
         } else {
-          redirect("/user");
+          router.push("/user");
         }
       }
     }
-  }, [path, status, data, isLoading]);
+  }, [path, status, data, isLoading, router]);
 
   return <>{children}</>;
 }
