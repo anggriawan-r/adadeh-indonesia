@@ -8,6 +8,8 @@ import { products } from "@/lib/constants";
 import axios from "axios";
 import { useLogin, useUserLoading } from "@/stores/useAuth";
 
+declare var snap: any;
+
 interface CartItem {
   id: number;
   name: string;
@@ -157,19 +159,20 @@ export default function Cart() {
           },
         },
       );
-      item_details.forEach((a)=>{
-        a.payment_id = response.data.data.id
-        delete a.url
-      })
+      item_details.forEach((a) => {
+        a.payment_id = response.data.data.id;
+        delete a.url;
+      });
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/histories`,
         item_details,
         {
           headers: {
-            Authorization: `Bearer ${data.token}`
-          }
-        }
-      )
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+
       // SNAP IS WORKING AS INTENDED
       snap.pay(response.data.data.snap_token, {
         onSuccess: async function (result: any) {
