@@ -44,7 +44,7 @@ export default function ProductCarousel({ data }: { data: productsType[] }) {
               className="basis-1/2 pl-[4px] md:basis-1/4 xl:basis-1/5"
               key={index}
             >
-              <ProductCard data={item} />
+              <ProductCard data={item} isLiked={false} />
             </CarouselItem>
           ))}
         </CarouselContent>

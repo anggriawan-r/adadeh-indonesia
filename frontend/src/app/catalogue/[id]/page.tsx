@@ -48,8 +48,6 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
       });
   };
 
-  const token = useLogin((state) => state.data.token);
-
   const { data: token, status } = useLogin();
   const addToCart = async () => {
     if (!status) {
