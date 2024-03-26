@@ -6,10 +6,9 @@ import { useEffect, useState } from "react";
 import ProductCarousel from "@/components/ProductCarousel";
 import { products } from "@/lib/constants";
 import axios from "axios";
-import { useLogin, useUserLoading } from "@/stores/useAuth";
+import { useLogin } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
-
-declare var snap: any;
+import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
 interface CartItem {
   id: number;
@@ -34,7 +33,7 @@ const getTotalHargaByChecked = (cartItems: CartItem[]): number => {
   return totalHarga;
 };
 
-export default function Cart() {
+function Cart() {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -43,7 +42,6 @@ export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { data } = useLogin();
-  const { isLoading: userLoading } = useUserLoading();
   const router = useRouter();
 
   useEffect(() => {
@@ -56,7 +54,7 @@ export default function Cart() {
       try {
         const response = await axios.get(`${baseUrl}/user/keranjang`, {
           headers: {
-            Authorization: `Bearer ${data.token}`,
+            Authorization: `Bearer ${data?.token}`,
           },
         });
         const responseData = response.data.data;
@@ -79,11 +77,11 @@ export default function Cart() {
       }
     }
 
-    if (!userLoading && data) {
+    if (data) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, userLoading]);
+  }, [data]);
 
   const handleCountChange = (id: number, newJumlah: number) => {
     const updatedCartItems = cartItems.map((item) => {
@@ -99,7 +97,7 @@ export default function Cart() {
     try {
       await axios.delete(`${baseUrl}/keranjang/${id}`, {
         headers: {
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       });
     } catch (error) {
@@ -139,7 +137,7 @@ export default function Cart() {
     selectedItems.forEach((item) => {
       const payment = {
         id: item.id,
-        user_id: data.user.id,
+        user_id: data?.user.id,
         price: item.harga,
         name: item.name,
         quantity: item.jumlah,
@@ -157,7 +155,7 @@ export default function Cart() {
         payment,
         {
           headers: {
-            Authorization: `Bearer ${data.token}`,
+            Authorization: `Bearer ${data?.token}`,
           },
         },
       );
@@ -173,7 +171,7 @@ export default function Cart() {
         item_details,
         {
           headers: {
-            Authorization: `Bearer ${data.token}`,
+            Authorization: `Bearer ${data?.token}`,
           },
         },
       );
@@ -182,20 +180,7 @@ export default function Cart() {
     } catch (error) {
       console.log(error);
     }
-    console.log(selectedItems);
   };
-
-  // useEffect(() => {
-  //   let script = document.createElement("script");
-  //   script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-  //   script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-");
-  //   script.async = true
-
-  //   document.body.appendChild(script);
-  //   return () => {
-  //     document.body.removeChild(script);
-  //   };
-  // }, []);
 
   return (
     <>
@@ -298,3 +283,5 @@ export default function Cart() {
     </>
   );
 }
+
+export default ProtectedRoutes(Cart);

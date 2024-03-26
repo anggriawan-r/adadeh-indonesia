@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MdAccountCircle } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { PiSignOutBold } from "react-icons/pi";
-import { useLogin, useUserLoading } from "@/stores/useAuth";
+import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -24,17 +24,16 @@ import { MdOutlineSpaceDashboard, MdPayment } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
-  const { message, data, status, handleSignOut } = useLogin();
-  const { isLoading } = useUserLoading();
+  const { message, data, status, handleSignOut, hasHydrated } = useLogin();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [productName, setProductName] = useState("");
   const { toast } = useToast();
   const router = useRouter();
 
   const onSignOut = () => {
+    setIsSubmitted(true);
     handleSignOut();
     router.push("/auth/signin");
-    setIsSubmitted(true);
   };
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
         </button>
       </form>
 
-      {!isLoading && status && (
+      {hasHydrated && data && (
         <>
           <Link href="/cart">
             <button className="flex size-10 shrink-0 items-center justify-center rounded-[50%] bg-black transition-colors hover:bg-black/80">
@@ -91,7 +90,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
           <div className="group relative flex h-full items-center">
             <Avatar>
               <AvatarFallback className="font-bold">
-                {!isLoading && data.user?.name[0]}
+                {hasHydrated && data?.user.name[0]}
               </AvatarFallback>
             </Avatar>
             <div className="invisible absolute bottom-0 right-[50%] translate-x-[30%] translate-y-full bg-white font-semibold shadow-2xl group-hover:visible">
@@ -109,7 +108,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
                 <MdPayment className="basis-1/5 text-2xl" />
                 <p className="basis-4/5">Transaction</p>
               </Link>
-              {!isLoading && data.user?.role == "admin" && (
+              {hasHydrated && data?.user.role == "admin" && (
                 <Link
                   href="/dashboard"
                   className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
@@ -136,22 +135,22 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
           </div>
         </>
       )}
-      {!status && (
+      {hasHydrated && !status && (
         <>
           <Button
-            disabled={isLoading}
+            disabled={!hasHydrated}
             variant="outline"
             className="hidden w-max items-center gap-2 rounded-none text-xs sm:flex"
             asChild
           >
-            <Link href="/auth/signup">{isLoading ? "Loading" : "SIGN UP"}</Link>
+            <Link href="/auth/signup">SIGN UP</Link>
           </Button>
           <Button
-            disabled={isLoading}
+            disabled={!hasHydrated}
             className="hidden w-max items-center gap-2 rounded-none text-xs sm:flex"
             asChild
           >
-            <Link href="/auth/signin">{isLoading ? "Loading" : "SIGN IN"}</Link>
+            <Link href="/auth/signin">SIGN IN</Link>
           </Button>
         </>
       )}
@@ -163,7 +162,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
           </button>
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-4 overflow-y-scroll">
-          {!status && (
+          {hasHydrated && !status && (
             <SheetClose asChild>
               <div className="flex gap-2">
                 <Button

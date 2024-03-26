@@ -19,10 +19,10 @@ import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
-export default function SignIn() {
-  const { message, status, handleSignIn, data } = useLogin();
-  const router = useRouter();
+function SignIn() {
+  const { message, status, handleSignIn } = useLogin();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -165,3 +165,5 @@ export default function SignIn() {
     </section>
   );
 }
+
+export default ProtectedRoutes(SignIn);

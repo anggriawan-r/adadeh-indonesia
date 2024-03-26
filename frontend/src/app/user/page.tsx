@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Account from "@/components/user/Account";
@@ -7,8 +9,9 @@ import Phone from "@/components/user/Phone";
 import { GoHeart } from "react-icons/go";
 import { FiShoppingCart } from "react-icons/fi";
 import Link from "next/link";
+import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
-export default function UserPage() {
+function UserPage() {
   return (
     <main className="mt-20 flex min-h-[calc(100svh-80px-44px)] w-full items-start justify-center gap-4 sm:pr-4">
       <div className="relative hidden h-[calc(100vh-80px-44px)] sm:block sm:basis-1/2">
@@ -92,3 +95,5 @@ export default function UserPage() {
     </main>
   );
 }
+
+export default ProtectedRoutes(UserPage);

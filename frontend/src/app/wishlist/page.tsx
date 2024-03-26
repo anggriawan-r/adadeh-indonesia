@@ -10,8 +10,9 @@ import { useLogin } from "@/stores/useAuth";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
-export default function WishList() {
+function WishList() {
   const { toast } = useToast();
   const { data } = useLogin();
   const [postError, setPostError] = useState(false);
@@ -21,7 +22,7 @@ export default function WishList() {
   const fetcher = async (url: string) => {
     const response = await axios.get(`${baseUrl}/${url}`, {
       headers: {
-        Authorization: `Bearer ${data.token}`,
+        Authorization: `Bearer ${data?.token}`,
       },
     });
     console.log(response.data.data);
@@ -46,7 +47,7 @@ export default function WishList() {
       };
       await axios.post(`${baseUrl}/keranjang`, payload, {
         headers: {
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       });
       setPostSucceed(true);
@@ -59,7 +60,7 @@ export default function WishList() {
     try {
       await axios.delete(`${baseUrl}/wishlists/${id}`, {
         headers: {
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       });
       setDeleteSucceed(true);
@@ -122,7 +123,7 @@ export default function WishList() {
                   ))}
                 </div>
               ) : wishlist?.length === 0 ? (
-                <h1 className="w-full self-start text-center text-2xl">
+                <h1 className="col-span-3 w-full text-center text-2xl">
                   Belum ada produk dalam wishlist anda
                 </h1>
               ) : error ? (
@@ -223,3 +224,5 @@ export default function WishList() {
     </>
   );
 }
+
+export default ProtectedRoutes(WishList);

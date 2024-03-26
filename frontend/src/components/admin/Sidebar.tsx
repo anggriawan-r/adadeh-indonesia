@@ -14,6 +14,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLogin } from "@/stores/useAuth";
 import { FaUsers } from "react-icons/fa6";
 import { twJoin } from "tailwind-merge";
+import Link from "next/link";
 
 interface props {
   click: any;
@@ -27,8 +28,10 @@ export default function Sidebar({ click }: props) {
     <>
       <header className="relative grid h-40 place-items-center">
         <div className="space-y-2">
-          <Image src={"/adadeh.svg"} height={80} width={80} alt="Logo" />
-          <p className="text-center">Admin</p>
+          <Link href="/">
+            <Image src={"/adadeh.svg"} height={80} width={80} alt="Logo" />
+          </Link>
+          <p className="text-center font-bold">Admin</p>
         </div>
         <Button
           variant={"ghost"}

@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import Footer from "@/components/Footer";
-import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,12 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <ProtectedRoutes>
-          <Navbar />
-          {children}
-          <Toaster />
-          <Footer />
-        </ProtectedRoutes>
+        <Navbar />
+        {children}
+        <Toaster />
+        <Footer />
       </body>
     </html>
   );

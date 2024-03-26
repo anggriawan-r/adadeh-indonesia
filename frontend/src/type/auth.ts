@@ -32,15 +32,32 @@ export interface signIn {
   password: string;
 }
 
+export type dataType = {
+  token: string;
+  user: {
+    address: string;
+    email_verified_at: string | null;
+    email: string;
+    id: number;
+    name: string;
+    phone: string;
+    role: "admin" | "customer" | null;
+    role_id: number;
+    updated_at: string;
+  };
+};
+
 export interface useSignIn {
   message: string;
   status: boolean;
+  hasHydrated: boolean;
+  setHasHydrated: (data: boolean) => void;
   handleSignIn: (data: signIn) => Promise<void>;
   handleSignOut: () => void;
-  mutateAddress: (data: string) => void;
-  mutateName: (data: string) => void;
-  mutatePhone: (data: string) => void;
-  data: (() => void) | any;
+  mutateAddress: (data: dataType) => void;
+  mutateName: (data: dataType) => void;
+  mutatePhone: (data: dataType) => void;
+  data: dataType | null;
 }
 
 export const signInSchema = z.object({

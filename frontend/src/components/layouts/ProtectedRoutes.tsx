@@ -1,35 +1,31 @@
 "use client";
 
 import { loginRoutes, protectedRoutes } from "@/lib/constants";
-import { useLogin, useUserLoading } from "@/stores/useAuth";
-import { usePathname, useRouter } from "next/navigation";
+import { useLogin } from "@/stores/useAuth";
+import { redirect, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-export default function ProtectedRoutes({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const router = useRouter();
-  const { status, data } = useLogin();
-  const { isLoading } = useUserLoading();
-  const path = usePathname();
+export default function ProtectedRoutes(Component: any) {
+  return function ProtectedRoutes(props: any) {
+    const { data, hasHydrated } = useLogin();
+    const path = usePathname();
 
-  useEffect(() => {
-    if (!isLoading && !status) {
-      if (protectedRoutes.includes(path)) {
-        router.push("/auth/signin");
+    useEffect(() => {
+      if (hasHydrated && data?.user.role != "admin" && path == "/dashboard") {
+        redirect("/");
       }
-    } else if (!isLoading && data) {
-      if (loginRoutes.includes(path)) {
-        if (data.user.role == "admin") {
-          router.push("/dashboard");
-        } else {
-          router.push("/user");
-        }
+      if (hasHydrated && data && loginRoutes.includes(path)) {
+        redirect("/");
       }
+      if (hasHydrated && !data && protectedRoutes.includes(path)) {
+        redirect("/auth/signin");
+      }
+    }, [hasHydrated, data, path]);
+
+    if (!hasHydrated) {
+      return null;
     }
-  }, [path, status, data, isLoading, router]);
 
-  return <>{children}</>;
+    return <Component {...props} />;
+  };
 }

@@ -19,8 +19,9 @@ import { z } from "zod";
 import { useRegister } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import ProtectedRoutes from "@/components/layouts/ProtectedRoutes";
 
-export default function SignUp() {
+function SignUp() {
   const [validasi, setValidasi] = useState(false);
   const { message, handleSignUp } = useRegister();
   const { toast } = useToast();
@@ -197,3 +198,5 @@ export default function SignUp() {
     </section>
   );
 }
+
+export default ProtectedRoutes(SignUp);

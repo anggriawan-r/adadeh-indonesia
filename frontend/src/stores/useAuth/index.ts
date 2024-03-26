@@ -1,7 +1,7 @@
 import { create, StateCreator } from "zustand";
 import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 import axios from "axios";
-import { signUp, useSignIn, useSignUp } from "@/type/auth";
+import { dataType, signUp, useSignIn, useSignUp } from "@/type/auth";
 
 export const useRegister = create<useSignUp>((set) => ({
   message: "",
@@ -39,10 +39,10 @@ export const useLogin = create<useSignIn, []>(
     (set, get): useSignIn => ({
       message: get()?.message,
       status: false,
-      data: () => {
-        useUserLoading.getState().setIsLoading(true);
-        get()?.data;
-        useUserLoading.getState().setIsLoading(false);
+      hasHydrated: false,
+      data: get()?.data ?? null,
+      setHasHydrated: (data) => {
+        set({ hasHydrated: data });
       },
       handleSignIn: async (data) => {
         useUserLoading.getState().setIsLoading(true);
@@ -67,31 +67,31 @@ export const useLogin = create<useSignIn, []>(
         set({ message: "Sign out success!" });
       },
       mutateAddress: (data) =>
-        set((state) => ({
+        set((state: any) => ({
           data: {
             ...state.data,
             user: {
-              ...state.data.user,
+              ...state.data?.user,
               address: data,
             },
           },
         })),
       mutateName: (data) =>
-        set((state) => ({
+        set((state: any) => ({
           data: {
             ...state.data,
             user: {
-              ...state.data.user,
+              ...state.data?.user,
               name: data,
             },
           },
         })),
       mutatePhone: (data) =>
-        set((state) => ({
+        set((state: any) => ({
           data: {
             ...state.data,
             user: {
-              ...state.data.user,
+              ...state.data?.user,
               phone: data,
             },
           },
@@ -100,6 +100,9 @@ export const useLogin = create<useSignIn, []>(
     {
       name: "user-storage",
       storage: createJSONStorage(() => sessionStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );
