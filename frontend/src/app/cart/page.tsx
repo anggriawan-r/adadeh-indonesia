@@ -160,6 +160,7 @@ export default function Cart() {
       item_details.forEach((a)=>{
         a.payment_id = response.data.data.id
         delete a.url
+        delete a.id
       })
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/histories`,
