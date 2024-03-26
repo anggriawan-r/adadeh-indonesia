@@ -125,13 +125,6 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
                 <GoHeartFill className="basis-1/5 text-xl" />
                 <p className="basis-4/5">Wishlist</p>
               </Link>
-              <Link
-                href="/transaction"
-                className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
-              >
-                <GoHeartFill className="basis-1/5 text-xl" />
-                <p className="basis-4/5">Transaction</p>
-              </Link>
               <div
                 onClick={onSignOut}
                 className="flex w-full cursor-pointer items-center gap-4 bg-white p-4 text-base font-semibold text-black hover:bg-zinc-100"
