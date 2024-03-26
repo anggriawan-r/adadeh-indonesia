@@ -22,6 +22,34 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
   const { toast } = useToast();
   const { data, error, isLoading } = useSWR("products", fetcher);
 
+  const handleWishList = async () => {
+    await axios
+      .post(
+        `${baseUrl}/wishlists`,
+        { product_id: params.id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then((res) => {
+        toast({
+          title: "Success",
+          description: res.data.message,
+        });
+      })
+      .catch((err) => {
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: err.response.data.message,
+        });
+      });
+  };
+
+  const token = useLogin((state) => state.data.token);
+
   const { data: token, status } = useLogin();
   const addToCart = async () => {
     if (!status) {
@@ -109,7 +137,10 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
                   >
                     ADD TO CART
                   </button>
-                  <button className="ml-4 inline-flex h-12 w-12 items-center justify-center border border-black bg-black p-0 text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black">
+                  <button
+                    onClick={handleWishList}
+                    className="ml-4 inline-flex h-12 w-12 items-center justify-center border border-black bg-black p-0 text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
+                  >
                     <svg
                       fill="currentColor"
                       strokeLinecap="round"
