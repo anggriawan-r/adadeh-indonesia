@@ -31,7 +31,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
         { product_id: params.id },
         {
           headers: {
-            Authorization: `Bearer ${token.token}`,
+            Authorization: `Bearer ${token?.token}`,
           },
         },
       )
@@ -62,7 +62,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     await axios
       .post(`${baseUrl}/keranjang`, data, {
         headers: {
-          Authorization: `Bearer ${token.token}`,
+          Authorization: `Bearer ${token?.token}`,
         },
       })
       .then((res) => {
