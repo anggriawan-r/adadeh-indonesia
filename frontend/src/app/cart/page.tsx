@@ -7,6 +7,7 @@ import ProductCarousel from "@/components/ProductCarousel";
 import { products } from "@/lib/constants";
 import axios from "axios";
 import { useLogin, useUserLoading } from "@/stores/useAuth";
+import { useRouter } from "next/navigation";
 
 declare var snap: any;
 
@@ -43,6 +44,7 @@ export default function Cart() {
 
   const { data } = useLogin();
   const { isLoading: userLoading } = useUserLoading();
+  const router = useRouter()
 
   useEffect(() => {
     const totalHarga = getTotalHargaByChecked(cartItems);
@@ -175,66 +177,25 @@ export default function Cart() {
           },
         },
       );
-
-      // SNAP IS WORKING AS INTENDED
-      snap.pay(response.data.data.snap_token, {
-        onSuccess: async function (result: any) {
-          const payment = {
-            status: "success",
-            payment_type: result.payment_type,
-          };
-          await axios.patch(
-            `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
-            payment,
-            {
-              headers: {
-                Authorization: `Bearer ${data.token}`,
-              },
-            },
-          );
-        },
-        onPending: async function (result: any) {
-          const payment = {
-            status: "pending",
-            payment_type: result.payment_type,
-          };
-          await axios.patch(
-            `${process.env.NEXT_PUBLIC_API_URL}/payments/status/${response.data.data.id}`,
-            payment,
-            {
-              headers: {
-                Authorization: `Bearer ${data.token}`,
-              },
-            },
-          );
-        },
-        onError: function (result: any) {
-          console.log("error");
-          console.log(result);
-        },
-        onClose: async function (result: any) {
-          console.log(
-            "customer closed the popup without finishing the payment",
-          );
-        },
-      });
+      
+      router.push("/transaction")
     } catch (error) {
       console.log(error);
     }
     console.log(selectedItems);
   };
 
-  useEffect(() => {
-    let script = document.createElement("script");
-    script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js");
-    script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-");
-    script.async = true;
+  // useEffect(() => {
+  //   let script = document.createElement("script");
+  //   script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+  //   script.setAttribute("data-client-key", "SB-Mid-client-5o_Ubr0-SXDlQGP-");
+  //   script.async = true
 
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  //   document.body.appendChild(script);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
   return (
     <>
