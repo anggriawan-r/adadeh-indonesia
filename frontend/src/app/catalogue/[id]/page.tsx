@@ -96,7 +96,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
                 </div>
                 <p className="leading-relaxed">{data?.description}</p>
                 <div className="mb-5 mt-6 flex items-center border-b-2 border-gray-200 pb-5"></div>
-                <div className="flex">
+                <div className="flex items-center">
                   <span className="title-font text-2xl font-medium text-gray-900">
                     {data?.price.toLocaleString("id-ID", {
                       style: "currency",

@@ -1,95 +1,132 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { MdOutlineSpaceDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdLogout, MdMenu, MdPayment } from "react-icons/md";
-import { useRouter } from "next/navigation";
+import {
+  MdOutlineSpaceDashboard,
+  MdCategory,
+  MdOutlineProductionQuantityLimits,
+  MdLogout,
+  MdMenu,
+  MdPayment,
+} from "react-icons/md";
+import { usePathname, useRouter } from "next/navigation";
 import { useLogin } from "@/stores/useAuth";
 import { FaUsers } from "react-icons/fa6";
+import { twJoin } from "tailwind-merge";
 
-interface props{
-    click: any
+interface props {
+  click: any;
 }
 
-export default function Sidebar({ click }: props){
-    const router = useRouter()
-    const { handleSignOut } = useLogin()
-    return(
-        <>
-            <header className="grid place-items-center h-40 relative">
-                <div className="space-y-2">
-                    <Image src={"/adadeh.svg"} height={80} width={80} alt="Logo" />
-                    <p className="text-center">Admin</p>
-                </div>
-                <Button variant={"ghost"} className="md:hidden inline-flex absolute w-10 h-10 top-4 right-1 p-0 border border-slate-200" onClick={()=>click()}>
-                    <MdMenu className="text-xl" />
-                </Button>
-            </header>
-            <main className="flex flex-col justify-between min-h-[calc(100%-160px)]">
-                <ul className="space-y-4">
-                    <li>
-                        <Button 
-                            className="w-full justify-start" 
-                            variant={"ghost"}
-                            onClick={()=>router.push("/dashboard")}
-                        >
-                            <MdOutlineSpaceDashboard className="text-xl mr-2" />
-                            Dashboard
-                        </Button>
-                    </li>
-                    <li>
-                        <Button 
-                            className="w-full justify-start" 
-                            variant={"ghost"}
-                            onClick={()=>router.push("/dashboard/customers")}
-                        >
-                            <FaUsers className="text-xl mr-2" />
-                            Customer
-                        </Button>
-                    </li>
-                    <li>
-                        <Button 
-                            className="w-full justify-start" 
-                            variant={"ghost"}
-                            onClick={()=>router.push("/dashboard/categories")}
-                        >
-                            <MdCategory className="text-xl mr-2" />
-                            Category
-                        </Button>
-                    </li>
-                    <li>
-                        <Button 
-                            className="w-full justify-start" 
-                            variant={"ghost"}
-                            onClick={()=>router.push("/dashboard/products")}
-                        >
-                            <MdOutlineProductionQuantityLimits className="text-xl mr-2" />
-                            Product
-                        </Button>
-                    </li>
-                    <li>
-                        <Button 
-                            className="w-full justify-start" 
-                            variant={"ghost"}
-                            onClick={()=>router.push("/dashboard/payments")}
-                        >
-                            <MdPayment className="text-xl mr-2" />
-                            Payment
-                        </Button>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <Button className="w-full justify-start" variant={"ghost"} onClick={()=>{
-                            handleSignOut()
-                            router.push("/auth/signin")
-                        }}>
-                            <MdLogout className="text-xl mr-2" />
-                            Logout
-                        </Button>
-                    </li>
-                </ul>
-            </main>
-        </>
-    )
+export default function Sidebar({ click }: props) {
+  const router = useRouter();
+  const path = usePathname();
+  const { handleSignOut } = useLogin();
+  return (
+    <>
+      <header className="relative grid h-40 place-items-center">
+        <div className="space-y-2">
+          <Image src={"/adadeh.svg"} height={80} width={80} alt="Logo" />
+          <p className="text-center">Admin</p>
+        </div>
+        <Button
+          variant={"ghost"}
+          className="absolute right-1 top-4 inline-flex h-10 w-10 border border-slate-200 p-0 md:hidden"
+          onClick={() => click()}
+        >
+          <MdMenu className="text-xl" />
+        </Button>
+      </header>
+      <main className="flex min-h-[calc(100%-160px)] flex-col justify-between">
+        <ul className="space-y-4">
+          <li>
+            <Button
+              className={twJoin(
+                "w-full justify-start rounded-none",
+                path == "/dashboard" &&
+                  "bg-black text-white hover:bg-zinc-800 hover:text-white",
+              )}
+              variant={"ghost"}
+              onClick={() => router.push("/dashboard")}
+            >
+              <MdOutlineSpaceDashboard className="mr-2 text-xl" />
+              Dashboard
+            </Button>
+          </li>
+          <li>
+            <Button
+              className={twJoin(
+                "w-full justify-start rounded-none",
+                path == "/dashboard/customers" &&
+                  "bg-black text-white hover:bg-zinc-800 hover:text-white",
+              )}
+              variant={"ghost"}
+              onClick={() => router.push("/dashboard/customers")}
+            >
+              <FaUsers className="mr-2 text-xl" />
+              Customer
+            </Button>
+          </li>
+          <li>
+            <Button
+              className={twJoin(
+                "w-full justify-start rounded-none",
+                path == "/dashboard/categories" &&
+                  "bg-black text-white hover:bg-zinc-800 hover:text-white",
+              )}
+              variant={"ghost"}
+              onClick={() => router.push("/dashboard/categories")}
+            >
+              <MdCategory className="mr-2 text-xl" />
+              Category
+            </Button>
+          </li>
+          <li>
+            <Button
+              className={twJoin(
+                "w-full justify-start rounded-none",
+                path == "/dashboard/products" &&
+                  "bg-black text-white hover:bg-zinc-800 hover:text-white",
+              )}
+              variant={"ghost"}
+              onClick={() => router.push("/dashboard/products")}
+            >
+              <MdOutlineProductionQuantityLimits className="mr-2 text-xl" />
+              Product
+            </Button>
+          </li>
+          <li>
+            <Button
+              className={twJoin(
+                "w-full justify-start rounded-none",
+                path == "/dashboard/payments" &&
+                  "bg-black text-white hover:bg-zinc-800 hover:text-white",
+              )}
+              variant={"ghost"}
+              onClick={() => router.push("/dashboard/payments")}
+            >
+              <MdPayment className="mr-2 text-xl" />
+              Payment
+            </Button>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Button
+              className="w-full justify-start"
+              variant={"ghost"}
+              onClick={() => {
+                handleSignOut();
+                router.push("/auth/signin");
+              }}
+            >
+              <MdLogout className="mr-2 text-xl" />
+              Logout
+            </Button>
+          </li>
+        </ul>
+      </main>
+    </>
+  );
 }
