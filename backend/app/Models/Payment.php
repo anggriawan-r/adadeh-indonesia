@@ -11,4 +11,10 @@ class Payment extends Model
     protected $fillable = [
         "user_id", "jumlah", "status", "snap_token", "payment_url", "order_id", "payment_type"
     ];
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function history(){
+        return $this->hasMany(History::class);
+    }
 }

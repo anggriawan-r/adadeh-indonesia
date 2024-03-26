@@ -17,7 +17,7 @@ import { GoHeartFill } from "react-icons/go";
 import { PiSignOutBold } from "react-icons/pi";
 import { useLogin, useUserLoading } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { categoryType } from "@/type/category";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -47,14 +47,14 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
     }
   }, [message, toast, isSubmitted]);
 
-  function handleSubmitSearchProduct(event) {
+  function handleSubmitSearchProduct(event: React.SyntheticEvent) {
     event.preventDefault();
     const urlParams = new URLSearchParams();
     urlParams.set("name", productName);
     router.push(`/catalogue?${urlParams.toString()}`)
   }
 
-  function handleChangeProductName(event) {
+  function handleChangeProductName(event: any) {
     setProductName(event.target.value)
   }
 
