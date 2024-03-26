@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { categoryType } from "@/type/category";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineSpaceDashboard, MdPayment } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
@@ -51,16 +51,19 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
     event.preventDefault();
     const urlParams = new URLSearchParams();
     urlParams.set("name", productName);
-    router.push(`/catalogue?${urlParams.toString()}`)
+    router.push(`/catalogue?${urlParams.toString()}`);
   }
 
   function handleChangeProductName(event: any) {
-    setProductName(event.target.value)
+    setProductName(event.target.value);
   }
 
   return (
     <div className="flex items-center gap-3">
-      <form onSubmit={handleSubmitSearchProduct} className="hidden min-[500px]:flex">
+      <form
+        onSubmit={handleSubmitSearchProduct}
+        className="hidden min-[500px]:flex"
+      >
         <div>
           <input
             type="text"
@@ -99,6 +102,13 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
                 <MdAccountCircle className="basis-1/5 text-2xl" />
                 <p className="basis-4/5">Account</p>
               </Link>
+              <Link
+                href="/transaction"
+                className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
+              >
+                <MdPayment className="basis-1/5 text-2xl" />
+                <p className="basis-4/5">Transaction</p>
+              </Link>
               {!isLoading && data.user?.role == "admin" && (
                 <Link
                   href="/dashboard"
@@ -114,6 +124,13 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
               >
                 <GoHeartFill className="basis-1/5 text-xl" />
                 <p className="basis-4/5">Wishlist</p>
+              </Link>
+              <Link
+                href="/transaction"
+                className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
+              >
+                <GoHeartFill className="basis-1/5 text-xl" />
+                <p className="basis-4/5">Transaction</p>
               </Link>
               <div
                 onClick={onSignOut}

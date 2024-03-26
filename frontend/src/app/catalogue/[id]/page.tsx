@@ -7,6 +7,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { useLogin } from "@/stores/useAuth";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -17,8 +18,8 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     return response.data.data;
   };
 
+  const router = useRouter();
   const { toast } = useToast();
-
   const { data, error, isLoading } = useSWR("products", fetcher);
 
   const handleWishList = async () => {
@@ -48,7 +49,13 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
   };
 
   const token = useLogin((state) => state.data.token);
+
+  const { data: token, status } = useLogin();
   const addToCart = async () => {
+    if (!status) {
+      return router.push("/auth/signin");
+    }
+
     const data = {
       produkId: params.id,
       jumlah: 1,
@@ -56,7 +63,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
     await axios
       .post(`${baseUrl}/keranjang`, data, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.token}`,
         },
       })
       .then((res) => {
@@ -117,7 +124,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
                 </div>
                 <p className="leading-relaxed">{data?.description}</p>
                 <div className="mb-5 mt-6 flex items-center border-b-2 border-gray-200 pb-5"></div>
-                <div className="flex">
+                <div className="flex items-center">
                   <span className="title-font text-2xl font-medium text-gray-900">
                     {data?.price.toLocaleString("id-ID", {
                       style: "currency",
