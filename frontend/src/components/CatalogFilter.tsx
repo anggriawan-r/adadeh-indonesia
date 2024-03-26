@@ -32,8 +32,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function CatalogFilter({ className }: { className?: string }) {
-  const searchParams = useSearchParams().get("category");
-  const searchParamsProductName = useSearchParams().get("name");
+  const searchParams = useSearchParams();
+  const searchCat = searchParams.get("category") ?? null;
+  const searchName = searchParams.get("name") ?? null;
   const form = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -84,15 +85,15 @@ export default function CatalogFilter({ className }: { className?: string }) {
   }
 
   useEffect(() => {
-    if (searchParams || searchParamsProductName) {
-      setFilter({ 
-        category: searchParams ?? "",
-        name: searchParamsProductName ?? "",
-       });
+    if (searchCat || searchName) {
+      setFilter({
+        category: searchCat ?? "",
+        name: searchName ?? "",
+      });
     } else {
       setFilter({});
     }
-  }, [searchParams, searchParamsProductName, setFilter]);
+  }, [searchCat, searchName, setFilter]);
 
   return (
     <aside
@@ -132,7 +133,7 @@ export default function CatalogFilter({ className }: { className?: string }) {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    {...(searchParams && { defaultValue: searchParams })}
+                    {...(searchCat && { defaultValue: searchCat })}
                     {...field}
                   >
                     <SelectTrigger
