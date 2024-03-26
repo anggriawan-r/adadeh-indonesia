@@ -24,7 +24,7 @@ export default function CatalogList({ className }: { className?: string }) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const productsUrl = `${baseUrl}/products`;
   const wishlistUrl = `${baseUrl}/wishlists`;
-  const token = useLogin((state) => state.data.token);
+  const { data } = useLogin();
 
   const fetcher = async (url: string) => {
     try {
@@ -38,7 +38,7 @@ export default function CatalogList({ className }: { className?: string }) {
   const wishlistFetcher = async (url: string) => {
     try {
       const response = await axios.get<{ data: WishlistItem[] }>(url, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${data?.token}` },
       });
       return response.data.data;
     } catch (error) {
