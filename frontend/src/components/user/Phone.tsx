@@ -27,7 +27,7 @@ export default function Phone() {
   const form = useForm<z.infer<typeof userChangePhone>>({
     resolver: zodResolver(userChangePhone),
     defaultValues: {
-      phone: data?.user?.phone ?? "",
+      phone: data?.user?.phone,
     },
   });
 
@@ -38,7 +38,7 @@ export default function Phone() {
         {
           phone: val.phone,
         },
-        data.token,
+        data?.token,
       );
       mutatePhone(val.phone);
       setMessage("Phone has been changed successfully!");

@@ -27,8 +27,8 @@ export default function Account() {
   const form = useForm<z.infer<typeof userChangeAccount>>({
     resolver: zodResolver(userChangeAccount),
     defaultValues: {
-      name: data?.user?.name ?? null,
-      email: data?.user?.email ?? null,
+      name: data?.user?.name,
+      email: data?.user?.email,
     },
   });
 
@@ -40,7 +40,7 @@ export default function Account() {
           name: val.name,
           email: val.email,
         },
-        data.token,
+        data?.token,
       );
       setMessage("Account information has been changed successfully!");
       mutateName(val.name);

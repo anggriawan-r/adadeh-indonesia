@@ -28,7 +28,7 @@ export default function Address() {
   const form = useForm<z.infer<typeof userChangeAddress>>({
     resolver: zodResolver(userChangeAddress),
     defaultValues: {
-      address: data?.user?.address ?? "",
+      address: data?.user?.address,
     },
   });
 
@@ -39,7 +39,7 @@ export default function Address() {
         {
           address: val.address,
         },
-        data.token,
+        data?.token,
       );
       mutateAddress(val.address);
       setMessage("Address has been changed successfully!");

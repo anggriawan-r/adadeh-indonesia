@@ -54,9 +54,9 @@ export interface useSignIn {
   setHasHydrated: (data: boolean) => void;
   handleSignIn: (data: signIn) => Promise<void>;
   handleSignOut: () => void;
-  mutateAddress: (data: dataType) => void;
-  mutateName: (data: dataType) => void;
-  mutatePhone: (data: dataType) => void;
+  mutateAddress: (data: string) => void;
+  mutateName: (data: string) => void;
+  mutatePhone: (data: string) => void;
   data: dataType | null;
 }
 

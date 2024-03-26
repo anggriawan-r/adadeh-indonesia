@@ -11,7 +11,7 @@ type userData = {
 export interface useUserI {
   status: boolean;
   message: string;
-  edit: (data: userData, token: string) => Promise<void>;
+  edit: (data: userData, token: string | undefined) => Promise<void>;
 }
 
 export const userChangePassword = z

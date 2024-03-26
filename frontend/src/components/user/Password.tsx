@@ -39,7 +39,7 @@ export default function Password() {
         {
           password: val.newPassword,
         },
-        data.token,
+        data?.token,
       );
       setMessage("Password has been changed successfully!");
       form.reset();
