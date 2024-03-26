@@ -9,6 +9,7 @@ import { useLogin } from "@/stores/useAuth";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export default function WishList() {
   const { toast } = useToast();
@@ -25,7 +26,12 @@ export default function WishList() {
     console.log(response.data.data);
     return response.data.data;
   };
-  const { data: wishlist, error, isValidating } = useSWR("wishlists", fetcher);
+  const {
+    data: wishlist,
+    error,
+    isValidating,
+    mutate,
+  } = useSWR("wishlists", fetcher);
   const [deleteSucceed, setDeleteSucceed] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
@@ -54,6 +60,7 @@ export default function WishList() {
         },
       });
       setDeleteSucceed(true);
+      mutate();
     } catch (error) {
       setDeleteError(true);
     }

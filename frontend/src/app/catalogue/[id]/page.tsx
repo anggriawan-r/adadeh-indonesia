@@ -22,6 +22,8 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
   const { toast } = useToast();
   const { data, error, isLoading } = useSWR("products", fetcher);
 
+  const { data: token, status } = useLogin();
+
   const handleWishList = async () => {
     await axios
       .post(
@@ -29,7 +31,7 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
         { product_id: params.id },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token.token}`,
           },
         },
       )
@@ -48,7 +50,6 @@ const ProductDetail = ({ params }: { params: { id: string } }) => {
       });
   };
 
-  const { data: token, status } = useLogin();
   const addToCart = async () => {
     if (!status) {
       return router.push("/auth/signin");
