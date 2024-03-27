@@ -25,28 +25,30 @@ import { Input } from "@/components/ui/input";
 import { useCategory } from "@/stores/useCategory";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useLogin } from "@/stores/useAuth";
 
 export default function FormCategory() {
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
   });
-  const { store, message } = useCategory();
+  const { store } = useCategory();
   const { toast } = useToast();
   const router = useRouter()
+  const { data } = useLogin()
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
     console.log(values)
-    await store(values)
-      .then(() => {
+    await store(values, data?.token)
+      .then((res: any) => {
         toast({
           title: "Success",
-          description: message,
+          description: res.data.message,
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
           variant: "destructive",
           title: "Failed",
-          description: message,
+          description: error.response.data.message,
         });
       })
       .finally(()=>{

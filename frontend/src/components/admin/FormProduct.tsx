@@ -36,6 +36,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import { useLogin } from "@/stores/useAuth";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
 const supabase = createClient(
@@ -48,6 +49,7 @@ export default function FormProduct() {
     `${process.env.NEXT_PUBLIC_API_URL}/categories`,
     fetcher,
   );
+  const { data: dataToken } = useLogin()
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
   });
@@ -73,7 +75,7 @@ export default function FormProduct() {
         image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`,
       };
       console.log(values);
-      await store(values);
+      await store(values, dataToken?.token);
       router.refresh();
       setIsSubmitted(true);
     }

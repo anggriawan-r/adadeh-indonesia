@@ -7,9 +7,34 @@ use Illuminate\Http\Request;
 
 class HistoryController extends Controller
 {
+
     /**
-     * Store a newly created resource in storage.
-     */
+   * @OA\Post(
+   *     path="/api/histories",
+   *     summary="History",
+   *     description="History",
+   *     operationId="all History",
+   *     tags={"History"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\RequestBody(
+   *         @OA\JsonContent(
+   *             @OA\Property(property="payment_id", type="integer", example=1),
+   *             @OA\Property(property="name", type="string", example="Sepatu"),
+   *             @OA\Property(property="price", type="integer", example=1000000),
+   *             @OA\Property(property="quantity", type="integer", example=2),
+   *         ),
+   *     ),
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="History gat way"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
     public function store(Request $request)
     {
         try {
@@ -25,29 +50,5 @@ class HistoryController extends Controller
                 "message"   =>  $th->getMessage()
             ]);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(History $history)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, History $history)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(History $history)
-    {
-        //
     }
 }
