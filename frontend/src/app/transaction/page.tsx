@@ -40,7 +40,7 @@ export default function TransactionPage() {
   const paymentStatus = {
     success: ['settlement', 'capture'],
     pending: ['pending'],
-    expired: ['expired']
+    expired: ['expire']
   }
 
   useEffect(() => {

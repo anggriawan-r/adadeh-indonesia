@@ -228,7 +228,7 @@ class PaymentController extends Controller
             $payment = Payment::where("order_id", $request->order_id)->first();
             switch ($request->status_code) {
                 case 200:
-                    $status = "success";
+                    $status = "settlement";
                     break;
                 case 201:
                     $status = "pending";
@@ -237,7 +237,7 @@ class PaymentController extends Controller
                     $status = "denied";
                     break;
                 case 407:
-                    $status = "expired";
+                    $status = "expire";
                     break;
                 default:
                     $status = "error";
