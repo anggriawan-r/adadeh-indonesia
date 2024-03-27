@@ -99,7 +99,7 @@ export const useLogin = create<useSignIn, []>(
     }),
     {
       name: "user-storage",
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
