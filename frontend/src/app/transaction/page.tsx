@@ -103,7 +103,7 @@ export default function TransactionPage() {
                       <Badge variant="secondary">Bayar</Badge>
                     </Link>
                   )}
-                  {hist.status == "success" && (
+                  {(hist.status == "success" || hist.status == "settlement") && (
                     <Badge variant="secondary">Sudah Dibayar</Badge>
                   )}
                 </div>
