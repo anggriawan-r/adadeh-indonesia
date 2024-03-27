@@ -33,6 +33,11 @@ const fetcher = async (url: string, token: string) => {
 export default function TransactionPage() {
   const searchParams = useSearchParams();
   const { data } = useLogin();
+  const paymentStatus = {
+    success: ['settlement', 'capture'],
+    pending: ['pending'],
+    expired: ['expired']
+  }
 
   useEffect(() => {
     console.log(searchParams);
@@ -67,7 +72,7 @@ export default function TransactionPage() {
                   <p>
                     {day} {month} {year}
                   </p>
-                  {hist.status == "pending" && (
+                  {paymentStatus.pending.includes(hist.status) && (
                     <Link
                       href={hist.payment_url}
                       className="self-end justify-self-end"
@@ -76,8 +81,11 @@ export default function TransactionPage() {
                       <Badge variant="secondary">Bayar</Badge>
                     </Link>
                   )}
-                  {hist.status == "success" && (
+                  {paymentStatus.success.includes(hist.status) && (
                     <Badge variant="secondary">Sudah Dibayar</Badge>
+                  )}
+                  {paymentStatus.expired.includes(hist.status) && (
+                    <Badge variant="secondary">Expired</Badge>
                   )}
                 </div>
               </div>
