@@ -60,6 +60,7 @@ Route::controller(RoleController::class)->group(function () {
 
 // Payment
 Route::get("/payments", [PaymentController::class, "index"]);
+Route::post("/webhook/update-payment", [PaymentController::class, "updatePaymentWebhook"]);
 
 Route::group(['middleware' => ['auth:api']], function () {
     // Payment

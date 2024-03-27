@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatePaymentWebhookRequest;
 use App\Models\History;
 use App\Models\Payment;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -175,5 +177,31 @@ class PaymentController extends Controller
             ]);
         }
 
+    }
+
+    public function updatePaymentWebhook(UpdatePaymentWebhookRequest $request) {
+        try {
+            $validated = $request->safe()->only(['order_id', 'transaction_status']);
+            $orderId = $validated['order_id'];
+            $transactionStatus = $validated['transaction_status'];
+
+            $payment = Payment::where('order_id', $orderId)->first();
+            if($payment === null) throw new Exception("Payment Tidak Ditemukan");
+
+            $payment->status = $transactionStatus;
+            $payment->save();
+
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Status Payment Berhasil Diupdate",
+                "data"      =>  $payment
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  $th->getMessage(),
+                "data"      =>  $payment
+            ]);
+        }
     }
 }
