@@ -82,7 +82,7 @@ Toko Online Resmi Adadeh Indonesia menyediakan produk terbaik mulai dari sepatu 
   </li>
 </ul>
 
-<p><b>Storage/b></p>
+<p><b>Storage</b></p>
 <ul>
   <li>
     <a href="https://supabase.com/">Supabase</a>
