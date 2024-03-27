@@ -259,6 +259,31 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+   * @OA\Post(
+   *     path="/api/webhook/update-payment",
+   *     summary="webhook for update payment status",
+   *     description="webhook for update payment status",
+   *     operationId="UpdatePaymentWebhook",
+   *     tags={"Payment"},
+   *     @OA\RequestBody(
+   *         @OA\JsonContent(
+   *             @OA\Property(property="order_id", type="string", example="ADADEH-1-1"),
+   *             @OA\Property(property="transaction_status", type="string", example="settlement"),
+   *             @OA\Property(property="payment_type", type="string", example="qris"),
+   *         ),
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Update Payment Successful",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="Status Payment Berhasil Diupdate"),
+   *             @OA\Property(property="data", type="string", example="{}"),
+   *         )
+   *     ),
+   * )
+   */
     public function updatePaymentWebhook(UpdatePaymentWebhookRequest $request) {
         try {
             $validated = $request->safe()->only(['order_id', 'transaction_status', 'payment_type']);

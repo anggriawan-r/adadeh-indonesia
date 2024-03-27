@@ -1398,6 +1398,65 @@
                 ]
             }
         },
+        "/api/webhook/update-payment": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "webhook for update payment status",
+                "description": "webhook for update payment status",
+                "operationId": "UpdatePaymentWebhook",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "order_id": {
+                                        "type": "string",
+                                        "example": "ADADEH-1-1"
+                                    },
+                                    "transaction_status": {
+                                        "type": "string",
+                                        "example": "settlement"
+                                    },
+                                    "payment_type": {
+                                        "type": "string",
+                                        "example": "qris"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Payment Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Status Payment Berhasil Diupdate"
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "{}"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
