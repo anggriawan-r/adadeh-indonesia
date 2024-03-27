@@ -32,7 +32,7 @@ class UpdatePaymentWebhookRequest extends FormRequest
     {
         $this->merge([
             'order_id' => $this->input('order_id') ?? null,
-            'transaction_status' => $this->input('order_id') ?? null
+            'transaction_status' => $this->input('transaction_status') ?? null
         ]);
     }
 }

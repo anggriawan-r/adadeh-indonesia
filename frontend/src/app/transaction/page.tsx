@@ -37,6 +37,11 @@ export default function TransactionPage() {
   const { data } = useLogin();
   const router = useRouter()
   const { toast } = useToast()
+  const paymentStatus = {
+    success: ['settlement', 'capture'],
+    pending: ['pending'],
+    expired: ['expired']
+  }
 
   useEffect(() => {
     if(data?.token.length !== undefined && data?.token.length > 0){
@@ -95,7 +100,7 @@ export default function TransactionPage() {
                   <p>
                     {day} {month} {year}
                   </p>
-                  {hist.status == "pending" && (
+                  {paymentStatus.pending.includes(hist.status) && (
                     <Link
                       href={hist.payment_url}
                       className="self-end justify-self-end"
@@ -103,8 +108,11 @@ export default function TransactionPage() {
                       <Badge variant="secondary">Bayar</Badge>
                     </Link>
                   )}
-                  {(hist.status == "success" || hist.status == "settlement") && (
+                  {paymentStatus.success.includes(hist.status) && (
                     <Badge variant="secondary">Sudah Dibayar</Badge>
+                  )}
+                  {paymentStatus.expired.includes(hist.status) && (
+                    <Badge variant="secondary">Expired</Badge>
                   )}
                 </div>
               </div>
