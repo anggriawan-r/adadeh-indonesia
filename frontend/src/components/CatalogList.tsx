@@ -53,7 +53,7 @@ export default function CatalogList({ className }: { className?: string }) {
     mutate: mutateProducts,
   } = useSWR(productsUrl, fetcher);
   const { data: wishlist, isValidating: wishlistValidating } = useSWR(
-    wishlistUrl,
+    data ? wishlistUrl : null,
     wishlistFetcher,
   );
 
