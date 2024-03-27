@@ -188,7 +188,7 @@ class PaymentController extends Controller
             $payment = Payment::where('order_id', $orderId)->first();
             if($payment === null) throw new Exception("Payment Tidak Ditemukan");
 
-            $payment->status = $transactionStatus;
+            if($transactionStatus) $payment->status = $transactionStatus;
             $payment->save();
 
             return response()->json([

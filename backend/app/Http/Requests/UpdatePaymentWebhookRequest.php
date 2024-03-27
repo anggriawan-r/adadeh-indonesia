@@ -23,8 +23,16 @@ class UpdatePaymentWebhookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id' => ['bail', 'required', 'string'],
-            'transaction_status' => ['bail', 'required', 'string']
+            'order_id' => ['bail', 'nullable', 'string'],
+            'transaction_status' => ['bail', 'nullable', 'string']
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'order_id' => $this->input('order_id') ?? null,
+            'transaction_status' => $this->input('order_id') ?? null
+        ]);
     }
 }
