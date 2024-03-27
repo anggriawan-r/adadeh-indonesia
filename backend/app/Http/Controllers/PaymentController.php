@@ -156,6 +156,25 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+   * @OA\Get(
+   *     path="/api/histories",
+   *     summary="histories",
+   *     description="histories by userId",
+   *     operationId="all histories",
+   *     tags={"History"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="histories user"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
     public function getHistory(){
         try {
             $payments = Payment::where("user_id", auth()->user()->id)->get();
@@ -174,6 +193,67 @@ class PaymentController extends Controller
                 "message"   =>  $th->getMessage()
             ]);
         }
+    }
 
+    /**
+   * @OA\Patch(
+   *     path="/api/payments/redirect",
+   *     summary="payment",
+   *     description="payment",
+   *     operationId="Payment redirect",
+   *     tags={"Payment"},
+   *     security={{ "bearerAuth": {} }},
+   *     @OA\RequestBody(
+   *         @OA\JsonContent(
+   *             @OA\Property(property="order_id", type="string", example="ADADEH-1-1"),
+   *             @OA\Property(property="status_code", type="string", example="201"),
+   *         ),
+   *     ),
+   *     @OA\Response(
+   *         response=201,
+   *         description="get auth data",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="status", type="boolean", example="true"),
+   *             @OA\Property(property="message", type="string", example="Payment gat way"),
+   *             @OA\Property(property="data", type="string", example="[]"),
+   *         )
+   *     ),
+   * )
+   */
+    public function getQuery(Request $request){
+        try {
+            $status = null;
+            $payment = Payment::where("order_id", $request->order_id)->first();
+            switch ($request->status_code) {
+                case 200:
+                    $status = "success";
+                    break;
+                case 201:
+                    $status = "pending";
+                    break;
+                case 202:
+                    $status = "denied";
+                    break;
+                case 407:
+                    $status = "expired";
+                    break;
+                default:
+                    $status = "error";
+                    break;
+            }
+            $payment->update([
+                "status"    =>  $status
+            ]);
+            return response()->json([
+                "status"    =>  true,
+                "message"   =>  "Data histori pembelanjaan dengan Kode: $request->order_id terupdate",
+                "data"      =>  $payment
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status"    =>  false,
+                "message"   =>  $th->getMessage(),
+            ]);
+        }
     }
 }

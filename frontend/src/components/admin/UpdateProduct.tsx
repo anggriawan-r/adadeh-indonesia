@@ -36,8 +36,9 @@ const supabase = createClient('https://vcowdsqhhhrcmyvetict.supabase.co', 'eyJhb
 
 interface props{
   id: string
+  token: any
 }
-export default function UpdateProduct({id}: props) {
+export default function UpdateProduct({id, token}: props) {
   const { data, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/categories`, fetcher)
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -59,7 +60,7 @@ export default function UpdateProduct({id}: props) {
     } else {
       values = {...values, image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`}
       console.log(values);
-      await edit(values, id)
+      await edit(values, id, token)
       router.refresh();
       setIsSubmitted(true)
     }

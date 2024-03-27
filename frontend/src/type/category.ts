@@ -16,7 +16,7 @@ export const categorySchema = z.object({
 export interface useCategories {
   status: boolean;
   message: string;
-  store: (data: any) => Promise<void>;
-  edit: (data: any, id: any) => Promise<void>;
-  destroy: (id: any) => Promise<void>;
+  store: (data: any, token: any) => Promise<void>;
+  edit: (data: any, id: any, token: any) => Promise<void>;
+  destroy: (id: any, token: any) => Promise<void>;
 }
