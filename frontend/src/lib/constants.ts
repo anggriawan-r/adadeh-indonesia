@@ -92,18 +92,18 @@ const heroes = [
   },
   {
     id: 2,
-    imageUrl: "superbounce.jpg",
+    imageUrl: "superbounce.webp",
     title: "ULTRABOUNCE",
     imageAlt: "ULTRABOUNCE",
-    buttonUrl: "/catalogue",
+    buttonUrl: "/catalogue/56",
     isButtonDark: true,
   },
   {
     id: 3,
-    imageUrl: "ultraboost.jpg",
+    imageUrl: "ultraboost.webp",
     title: "ULTRABOOST",
     imageAlt: "ULTRABOOST",
-    buttonUrl: "/catalogue",
+    buttonUrl: "/catalogue/57",
     isButtonDark: true,
   },
 ];
