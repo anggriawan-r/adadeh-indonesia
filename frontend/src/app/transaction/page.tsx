@@ -37,10 +37,10 @@ export default function TransactionPage() {
   const router = useRouter();
   const { toast } = useToast();
   const paymentStatus = {
-    success: ["settlement", "capture"],
-    pending: ["pending"],
-    expired: ["expired"],
-  };
+    success: ['settlement', 'capture'],
+    pending: ['pending'],
+    expired: ['expire']
+  }
 
   useEffect(() => {
     if (data?.token.length !== undefined && data?.token.length > 0) {
