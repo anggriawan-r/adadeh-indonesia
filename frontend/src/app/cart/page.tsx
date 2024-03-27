@@ -235,13 +235,19 @@ function Cart() {
             </div>
             <div className="flex justify-between">
               <p>TAX</p>
-              <span className="font-semibold">Rp 10.000</span>
+              <span className="font-semibold">
+                {(0).toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                  maximumFractionDigits: 0,
+                })}
+              </span>
             </div>
             <div className="my-4 border-separate border-b"></div>
             <div className="flex justify-between">
               <p className="font-semibold">TOTAL</p>
               <span className="font-semibold">
-                {(totalPrice + 10000).toLocaleString("id-ID", {
+                {totalPrice.toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
                   maximumFractionDigits: 0,
@@ -260,7 +266,13 @@ function Cart() {
           <div className="fixed bottom-0 left-0 right-0 z-10 border border-black bg-white p-4 lg:hidden">
             <div className="flex justify-between">
               <p className="font-semibold">TOTAL</p>
-              <span className="font-semibold">Rp {totalPrice + 10000}</span>
+              <span className="font-semibold">
+                {totalPrice.toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                  maximumFractionDigits: 0,
+                })}
+              </span>
             </div>
             <div>
               <button
