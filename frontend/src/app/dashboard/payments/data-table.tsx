@@ -176,10 +176,22 @@ export function DataTable<TData, TValue>({
           >
             Previous
           </Button>
+          <select
+            value={table.getState().pagination.pageIndex}
+            onChange={e => {
+              table.setPageIndex(Number(e.target.value))
+            }}
+          >
+            {Array.from({ length: Math.ceil(table.getFilteredRowModel().rows.length / 5) }, (_, i) => i + 1).map(pageIndex => (
+              <option key={pageIndex-1} value={pageIndex-1}>
+                {pageIndex-1}
+              </option>
+            ))}
+          </select>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.setPageIndex(1)}
+            onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next

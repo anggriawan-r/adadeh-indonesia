@@ -48,7 +48,7 @@ export default function FormCategory() {
         toast({
           variant: "destructive",
           title: "Failed",
-          description: error.response.data.message,
+          description: "Category unsuccessfully created",
         });
       })
       .finally(()=>{

@@ -48,8 +48,8 @@ export function DataTable<TData, TValue>({
   );
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5
-  })
+    pageSize: 5,
+  });
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
-      pagination
+      pagination,
     },
   });
 
@@ -78,14 +78,28 @@ export function DataTable<TData, TValue>({
     <>
       <div>
         <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter name..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+          <div className="flex gap-4">
+            <Input
+              placeholder="Filter name..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+            <Input
+              placeholder="Filter category..."
+              value={
+                (table.getColumn("category")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("category")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
@@ -176,6 +190,18 @@ export function DataTable<TData, TValue>({
           >
             Previous
           </Button>
+          <select
+            value={table.getState().pagination.pageIndex}
+            onChange={e => {
+              table.setPageIndex(Number(e.target.value))
+            }}
+          >
+            {Array.from({ length: Math.ceil(table.getFilteredRowModel().rows.length / 5) }, (_, i) => i + 1).map(pageIndex => (
+              <option key={pageIndex-1} value={pageIndex-1}>
+                {pageIndex-1}
+              </option>
+            ))}
+          </select>
           <Button
             variant="outline"
             size="sm"

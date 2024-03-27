@@ -17,7 +17,7 @@ export type Product = {
   description: string
   stock: number
   price: number
-  category_id: string
+  category: string
   image: string
   created_at: string;
   updated_at: string;
@@ -75,14 +75,34 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "stock",
-    header: "Stock",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Stock
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
-    accessorKey: "category_id",
+    accessorKey: "category",
     header: ({ column }) => {
       return (
         <Button
