@@ -21,7 +21,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
-
 const fetcher = async (url: string, token: string) => {
   const res = await axios.get(url, {
     headers: {
@@ -35,8 +34,8 @@ const fetcher = async (url: string, token: string) => {
 export default function TransactionPage() {
   const searchParams = useSearchParams();
   const { data } = useLogin();
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
   const paymentStatus = {
     success: ['settlement', 'capture'],
     pending: ['pending'],
@@ -44,30 +43,38 @@ export default function TransactionPage() {
   }
 
   useEffect(() => {
-    if(data?.token.length !== undefined && data?.token.length > 0){
-      if(searchParams.get("order_id") != null && searchParams.get("status_code") != null){
+    if (data?.token.length !== undefined && data?.token.length > 0) {
+      if (
+        searchParams.get("order_id") != null &&
+        searchParams.get("status_code") != null
+      ) {
         const payment = {
           order_id: searchParams.get("order_id"),
-          status_code: searchParams.get("status_code")
-        }
-        axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/redirect`, payment, {
-          headers: {
-            Authorization: `Bearer ${data?.token}`
-          }
-        })
-        .then((res)=>{
-          toast({
-            title: "Success",
-            description: res.data.message
+          status_code: searchParams.get("status_code"),
+        };
+        axios
+          .patch(
+            `${process.env.NEXT_PUBLIC_API_URL}/payments/redirect`,
+            payment,
+            {
+              headers: {
+                Authorization: `Bearer ${data?.token}`,
+              },
+            },
+          )
+          .then((res) => {
+            toast({
+              title: "Success",
+              description: res.data.message,
+            });
+            router.push("/transaction");
           })
-          router.push("/transaction")
-        })
-        .catch((error)=>{
-          toast({
-            title: "Success",
-            description: error.response.data.message
-          })
-        })
+          .catch((error) => {
+            toast({
+              title: "Success",
+              description: error.response.data.message,
+            });
+          });
       }
     }
   }, [searchParams, data?.token]);
@@ -97,9 +104,7 @@ export default function TransactionPage() {
               <div className="flex h-max items-center justify-between bg-black p-2 text-white">
                 <p>{hist.order_id}</p>
                 <div className="flex flex-col items-center gap-4 text-sm sm:flex-row">
-                  <p>
-                    {dateResult}
-                  </p>
+                  <p>{dateResult}</p>
                   {paymentStatus.pending.includes(hist.status) && (
                     <Link
                       href={hist.payment_url}
@@ -176,6 +181,11 @@ export default function TransactionPage() {
             </div>
           );
         })}
+      {historyData?.data.length === 0 && (
+        <h2 className="text-center text-3xl font-bold">
+          Transaksi anda kosong
+        </h2>
+      )}
     </div>
   );
 }

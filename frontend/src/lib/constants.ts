@@ -92,7 +92,7 @@ const heroes = [
   },
   {
     id: 2,
-    imageUrl: "superbounce.webp",
+    imageUrl: "/superbounce.webp",
     title: "ULTRABOUNCE",
     imageAlt: "ULTRABOUNCE",
     buttonUrl: "/catalogue/56",
@@ -100,7 +100,7 @@ const heroes = [
   },
   {
     id: 3,
-    imageUrl: "ultraboost.webp",
+    imageUrl: "/ultraboost.webp",
     title: "ULTRABOOST",
     imageAlt: "ULTRABOOST",
     buttonUrl: "/catalogue/57",
