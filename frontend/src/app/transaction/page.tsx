@@ -91,14 +91,14 @@ export default function TransactionPage() {
       )}
       {historyData?.data.length > 0 &&
         historyData?.data.map((hist: any, i: number) => {
-          const { day, month, year } = convertDate(hist.created_at);
+          const { dateResult } = convertDate(hist.created_at);
           return (
             <div className="mb-3 border-2 border-black" key={i}>
               <div className="flex h-max items-center justify-between bg-black p-2 text-white">
                 <p>{hist.order_id}</p>
                 <div className="flex flex-col items-center gap-4 text-sm sm:flex-row">
                   <p>
-                    {day} {month} {year}
+                    {dateResult}
                   </p>
                   {paymentStatus.pending.includes(hist.status) && (
                     <Link

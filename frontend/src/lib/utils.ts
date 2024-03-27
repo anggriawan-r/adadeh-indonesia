@@ -13,6 +13,12 @@ export function convertDate(data: string) {
 
   const day = date.getDate();
   const year = date.getFullYear();
+  const hour = ("0" + date.getHours()).slice(-2);
+  const minute = ("0" + date.getMinutes()).slice(-2);
+  const second = ("0" + date.getSeconds()).slice(-2);
+  const milisecond = ("00" + date.getMilliseconds()).slice(-3);
 
-  return { day, month, year };
+  const dateResult = `${day} ${month} ${year} ${hour}:${minute}:${second}:${milisecond}`
+
+  return { dateResult };
 }
