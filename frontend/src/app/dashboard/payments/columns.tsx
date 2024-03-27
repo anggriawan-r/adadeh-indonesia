@@ -131,9 +131,9 @@ export const columns: ColumnDef<Category>[] = [
             <Button
               variant={"outline"}
               className="text-green-500"
-              onClick={() => handleStatus("success")}
+              onClick={() => handleStatus("settlement")}
             >
-              Success
+              Settlement
             </Button>
             <Button
               variant={"outline"}
