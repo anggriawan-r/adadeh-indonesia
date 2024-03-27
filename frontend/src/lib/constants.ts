@@ -1,4 +1,4 @@
-export const protectedRoutes = ["/user", "/cart", "/wishlist"];
+export const protectedRoutes = ["/user", "/cart", "/wishlist", "/transaction"];
 export const loginRoutes = ["/auth/signin", "/auth/signup"];
 
 const nav = ["LIFESTYLE", "SPORTS", "OUTDOOR", "SLIDES", "ESSENTIALS"] as const;

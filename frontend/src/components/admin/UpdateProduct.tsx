@@ -25,20 +25,32 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { productSchema } from "@/type/product";
 import { useProduct } from "@/stores/useProduct";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import axios from 'axios'
-import useSWR from "swr"
-import { createClient } from '@supabase/supabase-js'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import axios from "axios";
+import useSWR from "swr";
+import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
- 
-const fetcher = (url: string) => axios.get(url).then(res => res.data.data)
-const supabase = createClient('https://vcowdsqhhhrcmyvetict.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjb3dkc3FoaGhyY215dmV0aWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2NTM2NDYsImV4cCI6MjAyNTIyOTY0Nn0.KY9p1Lz1x3fYcK86eYx4mrUI3F-nDPvZS4iW3FeGNn0')
 
-interface props{
-  id: string
+const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
+const supabase = createClient(
+  "https://vcowdsqhhhrcmyvetict.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjb3dkc3FoaGhyY215dmV0aWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2NTM2NDYsImV4cCI6MjAyNTIyOTY0Nn0.KY9p1Lz1x3fYcK86eYx4mrUI3F-nDPvZS4iW3FeGNn0",
+);
+
+interface props {
+  id: string;
 }
-export default function UpdateProduct({id}: props) {
-  const { data, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/categories`, fetcher)
+export default function UpdateProduct({ id }: props) {
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+    fetcher,
+  );
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
   });
@@ -49,7 +61,9 @@ export default function UpdateProduct({id}: props) {
   const onSubmit = async (values: z.infer<typeof productSchema>) => {
     const file = values.image[0];
     const filePath = file.name;
-    const { data, error } = await supabase.storage.from('test').upload(filePath, file)
+    const { data, error } = await supabase.storage
+      .from("test")
+      .upload(filePath, file);
     if (error) {
       toast({
         variant: "destructive",
@@ -57,35 +71,38 @@ export default function UpdateProduct({id}: props) {
         description: "Gagal upload gambar",
       });
     } else {
-      values = {...values, image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`}
+      values = {
+        ...values,
+        image: `https://vcowdsqhhhrcmyvetict.supabase.co/storage/v1/object/public/test/${values.image[0].name}`,
+      };
       console.log(values);
-      await edit(values, id)
+      await edit(values, id);
       router.refresh();
-      setIsSubmitted(true)
+      setIsSubmitted(true);
     }
   };
   const [isSubmitted, setIsSubmitted] = useState(false);
-  useEffect(()=>{
-    if(isSubmitted){
-      if(status){
+  useEffect(() => {
+    if (isSubmitted) {
+      if (status) {
         toast({
           title: "Success",
           description: message,
         });
-      }else{
+      } else {
         toast({
           variant: "destructive",
           title: "Failed",
           description: message,
         });
       }
-      setIsSubmitted(false)
+      setIsSubmitted(false);
     }
-  }, [status, message, isSubmitted])
+  }, [status, message, isSubmitted]);
   return (
     <Dialog>
       <DialogTrigger className="rounded-lg border border-slate-200 px-4 py-2">
-         Edit
+        Edit
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -165,11 +182,11 @@ export default function UpdateProduct({id}: props) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {
-                            data?.map((d: any, index: number)=>(
-                              <SelectItem value={d.id} key={index}>{d.name}</SelectItem>
-                            ))
-                          }
+                          {data?.map((d: any, index: number) => (
+                            <SelectItem value={d.id.toString()} key={index}>
+                              {d.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />

@@ -180,7 +180,7 @@ export default function FormProduct() {
                         </FormControl>
                         <SelectContent>
                           {data?.map((d: any, index: number) => (
-                            <SelectItem value={d.id} key={index}>
+                            <SelectItem value={d.id.toString()} key={index}>
                               {d.name}
                             </SelectItem>
                           ))}
