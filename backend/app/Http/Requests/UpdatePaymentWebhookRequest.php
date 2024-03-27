@@ -24,7 +24,8 @@ class UpdatePaymentWebhookRequest extends FormRequest
     {
         return [
             'order_id' => ['bail', 'nullable', 'string'],
-            'transaction_status' => ['bail', 'nullable', 'string']
+            'transaction_status' => ['bail', 'nullable', 'string'],
+            'payment_type' => ['bail', 'nullable', 'string']
         ];
     }
 
@@ -32,7 +33,8 @@ class UpdatePaymentWebhookRequest extends FormRequest
     {
         $this->merge([
             'order_id' => $this->input('order_id') ?? null,
-            'transaction_status' => $this->input('transaction_status') ?? null
+            'transaction_status' => $this->input('transaction_status') ?? null,
+            'payment_type' => $this->input('payment_type') ?? null
         ]);
     }
 }

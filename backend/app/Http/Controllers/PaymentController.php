@@ -261,14 +261,16 @@ class PaymentController extends Controller
 
     public function updatePaymentWebhook(UpdatePaymentWebhookRequest $request) {
         try {
-            $validated = $request->safe()->only(['order_id', 'transaction_status']);
+            $validated = $request->safe()->only(['order_id', 'transaction_status', 'payment_type']);
             $orderId = $validated['order_id'];
             $transactionStatus = $validated['transaction_status'];
+            $paymentType = $validated['payment_type'];
 
             $payment = Payment::where('order_id', $orderId)->first();
             if($payment === null) throw new Exception("Payment Tidak Ditemukan");
 
             if($transactionStatus) $payment->status = $transactionStatus;
+            if($paymentType) $payment->payment_type = $paymentType;
             $payment->save();
 
             return response()->json([
