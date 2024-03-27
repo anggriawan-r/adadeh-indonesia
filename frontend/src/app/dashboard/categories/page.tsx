@@ -4,6 +4,8 @@ import axios from "axios";
 import { Separator } from "@/components/ui/separator";
 import FormCategory from "@/components/admin/FormCategory";
 
+export const revalidate = 0;
+
 async function getData() {
   try {
     const response = await axios.get(
@@ -19,14 +21,14 @@ export default async function Categories() {
   const data = await getData();
   return (
     <>
-      <div className="container space-y-2 md:w-full w-screen">
+      <div className="container w-screen space-y-2 md:w-full">
         <div className="mt-10 flex items-center justify-between">
           <p className="text-2xl font-bold">Category</p>
           <FormCategory />
         </div>
         <Separator />
       </div>
-      <div className="container mx-auto py-2 md:w-full w-screen">
+      <div className="container mx-auto w-screen py-2 md:w-full">
         <DataTable columns={columns} data={data} />
       </div>
     </>
