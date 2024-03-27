@@ -17,8 +17,10 @@ import { useLogin } from "@/stores/useAuth";
 import Link from "next/link";
 import useSWR from "swr";
 import { convertDate } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+
 
 const fetcher = async (url: string, token: string) => {
   const res = await axios.get(url, {
@@ -33,10 +35,37 @@ const fetcher = async (url: string, token: string) => {
 export default function TransactionPage() {
   const searchParams = useSearchParams();
   const { data } = useLogin();
+  const router = useRouter()
+  const { toast } = useToast()
 
   useEffect(() => {
-    console.log(searchParams);
-  }, [searchParams]);
+    if(data?.token.length !== undefined && data?.token.length > 0){
+      if(searchParams.get("order_id") != null && searchParams.get("status_code") != null){
+        const payment = {
+          order_id: searchParams.get("order_id"),
+          status_code: searchParams.get("status_code")
+        }
+        axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/payments/redirect`, payment, {
+          headers: {
+            Authorization: `Bearer ${data?.token}`
+          }
+        })
+        .then((res)=>{
+          toast({
+            title: "Success",
+            description: res.data.message
+          })
+          router.push("/transaction")
+        })
+        .catch((error)=>{
+          toast({
+            title: "Success",
+            description: error.response.data.message
+          })
+        })
+      }
+    }
+  }, [searchParams, data?.token]);
 
   const {
     data: historyData,
@@ -46,7 +75,6 @@ export default function TransactionPage() {
     data ? [`${process.env.NEXT_PUBLIC_API_URL}/histories`, data.token] : null,
     ([url, token]) => fetcher(url, token),
   );
-
   return (
     <div className="mt-20 flex min-h-[calc(100vh-80px-44px)] w-full flex-col px-4">
       <h1 className="text-2xl font-bold">Riwayat Transaksi</h1>
@@ -71,7 +99,6 @@ export default function TransactionPage() {
                     <Link
                       href={hist.payment_url}
                       className="self-end justify-self-end"
-                      target="_blank"
                     >
                       <Badge variant="secondary">Bayar</Badge>
                     </Link>

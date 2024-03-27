@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useProduct } from "@/stores/useProduct";
 import UpdateProduct from "@/components/admin/UpdateProduct";
+import { useLogin } from "@/stores/useAuth";
 
 export type Product = {
   id: string;
@@ -102,17 +103,15 @@ export const columns: ColumnDef<Product>[] = [
       const { destroy, message } = useProduct();
       const { toast } = useToast();
       const router = useRouter();
+      const { data } = useLogin()
       return (
         <>
-          <Button variant={"ghost"} className="border border-slate-200">
-            View
-          </Button>
-          <UpdateProduct id={category.id} />
+          <UpdateProduct id={category.id} token={data?.token} />
           <Button
             variant={"ghost"}
             className="border border-slate-200"
             onClick={async () => {
-              await destroy(category.id)
+              await destroy(category.id, data?.token)
                 .then(() => {
                   toast({
                     title: "Success",

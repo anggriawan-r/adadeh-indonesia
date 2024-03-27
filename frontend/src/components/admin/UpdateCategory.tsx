@@ -28,9 +28,10 @@ import { useRouter } from "next/navigation";
 
 interface props{
     id: string
+    token: any
 }
 
-export default function UpdateCategory({ id }:props) {
+export default function UpdateCategory({ id, token }:props) {
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
   });
@@ -39,7 +40,7 @@ export default function UpdateCategory({ id }:props) {
   const router = useRouter()
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
     console.log(values)
-    await edit(values, id)
+    await edit(values, id, token)
       .then(() => {
         toast({
           title: "Success",

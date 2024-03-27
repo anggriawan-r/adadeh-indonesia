@@ -16,6 +16,7 @@ import { useCategory } from "@/stores/useCategory";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import UpdateCategory from "@/components/admin/UpdateCategory";
+import { useLogin } from "@/stores/useAuth";
 
 export type Category = {
   id: string;
@@ -92,17 +93,15 @@ export const columns: ColumnDef<Category>[] = [
       const { destroy, message } = useCategory();
       const { toast } = useToast();
       const router = useRouter();
+      const { data } = useLogin()
       return (
         <>
-          <Button variant={"ghost"} className="border border-slate-200">
-            View
-          </Button>
-          <UpdateCategory id={category.id} />
+          <UpdateCategory id={category.id} token={data?.token} />
           <Button
             variant={"ghost"}
             className="border border-slate-200"
             onClick={async () => {
-              await destroy(category.id)
+              await destroy(category.id, data?.token)
                 .then(() => {
                   toast({
                     title: "Success",
