@@ -140,7 +140,7 @@ class PaymentController extends Controller
    */
     function index(){
         try {
-            $payments = Payment::all();
+            $payments = Payment::orderBy('created_at', 'desc')->get();
             foreach($payments as $payment){
                 $user = User::find($payment->user_id);
                 $payment->customer = $user->name;
