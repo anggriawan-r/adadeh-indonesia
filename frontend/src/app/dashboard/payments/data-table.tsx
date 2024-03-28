@@ -44,8 +44,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5
-  })
+    pageSize: 5,
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -80,9 +80,11 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter name..."
-            value={(table.getColumn("user_id")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("customer")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("user_id")?.setFilterValue(event.target.value)
+              table.getColumn("customer")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -178,13 +180,18 @@ export function DataTable<TData, TValue>({
           </Button>
           <select
             value={table.getState().pagination.pageIndex}
-            onChange={e => {
-              table.setPageIndex(Number(e.target.value))
+            onChange={(e) => {
+              table.setPageIndex(Number(e.target.value));
             }}
           >
-            {Array.from({ length: Math.ceil(table.getFilteredRowModel().rows.length / 5) }, (_, i) => i + 1).map(pageIndex => (
-              <option key={pageIndex-1} value={pageIndex-1}>
-                {pageIndex-1}
+            {Array.from(
+              {
+                length: Math.ceil(table.getFilteredRowModel().rows.length / 5),
+              },
+              (_, i) => i + 1,
+            ).map((pageIndex) => (
+              <option key={pageIndex - 1} value={pageIndex - 1}>
+                {pageIndex - 1}
               </option>
             ))}
           </select>
