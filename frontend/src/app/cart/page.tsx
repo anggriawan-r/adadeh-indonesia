@@ -147,7 +147,7 @@ function Cart() {
     });
     try {
       const payment = {
-        jumlah: totalPrice + 10000,
+        jumlah: totalPrice,
         item_details: item_details,
       };
       const response = await axios.post(
