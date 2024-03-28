@@ -174,7 +174,7 @@ function WishList() {
                     <div className="border border-t-0 border-gray-400 p-2">
                       <div className="mt-6 flex flex-col items-start justify-between">
                         <div className="flex items-center justify-center">
-                          <Link href={`/catalog/${product.id}`}>
+                          <Link href={`/catalogue/${product.id}`}>
                             <p className="text-2xl font-semibold leading-6 tracking-tight text-gray-800 hover:underline dark:text-white">
                               {product.product.name}
                             </p>
