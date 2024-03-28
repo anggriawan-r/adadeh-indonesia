@@ -179,7 +179,7 @@ class PaymentController extends Controller
    */
     public function getHistory(){
         try {
-            $payments = Payment::where("user_id", auth()->user()->id)->get();
+            $payments = Payment::where("user_id", auth()->user()->id)->orderBy('created_at', 'desc')->get();
             foreach($payments as $payment){
                 $histories = History::where("payment_id", $payment->id)->get();
                 $payment->history = $histories;
