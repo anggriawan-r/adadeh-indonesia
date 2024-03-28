@@ -125,7 +125,7 @@ export default function TransactionPage() {
                 <Table className="min-w-[400px] lg:w-full">
                   <TableHeader>
                     <TableRow className="text-center">
-                      <TableHead className="text-start">Produk</TableHead>
+                      <TableHead className="text-start w-2/3">Produk</TableHead>
                       <TableHead className="text-center">Jumlah</TableHead>
                       <TableHead className="text-end">Harga</TableHead>
                     </TableRow>
