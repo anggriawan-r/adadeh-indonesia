@@ -110,7 +110,7 @@ export default function NavbarUtils({ navList }: { navList: categoryType[] }) {
               </Link>
               {hasHydrated && data?.user.role == "admin" && (
                 <Link
-                  href="/dashboard"
+                  href="/dashboard/categories"
                   className="flex w-full items-center gap-4 p-4 hover:bg-zinc-100"
                 >
                   <MdOutlineSpaceDashboard className="basis-1/5 text-2xl" />

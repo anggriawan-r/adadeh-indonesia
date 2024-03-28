@@ -43,7 +43,7 @@ export default function Sidebar({ click }: props) {
       </header>
       <main className="flex min-h-[calc(100%-160px)] flex-col justify-between">
         <ul className="space-y-4">
-          <li>
+          {/* <li>
             <Button
               className={twJoin(
                 "w-full justify-start rounded-none",
@@ -56,7 +56,7 @@ export default function Sidebar({ click }: props) {
               <MdOutlineSpaceDashboard className="mr-2 text-xl" />
               Dashboard
             </Button>
-          </li>
+          </li> */}
           <li>
             <Button
               className={twJoin(
